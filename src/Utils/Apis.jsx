@@ -3,8 +3,8 @@
 const forgetTooken = `Bearer ${localStorage.getItem('forgteToken')}`;
 // const token = localStorage.getItem('token');
 
-const LocalGirjeshIP= 'http://10.5.51.4:5000';
-const Domain= 'http://auth.edu2all.in:5000';
+// const LocalGirjeshIP= 'http://10.5.51.4:5000';
+const Domain= 'https://www.auth.edu2all.in';
 
 // ******************************************************************************************************
                             // Login  //
@@ -1176,7 +1176,7 @@ const newngrok1= 'http://auth.edu2all.in:5000';
 
 export const loginApi = async(data) => {
 
-    let res = await axios.post(`${newngrok1}/login/all`,data);
+    let res = await axios.post(`${Domain}/login/all`,data);
 
     if (res) {
         return res;
@@ -1190,7 +1190,7 @@ export const loginApi = async(data) => {
 // post api 
 export const PostApi = async(formData) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/role/addRole`,formData)
+   const res= await axios.post(`${Domain}/role/addRole`,formData)
    
    if(res) {
     return res;
@@ -1203,7 +1203,7 @@ export const PostApi = async(formData) =>{
 // GetAll Api 
 export const RolePermissionGetApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/role/getRoleBySch`)
+   const res= await axios.get(`${Domain}/role/getRoleBySch`)
    if(res) {
     return res;
    }
@@ -1216,8 +1216,8 @@ export const RolePermissionGetApi = async() =>{
 //  Get All Api of special feature get from addon page in super admin panel
 export const SpeFeaGetAllApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/fea/getFeaByRoleId`)
-   // const res= await axios.get(`${newngrok1}/fea/getAllFeatures`)
+   const res= await axios.get(`${Domain}/fea/getFeaByRoleId`)
+   // const res= await axios.get(`${Domain}/fea/getAllFeatures`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1231,7 +1231,7 @@ export const SpeFeaGetAllApi = async() =>{
 
  export const RolePermDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/role/delete/${id}`)
+   const res2= await axios.delete(`${Domain}/role/delete/${id}`)
    if(res2) {
     return res2;
    }
@@ -1244,7 +1244,7 @@ export const SpeFeaGetAllApi = async() =>{
 
 export const RolePerGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/role/getByRoleId/${id}`)
+   const res2= await axios.get(`${Domain}/role/getByRoleId/${id}`)
    if(res2) {
     return res2;
    }
@@ -1255,7 +1255,7 @@ export const RolePerGetByIdApi = async(id) =>{
 // Put Data Api 
 export const RolePerPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/role/editById/${id}`,datares)
+    const res2= await axios.put(`${Domain}/role/editById/${id}`,datares)
     // console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1277,7 +1277,7 @@ export const RolePerPutApi = async(id,datares) =>{
 // post Api 
 export const ClassPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/class/addClass`,datares)
+   const res= await axios.post(`${Domain}/class/addClass`,datares)
    if(res) {
     return res;
    }
@@ -1290,7 +1290,7 @@ export const ClassPostApi = async(datares) =>{
 // GetAll Api 
 export const ClassGetApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/class/getAllClassBySchId`)
+   const res= await axios.get(`${Domain}/class/getAllClassBySchId`)
 //    console.log('my-response', res)
 
    if(res) {
@@ -1304,7 +1304,7 @@ export const ClassGetApi = async() =>{
 
 export const ClassDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/class/deleteById/${id}`)
+   const res2= await axios.delete(`${Domain}/class/deleteById/${id}`)
    if(res2) {
     return res2;
    }
@@ -1319,7 +1319,7 @@ export const ClassDeleteApi = async(id) =>{
 
 export const ClassGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/class/getClassById/${id}`)
+   const res2= await axios.get(`${Domain}/class/getClassById/${id}`)
    if(res2) {
     return res2;
    }
@@ -1330,7 +1330,7 @@ export const ClassGetByIdApi = async(id) =>{
 // Put Data Api 
 export const ClassPutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/class/updateClassById/${id}`,datares)
+   const res2= await axios.put(`${Domain}/class/updateClassById/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -1351,7 +1351,7 @@ export const ClassPutApi = async(id,datares) =>{
 
 export const ClassRoomPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/room/addRoom`,datares)
+   const res= await axios.post(`${Domain}/room/addRoom`,datares)
    if(res) {
     return res;
    }
@@ -1364,7 +1364,7 @@ export const ClassRoomPostApi = async(datares) =>{
 // GetAll Api 
 export const ClassRoomGetApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/room/getAllRoomBySchId`)
+   const res= await axios.get(`${Domain}/room/getAllRoomBySchId`)
 //    console.log('my-response', res)
 
    if(res) {
@@ -1379,7 +1379,7 @@ export const ClassRoomGetApi = async() =>{
 
 export const ClassRoomGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/room/getRoomById/${id}`)
+   const res2= await axios.get(`${Domain}/room/getRoomById/${id}`)
    if(res2) {
     return res2;
    }
@@ -1391,7 +1391,7 @@ export const ClassRoomGetByIdApi = async(id) =>{
 
 export const classRoomDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/room/deleteById/${id}`)
+   const res2= await axios.delete(`${Domain}/room/deleteById/${id}`)
    if(res2) {
     return res2;
    }
@@ -1402,7 +1402,7 @@ export const classRoomDeleteApi = async(id) =>{
 // Put Data Api 
 export const ClassRoomPutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/room/updateRoomById/${id}`,datares)
+   const res2= await axios.put(`${Domain}/room/updateRoomById/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -1424,7 +1424,7 @@ export const ClassRoomPutApi = async(id,datares) =>{
 
 export const SectionPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/section/addSecInClass`,datares)
+   const res= await axios.post(`${Domain}/section/addSecInClass`,datares)
    if(res) {
     return res;
    }
@@ -1438,7 +1438,7 @@ export const SectionPostApi = async(datares) =>{
 
 export const NullRoomGetApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/room/getAllNullRoom`)
+   const res= await axios.get(`${Domain}/room/getAllNullRoom`)
 //    console.log('my-response', res)
 
    if(res) {
@@ -1452,7 +1452,7 @@ export const NullRoomGetApi = async() =>{
 // Sectionn Get All Api 
 export const SectionRoomGetApi = async(searchKey) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/section/getAllSecBySchool?searchKey=${searchKey}`)
+   const res= await axios.get(`${Domain}/section/getAllSecBySchool?searchKey=${searchKey}`)
 
    if(res) {
     return res;
@@ -1466,7 +1466,7 @@ export const SectionRoomGetApi = async(searchKey) =>{
 // Sectionn Delete Api 
 export const SectionDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/section/deleteSection/${id}`)
+   const res2= await axios.delete(`${Domain}/section/deleteSection/${id}`)
    if(res2) {
     return res2;
    }
@@ -1479,7 +1479,7 @@ export const SectionDeleteApi = async(id) =>{
 
 export const SectionGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/section/getBySectionId/${id}`)
+   const res2= await axios.get(`${Domain}/section/getBySectionId/${id}`)
    if(res2) {
     return res2;
    }
@@ -1492,7 +1492,7 @@ export const SectionGetByIdApi = async(id) =>{
 // Put Data Api 
 export const SectionPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/section/updateSection/${id}`,datares)
+    const res2= await axios.put(`${Domain}/section/updateSection/${id}`,datares)
     console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1508,7 +1508,7 @@ export const SectionPutApi = async(id,datares) =>{
 
 export const SectionRoomByIdGetApi = async(Class) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/section/getByClassId?classId=${Class}`,)
+   const res= await axios.get(`${Domain}/section/getByClassId?classId=${Class}`,)
 
    if(res) {
     return res;
@@ -1529,7 +1529,7 @@ export const SectionRoomByIdGetApi = async(Class) =>{
 // Event post Api 
 export const EventPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/events/addEvents`,datares)
+   const res= await axios.post(`${Domain}/events/addEvents`,datares)
    if(res) {
     return res;
    }
@@ -1543,7 +1543,7 @@ export const EventPostApi = async(datares) =>{
 
 export const EventGetAllApi = async(key) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/events/allEvents?searchKey=${key}`)
+   const res= await axios.get(`${Domain}/events/allEvents?searchKey=${key}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1557,7 +1557,7 @@ export const EventGetAllApi = async(key) =>{
 // Event Delete Api 
 export const EventDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/events/delete/${id}`)   
+   const res2= await axios.delete(`${Domain}/events/delete/${id}`)   
    if(res2) {
     return res2;
    }
@@ -1570,7 +1570,7 @@ export const EventDeleteApi = async(id) =>{
 // Event get by id 
 export const EventGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/events/findEvents/${id}`)
+   const res2= await axios.get(`${Domain}/events/findEvents/${id}`)
    if(res2) {
     return res2;
    }
@@ -1584,7 +1584,7 @@ export const EventGetByIdApi = async(id) =>{
 // Event Put Data Api 
 export const EventPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/events/modify/${id}`,datares)
+    const res2= await axios.put(`${Domain}/events/modify/${id}`,datares)
     console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1605,7 +1605,7 @@ export const EventPutApi = async(id,datares) =>{
 // Event post Api 
 export const NoticePostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/notice/addNotice`,datares)
+   const res= await axios.post(`${Domain}/notice/addNotice`,datares)
    if(res) {
     return res;
    }
@@ -1620,7 +1620,7 @@ export const NoticePostApi = async(datares) =>{
 
 export const NoticeGetAllApi = async(key) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/notice/allNotice?searchKey=${key}`)
+   const res= await axios.get(`${Domain}/notice/allNotice?searchKey=${key}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1633,7 +1633,7 @@ export const NoticeGetAllApi = async(key) =>{
 // Notice Delete Api 
 export const NoticeDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/notice/delete/${id}`)
+   const res2= await axios.delete(`${Domain}/notice/delete/${id}`)
    if(res2) {
     return res2;
    }
@@ -1645,7 +1645,7 @@ export const NoticeDeleteApi = async(id) =>{
 // Notice get by id 
 export const NoticeGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/notice/findNotice/${id}`)
+   const res2= await axios.get(`${Domain}/notice/findNotice/${id}`)
    if(res2) {
     return res2;
    }
@@ -1657,7 +1657,7 @@ export const NoticeGetByIdApi = async(id) =>{
 // Notice Put Data Api 
 export const NoticePutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/notice/modify/${id}`,datares)
+    const res2= await axios.put(`${Domain}/notice/modify/${id}`,datares)
     console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1678,7 +1678,7 @@ export const NoticePutApi = async(id,datares) =>{
 // Holiday post Api 
 export const HolidayPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/holiday/addHoliday`,datares)
+   const res= await axios.post(`${Domain}/holiday/addHoliday`,datares)
    if(res) {
     return res;
    }
@@ -1690,7 +1690,7 @@ export const HolidayPostApi = async(datares) =>{
 // Holiday Get All Api 
 export const HolidayGetAllApi = async(key) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/holiday/all?searchKey=${key}`)
+   const res= await axios.get(`${Domain}/holiday/all?searchKey=${key}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1703,7 +1703,7 @@ export const HolidayGetAllApi = async(key) =>{
 // Holiday Delete Api 
 export const HolidayDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/holiday/delete/${id}`)
+   const res2= await axios.delete(`${Domain}/holiday/delete/${id}`)
    if(res2) {
     return res2;
    }
@@ -1715,7 +1715,7 @@ export const HolidayDeleteApi = async(id) =>{
 // Holiday get by id 
 export const HolidayGetByIdApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.get(`${newngrok1}/holiday/find/${id}`)
+   const res2= await axios.get(`${Domain}/holiday/find/${id}`)
    if(res2) {
     return res2;
    }
@@ -1728,7 +1728,7 @@ export const HolidayGetByIdApi = async(id) =>{
 // Holiday Put Data Api 
 export const HolidayPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/holiday/modify/${id}`,datares)
+    const res2= await axios.put(`${Domain}/holiday/modify/${id}`,datares)
     console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1751,7 +1751,7 @@ export const HolidayPutApi = async(id,datares) =>{
 // Staff  post Api 
 export const StaffPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/otherStaff/addStaff`,datares)
+   const res= await axios.post(`${Domain}/otherStaff/addStaff`,datares)
    if(res) {
     return res;
    }
@@ -1765,7 +1765,7 @@ export const StaffPostApi = async(datares) =>{
 // Teacher  Get All Api 
 export const TeacherGetAllApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/otherStaff/getStaffByRoleType/${id}`)
+   const res= await axios.get(`${Domain}/otherStaff/getStaffByRoleType/${id}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1779,7 +1779,7 @@ export const TeacherGetAllApi = async(id) =>{
 // Staff Delete Api 
 export const StaffDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/otherStaff/deleteStaff/${id}`)
+   const res2= await axios.delete(`${Domain}/otherStaff/deleteStaff/${id}`)
    if(res2) {
     return res2;
    }
@@ -1792,7 +1792,7 @@ export const StaffDeleteApi = async(id) =>{
 
 export const StaffGetById = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/otherStaff/getUser/${id}`)
+   const res= await axios.get(`${Domain}/otherStaff/getUser/${id}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1804,7 +1804,7 @@ export const StaffGetById = async(id) =>{
 // staff Put Data Api 
 export const StaffPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/otherStaff/editStaff/${id}`,datares)
+    const res2= await axios.put(`${Domain}/otherStaff/editStaff/${id}`,datares)
     // console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1828,7 +1828,7 @@ export const StaffPutApi = async(id,datares) =>{
 //  post Api 
 export const BookManagerPostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/books/add`,datares)
+   const res= await axios.post(`${Domain}/books/add`,datares)
    if(res) {
     return res;
    }
@@ -1840,7 +1840,7 @@ export const BookManagerPostApi = async(datares) =>{
 // Library  Get All Api 
 export const BookManagerGetAllApi = async() =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/books/allBooks`)
+   const res= await axios.get(`${Domain}/books/allBooks`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1853,7 +1853,7 @@ export const BookManagerGetAllApi = async() =>{
 //  Delete Api 
 export const BookManagerDeleteApi = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.delete(`${newngrok1}/books/delete/${id}`)
+   const res2= await axios.delete(`${Domain}/books/delete/${id}`)
    if(res2) {
     return res2;
    }
@@ -1865,7 +1865,7 @@ export const BookManagerDeleteApi = async(id) =>{
 
 export const BookmanGetById = async(id) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.get(`${newngrok1}/books/getBook/${id}`)
+   const res= await axios.get(`${Domain}/books/getBook/${id}`)
 // console.log('my-response', res)
    if(res) {
     return res;
@@ -1878,7 +1878,7 @@ export const BookmanGetById = async(id) =>{
 // Book Manager Put Data Api 
 export const BookManPutApi = async(id,datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-    const res2= await axios.put(`${newngrok1}/books/modifyBook/${id}`,datares)
+    const res2= await axios.put(`${Domain}/books/modifyBook/${id}`,datares)
     // console.log('my-response-get-by-id', res2)
  
     if(res2) {
@@ -1897,7 +1897,7 @@ export const BookManPutApi = async(id,datares) =>{
 //  post Api 
 export const BookIssuePostApi = async(datares) =>{
     axios.defaults.headers.common["Authorization"] = token;
-   const res= await axios.post(`${newngrok1}/transaction/issue-book`,datares)
+   const res= await axios.post(`${Domain}/transaction/issue-book`,datares)
    if(res) {
     return res;
    }
@@ -1909,7 +1909,7 @@ export const BookIssuePostApi = async(datares) =>{
 //   Get All Api 
 export const bookIssueGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/transaction/all`)
+  const res= await axios.get(`${Domain}/transaction/all`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -1922,7 +1922,7 @@ export const bookIssueGetAllApi = async() =>{
 //  Delete Api 
 export const IssueBookDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/transaction/delete/${id}`)
+  const res2= await axios.delete(`${Domain}/transaction/delete/${id}`)
   if(res2) {
    return res2;
   }
@@ -1934,7 +1934,7 @@ export const IssueBookDeleteApi = async(id) =>{
 //  Get by user Id 
 export const IssueBookGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/transaction/getOne/${id}`)
+  const res= await axios.get(`${Domain}/transaction/getOne/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -1947,7 +1947,7 @@ export const IssueBookGetById = async(id) =>{
 // Book Issue Put Data Api 
 export const IssueBookPutApi = async(id,PuData) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/transaction/update/${id}`,PuData)
+   const res2= await axios.put(`${Domain}/transaction/update/${id}`,PuData)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -1969,7 +1969,7 @@ export const IssueBookPutApi = async(id,PuData) =>{
 // Student  Get All Api 
 export const studentGetAllApi = async(searchKey,classNo,sectionName) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/student/getAllScClSec?searchKey=${searchKey}&classNo=${classNo}&classSec=${sectionName}`)
+  const res= await axios.get(`${Domain}/student/getAllScClSec?searchKey=${searchKey}&classNo=${classNo}&classSec=${sectionName}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -1988,7 +1988,7 @@ export const studentGetAllApi = async(searchKey,classNo,sectionName) =>{
 //  post Api 
 export const OnlinePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/courses/add`,datares)
+  const res= await axios.post(`${Domain}/courses/add`,datares)
   if(res) {
    return res;
   }
@@ -2000,7 +2000,7 @@ export const OnlinePostApi = async(datares) =>{
 // Get All Api 
 export const OnlineCourseGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/courses/getAllCourses`)
+  const res= await axios.get(`${Domain}/courses/getAllCourses`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2012,7 +2012,7 @@ export const OnlineCourseGetAllApi = async() =>{
 //  Delete Api 
 export const OnlineDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/courses/delete/${id}`)
+  const res2= await axios.delete(`${Domain}/courses/delete/${id}`)
   if(res2) {
    return res2;
   }
@@ -2024,7 +2024,7 @@ export const OnlineDeleteApi = async(id) =>{
 //  Get by user Id 
 export const OnlineGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/courses/getCourses/${id}`)
+  const res= await axios.get(`${Domain}/courses/getCourses/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2037,7 +2037,7 @@ export const OnlineGetById = async(id) =>{
 //  Put Data Api 
 export const OnlinePutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/courses/update/${id}`,datares)
+   const res2= await axios.put(`${Domain}/courses/update/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -2057,7 +2057,7 @@ export const OnlinePutApi = async(id,datares) =>{
 //  post Api 
 export const LeavePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/leaveType/create`,datares)
+  const res= await axios.post(`${Domain}/leaveType/create`,datares)
   if(res) {
    return res;
   }
@@ -2070,7 +2070,7 @@ export const LeavePostApi = async(datares) =>{
 // Get All Api 
 export const LeaveGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/leaveType/getAll`)
+  const res= await axios.get(`${Domain}/leaveType/getAll`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2083,7 +2083,7 @@ export const LeaveGetAllApi = async() =>{
 //  Delete Api 
 export const LeaveDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/leaveType/delete/${id}`)
+  const res2= await axios.delete(`${Domain}/leaveType/delete/${id}`)
   if(res2) {
    return res2;
   }
@@ -2095,7 +2095,7 @@ export const LeaveDeleteApi = async(id) =>{
 //  Get by user Id 
 export const LeaveGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/leaveType/get/${id}`)
+  const res= await axios.get(`${Domain}/leaveType/get/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2108,7 +2108,7 @@ export const LeaveGetById = async(id) =>{
 //  Put Data Api 
 export const LeavePutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/leaveType/edit/${id}`,datares)
+   const res2= await axios.put(`${Domain}/leaveType/edit/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -2127,7 +2127,7 @@ export const LeavePutApi = async(id,datares) =>{
 //  post Api 
 export const AssignLeavePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/leaveUser/add`,datares)
+  const res= await axios.post(`${Domain}/leaveUser/add`,datares)
   if(res) {
    return res;
   }
@@ -2138,7 +2138,7 @@ export const AssignLeavePostApi = async(datares) =>{
 // Get All Api 
 export const AssignLeaveGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/leaveUser/getUsers`)
+  const res= await axios.get(`${Domain}/leaveUser/getUsers`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2150,7 +2150,7 @@ export const AssignLeaveGetAllApi = async() =>{
 // Delete api
 export const LeaveAssignDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/leaveUser/delete/${id}`)
+  const res2= await axios.delete(`${Domain}/leaveUser/delete/${id}`)
   if(res2) {
    return res2;
   }
@@ -2162,7 +2162,7 @@ export const LeaveAssignDeleteApi = async(id) =>{
 export const LeaveAssignDeleteTypeApi = async(id, roleId) =>{
    // console.log('my leave type in apis page',datares)
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/leaveUser/deleteLeaveType/${id}?leaveType=${roleId}`)
+  const res2= await axios.delete(`${Domain}/leaveUser/deleteLeaveType/${id}?leaveType=${roleId}`)
   if(res2) {
    return res2;
   }
@@ -2175,7 +2175,7 @@ export const LeaveAssignDeleteTypeApi = async(id, roleId) =>{
 //  Get by user Id 
 export const AssignLeaveGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/leaveUser/getById/${id}`)
+  const res= await axios.get(`${Domain}/leaveUser/getById/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2192,7 +2192,7 @@ export const AssignLeaveGetById = async(id) =>{
 //  post Api 
 export const LeaveStatusPostApi = async(id, datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/leave/acknowledge/${id}`,datares)
+  const res= await axios.post(`${Domain}/leave/acknowledge/${id}`,datares)
   if(res) {
    return res;
   }
@@ -2204,7 +2204,7 @@ export const LeaveStatusPostApi = async(id, datares) =>{
 // Get All Api 
 export const LeaveStatusGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/leave/new-applied`)
+  const res= await axios.get(`${Domain}/leave/new-applied`)
   if(res) {
    return res;
   }
@@ -2224,7 +2224,7 @@ export const LeaveStatusGetAllApi = async() =>{
 //  post Api 
 export const SubjectPostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/subject/addSubject`,datares)
+  const res= await axios.post(`${Domain}/subject/addSubject`,datares)
   if(res) {
    return res;
   }
@@ -2236,7 +2236,7 @@ export const SubjectPostApi = async(datares) =>{
 // subject Get All Api 
 export const SubjectGetAllApi = async(key, classIdForSearch) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getAllSubjectBySchId?searchKey=${key}&classNo=${classIdForSearch}`, )
+  const res= await axios.get(`${Domain}/subject/getAllSubjectBySchId?searchKey=${key}&classNo=${classIdForSearch}`, )
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2249,7 +2249,7 @@ export const SubjectGetAllApi = async(key, classIdForSearch) =>{
 //  Delete Api 
 export const SubjectDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/subject/deleteById/${id}`)
+  const res2= await axios.delete(`${Domain}/subject/deleteById/${id}`)
   if(res2) {
    return res2;
   }
@@ -2261,7 +2261,7 @@ export const SubjectDeleteApi = async(id) =>{
 //  Get by user Id 
 export const SubjectGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getSubjectById/${id}`)
+  const res= await axios.get(`${Domain}/subject/getSubjectById/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2275,7 +2275,7 @@ export const SubjectGetById = async(id) =>{
 //  Put Data Api 
 export const SubjectPutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/subject/updateSubById/${id}`,datares)
+   const res2= await axios.put(`${Domain}/subject/updateSubById/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -2294,7 +2294,7 @@ export const SubjectPutApi = async(id,datares) =>{
 //  post Api 
 export const DepartmentPostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/departments/add`,datares)
+  const res= await axios.post(`${Domain}/departments/add`,datares)
   if(res) {
    return res;
   }
@@ -2306,7 +2306,7 @@ export const DepartmentPostApi = async(datares) =>{
 // Department Get All Api 
 export const DepartmentGetAllApi = async(key) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/departments/all?searchKey=${key}`)
+  const res= await axios.get(`${Domain}/departments/all?searchKey=${key}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2319,7 +2319,7 @@ export const DepartmentGetAllApi = async(key) =>{
 //  Delete Api 
 export const DepartmentDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/departments/delete/${id}`)
+  const res2= await axios.delete(`${Domain}/departments/delete/${id}`)
   if(res2) {
    return res2;
   }
@@ -2331,7 +2331,7 @@ export const DepartmentDeleteApi = async(id) =>{
 //  Get by user Id 
 export const DepartmentGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/departments/getById/${id}`)
+  const res= await axios.get(`${Domain}/departments/getById/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2344,7 +2344,7 @@ export const DepartmentGetById = async(id) =>{
 //  Put Data Api 
 export const DepartmentPutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/departments/modify/${id}`,datares)
+   const res2= await axios.put(`${Domain}/departments/modify/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -2360,7 +2360,7 @@ export const DepartmentPutApi = async(id,datares) =>{
 // Department Get All Api 
 export const DepartmentSearchGetAllApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getAllSubByClassId/${id}`)
+  const res= await axios.get(`${Domain}/subject/getAllSubByClassId/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2378,7 +2378,7 @@ export const DepartmentSearchGetAllApi = async(id) =>{
 //  post Api 
 export const SyllabusPostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/syllabus/addSyllabus`,datares)
+  const res= await axios.post(`${Domain}/syllabus/addSyllabus`,datares)
   if(res) {
    return res;
   }
@@ -2390,7 +2390,7 @@ export const SyllabusPostApi = async(datares) =>{
 // this section api use for section by class id for section 
 export const SyllabusSectionGetAllApi = async(classId) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/section/getByClassId?classId=${classId}`)
+  const res= await axios.get(`${Domain}/section/getByClassId?classId=${classId}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2403,7 +2403,7 @@ export const SyllabusSectionGetAllApi = async(classId) =>{
 // Get subject by class id in syllabus 
 export const SubjectByClassIdInSyllabusGetAllApi = async(classId) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getAllSubByClassId/${classId}`)
+  const res= await axios.get(`${Domain}/subject/getAllSubByClassId/${classId}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2417,8 +2417,8 @@ export const SubjectByClassIdInSyllabusGetAllApi = async(classId) =>{
 // Get all api syllabus 
 export const SyllabusGetAllApi = async(key,classId,sectionId) =>{
    axios.defaults.headers.common["Authorization"] = token;
-//   const res= await axios.get(`${newngrok1}/syllabus/getAllSyllabus`)
-  const res= await axios.get(`${newngrok1}/syllabus/getByClassSection?searchKey=${key}&classId=${classId}&classSecId=${sectionId}`)
+//   const res= await axios.get(`${Domain}/syllabus/getAllSyllabus`)
+  const res= await axios.get(`${Domain}/syllabus/getByClassSection?searchKey=${key}&classId=${classId}&classSecId=${sectionId}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2431,7 +2431,7 @@ export const SyllabusGetAllApi = async(key,classId,sectionId) =>{
 //  Delete Api 
 export const SyllabusDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/syllabus/deleteById/${id}`)
+  const res2= await axios.delete(`${Domain}/syllabus/deleteById/${id}`)
   if(res2) {
    return res2;
   }
@@ -2444,7 +2444,7 @@ export const SyllabusDeleteApi = async(id) =>{
 
 export const SyllbusGetById = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/syllabus/getSyllabusById/${id}`)
+  const res= await axios.get(`${Domain}/syllabus/getSyllabusById/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2457,7 +2457,7 @@ export const SyllbusGetById = async(id) =>{
 //  Put Data Api 
 export const SyllabusPutApi = async(id,datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/syllabus/updateById/${id}`,datares)
+   const res2= await axios.put(`${Domain}/syllabus/updateById/${id}`,datares)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
@@ -2471,7 +2471,7 @@ export const SyllabusPutApi = async(id,datares) =>{
 // Download file apis 
 export const SyllabusFileDownloadGetAllApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/syllabus/downloadSyllabus/${id}`)
+  const res= await axios.get(`${Domain}/syllabus/downloadSyllabus/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2494,7 +2494,7 @@ export const SyllabusFileDownloadGetAllApi = async(id) =>{
 // Get all teacher by sybject id api syllabus 
 export const AllTeacherBySubjectId = async(classId,subjectId) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getAllSubjectTeacher?classId=${classId}&subjectId=${subjectId}`)
+  const res= await axios.get(`${Domain}/subject/getAllSubjectTeacher?classId=${classId}&subjectId=${subjectId}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2508,7 +2508,7 @@ export const AllTeacherBySubjectId = async(classId,subjectId) =>{
 export const ClassRoitinePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
 //   const res= await axios.post(`${girjeshServer}/routine/addRoutine`,datares)
-  const res= await axios.post(`${newngrok1}/routine/addRoutine`,datares)
+  const res= await axios.post(`${Domain}/routine/addRoutine`,datares)
   if(res) {
    return res;
   }
@@ -2519,7 +2519,7 @@ export const ClassRoitinePostApi = async(datares) =>{
 // get all api 
 export const ClassRoutineGetAll = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/routine/getAllRoute`)
+  const res= await axios.get(`${Domain}/routine/getAllRoute`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2532,7 +2532,7 @@ export const ClassRoutineGetAll = async() =>{
 // get all api by search class and section 
 export const ClassRoutineBySearchGetAll = async(classNo, section) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/routine/getBySchClassId?classNo=${classNo}&section=${section}`)
+  const res= await axios.get(`${Domain}/routine/getBySchClassId?classNo=${classNo}&section=${section}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2550,7 +2550,7 @@ export const ClassRoutineBySearchGetAll = async(classNo, section) =>{
 //  post Api 
 export const AssignTeaSubPostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/subject/setSubjectTeacher`,datares)
+  const res= await axios.post(`${Domain}/subject/setSubjectTeacher`,datares)
   if(res) {
    return res;
   }
@@ -2562,7 +2562,7 @@ export const AssignTeaSubPostApi = async(datares) =>{
 // subject and teacher Get all api  
 export const AssignGetAllApi = async(classId,subjectId) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/subject/getAllSubjectTeacher?classId=${classId}&subjectId=${subjectId}`)
+  const res= await axios.get(`${Domain}/subject/getAllSubjectTeacher?classId=${classId}&subjectId=${subjectId}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2574,7 +2574,7 @@ export const AssignGetAllApi = async(classId,subjectId) =>{
 //  Delete Api 
 export const AssignDeleteDeleteApi = async(subjectIdForDelete, staffIdForDelete) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/subject/removeSubjectTeacher?subjectId=${subjectIdForDelete}&teacherId=${staffIdForDelete}`)
+  const res2= await axios.delete(`${Domain}/subject/removeSubjectTeacher?subjectId=${subjectIdForDelete}&teacherId=${staffIdForDelete}`)
   if(res2) {
    return res2;
   }
@@ -2594,7 +2594,7 @@ export const AssignDeleteDeleteApi = async(subjectIdForDelete, staffIdForDelete)
 
 export const DailyAttendancehGetAll = async(sectionId, date) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/attendance/search-date?sectionId=${sectionId}&date=${date}`)
+  const res= await axios.get(`${Domain}/attendance/search-date?sectionId=${sectionId}&date=${date}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2608,7 +2608,7 @@ export const DailyAttendancehGetAll = async(sectionId, date) =>{
 export const DailyAttendancePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
 //   const res= await axios.post(`${girjeshServer}/routine/addRoutine`,datares)
-  const res= await axios.post(`${newngrok1}/routine/addRoutine`,datares)
+  const res= await axios.post(`${Domain}/routine/addRoutine`,datares)
   if(res) {
    return res;
   }
@@ -2627,7 +2627,7 @@ export const DailyAttendancePostApi = async(datares) =>{
 // get all api by search class and section 
 export const GeyAllTeacherLightWeightGetAll = async(classNo, section) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/otherStaff/getAllStaff-light`)
+  const res= await axios.get(`${Domain}/otherStaff/getAllStaff-light`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2640,7 +2640,7 @@ export const GeyAllTeacherLightWeightGetAll = async(classNo, section) =>{
 //  post Api 
 export const AssignClassTreachPostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.post(`${newngrok1}/section/assignClassTeacher`,datares)
+  const res= await axios.post(`${Domain}/section/assignClassTeacher`,datares)
   if(res) {
    return res;
   }
@@ -2651,7 +2651,7 @@ export const AssignClassTreachPostApi = async(datares) =>{
 //  assign get all api
 export const AssignClassTeacherGetAllApi = async() =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/section/section-classTeacher-getAll`)
+  const res= await axios.get(`${Domain}/section/section-classTeacher-getAll`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2665,7 +2665,7 @@ export const AssignClassTeacherGetAllApi = async() =>{
 //  Delete Api 
 export const AssignDeleteApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res2= await axios.delete(`${newngrok1}/section/removeClassTeacher/${id}`)
+  const res2= await axios.delete(`${Domain}/section/removeClassTeacher/${id}`)
   if(res2) {
    return res2;
   }
@@ -2676,7 +2676,7 @@ export const AssignDeleteApi = async(id) =>{
 // Get by id
 export const AssignClassTeacherGetByIdAllApi = async(id) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${newngrok1}/section/sectionClassTeacherGetById/${id}`)
+  const res= await axios.get(`${Domain}/section/sectionClassTeacherGetById/${id}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2690,7 +2690,7 @@ export const AssignClassTeacherGetByIdAllApi = async(id) =>{
 export const AssignClassTeacherPutApi = async(section, teacher) =>{
    
    axios.defaults.headers.common["Authorization"] = token;
-   const res2= await axios.put(`${newngrok1}/section/editClassTeacher?sectionId=${section}&staffId=${teacher}`)
+   const res2= await axios.put(`${Domain}/section/editClassTeacher?sectionId=${section}&staffId=${teacher}`)
    // console.log('my-response-get-by-id', res2)
 
    if(res2) {
