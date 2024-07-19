@@ -1,0 +1,728 @@
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import SamplePaperTable from '../Modals/SamplePapers/SamplePaperTable';
+import { getAllClassApi, getDownloadSamplePaperDataApi, getSearhSamplePaperDataApi } from '../Utils/Apis';
+import { Toaster } from 'react-hot-toast';
+
+const Container = styled.div`
+height: 92vh;
+    .form-select{
+        color: var(--greyState);
+        box-shadow: none;
+        border: 1px solid var(--formInputBorder) !important;
+    }
+    
+    .mainBreadCrum{
+        --bs-breadcrumb-divider: '>' !important;
+    }
+
+    .bredcrumText{
+        color: var(--breadCrumTextColor);
+    }
+
+    .bredcrumActiveText{
+        color: var(--breadCrumActiveTextColor);
+    }
+
+    .ExportBtns{
+        border-radius: 6px;
+        border: 1.5px solid var(--fontControlBorder);
+    }
+
+    .form-control::placeholder, .form-control, .form-select{
+        color: var(--greyState)
+    }
+
+    .form-control, .form-select{
+        border-radius: 5px !important;
+        box-shadow: none !important;
+        border: 1px solid var(--fontControlBorder);
+    }
+
+    .contbtn{
+        margin-left: 41% !important;
+        margin-top: -20% !important;
+    }
+
+    .greydiv{
+        background-color: #FBFBFB;
+    }
+
+`;
+
+
+const SamplePaper = () => {
+
+    const token = localStorage.getItem('token');
+    const [SearchBtn, setSearchBtn] = useState(false);
+
+    const [AddWarning, setAddWarning] = useState(true);
+    const [EditWarning, setEditWarning] = useState(true);
+    const [DeleteWarning, setDeleteWarning] = useState(true);
+    const [isChecked, setIsChecked] = useState(false);
+
+
+    const [getDriverIdDataName, setgetDriverIdDataName]= useState('');
+    const [getDriverIdDataAddress, setgetDriverIdDataAddress]= useState('');
+    const [getDriverIdDataPhone, setgetDriverIdDataPhone]= useState('');
+    const [getDriverIdDataEmail, setgetDriverIdDataEmail]= useState('');
+    const [getDriverIdDataGender, setgetDriverIdDataGender]= useState('');
+    const [getDriverIdDataImage, setgetDriverIdDataImage]= useState('');
+
+    const [getDriverIdDataNameError, setgetDriverIdDataNameError]= useState('');
+    const [getDriverIdDataAddressError, setgetDriverIdDataAddressError]= useState('');
+    const [getDriverIdDataPhoneError, setgetDriverIdDataPhoneError]= useState('');
+    const [getDriverIdDataEmailError, setgetDriverIdDataEmailError]= useState('');
+    const [getDriverIdDataGenderError, setgetDriverIdDataGenderError]= useState('');
+    const [getDriverIdDataImageError, setgetDriverIdDataImageError]= useState('');
+
+
+    const [addressError, setAddressError] = useState('');
+
+    const [classNo, setClassNo] = useState('');
+    const [classId, setClassId] = useState(0);
+    const [sectionId, setSectionId] = useState(0);
+    const [subjectId, setSubjectId] = useState(0);
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [allClassData, setAllClassData] = useState([]);
+    const [allSectionData, setAllSectionData] = useState([]);
+    const [allSubjectData, setAllSubjectData] = useState([]);
+
+    const [allSamplePaperData, setAllSamplePaperData] = useState([]);
+
+
+    const [refreshUpdate, setRefreshUpdate] = useState(false);
+    const [refreshPage, setRefreshPage] = useState(false);
+    const [refreshDelete, setRefreshDelete] = useState(false);
+
+
+    // Pagination
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(2); // Change this value as needed
+    const [totalItems, setTotalItems] = useState(10);
+
+    // Pagination
+
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        const [val1, val2] = value.split(',');
+        setClassNo(val1);
+        setClassId(val2);
+    }
+
+
+    useEffect(() => {
+        getAllClassData();
+    }, [token]);
+
+    const PageRefresh = () => {
+        setRefreshPage(!refreshPage);
+    }
+
+    const getAllSamplePaper = async () => {
+        try {
+            // const formdata = new FormData();
+            // formdata.append('classId', classId);
+            // formdata.append('sectionId', sectionId);
+            // formdata.append('subjectId', subjectId);
+            console.log('try')
+
+            var response = await getSearhSamplePaperDataApi(classId, sectionId, subjectId);
+            console.log(response, 'try2')
+
+            if (response?.status === 200) {
+                if (response?.data?.status === 'success') {
+                    setAllSamplePaperData(response?.data?.samplePaper);
+                    console.log(response?.data?.samplePaper, 'class');
+                }
+            }
+            else {
+                console.log(response?.data?.msg);
+            }
+        }
+        catch (e) {
+            console.log(e);
+
+        }
+    }
+
+
+    const getAllClassData = async () => {
+        try {
+            var response = await getAllClassApi();
+            if (response?.status === 200) {
+                if (response?.data?.status === 'success') {
+                    setSearchBtn(true)
+                    setAllClassData(response?.data?.classes);
+                    console.log(response?.data?.classes, 'class');
+                }
+            }
+            else {
+                console.log(response?.data?.msg);
+            }
+        }
+        catch {
+
+        }
+    }
+
+
+    const getDownloadSamplePaperData = async (id) => {
+        try {
+            console.log('try 1')
+            console.log('id', id)
+            var response = await getDownloadSamplePaperDataApi(id);
+            console.log(response, 'res')
+            if (response?.status === 200) {
+                if (response?.data?.status === 'success') {
+                    console.log('sucess');
+                }
+            }
+            else {
+                console.log(response?.data?.msg);
+            }
+        }
+        catch {
+
+        }
+    }
+
+    // const getAllSectionData = async() => {
+    //     try{
+    //         console.log('section')
+    //         const formData = new FormData();
+    //         formData.append('classNo' , classNo);
+    //         var response = await getAllSectionByClassApi(classNo);
+
+    //         console.log('section 2')
+    //         console.log(classNo, 'classNo')
+    //         console.log(response , 'response')
+
+    //         if(response?.status===200){
+    //             console.log('section 3')
+    //             if(response?.data?.status==='success'){
+    //                 console.log('section 4')
+    //                 setAllSectionData(response?.data?.allSections);
+    //                 console.log(response?.data?.allSections , 'section');
+    //             }
+    //             else{
+    //                 console.log('else 1')
+    //             }
+    //         }
+    //         else{
+    //         console.log(response?.data?.msg);
+    //         }
+    //     }
+    //     catch (error){
+    //         console.log('Error during Section Api' , error)
+    //     }
+    // }
+
+    // const getAllSubjectData = async() => {
+    //     try{
+    //         console.log(classId, 'subject')
+    //         var response = await getAllSubjectByClassApi(classId);
+    //         if(response?.status===200){
+    //         if(response?.data?.status==='success'){
+    //             setAllSubjectData(response?.data?.subjects);
+    //         }
+    //         }
+    //         else{
+    //         console.log(response?.data?.msg);
+    //         }
+    //     }
+    //     catch{
+
+    //     }
+    // }
+
+    const AddNewSamplePaper = () => {
+
+    }
+
+
+    const cancelSearch = () => {
+        setSearchBtn(false)
+    }
+
+    const PageRefreshOnAdd = () => {
+        setAddWarning(!AddWarning);
+        setRefreshUpdate(!refreshUpdate);
+    }
+
+
+    const DeleteDriverDataById = async(id) => {
+        if(isChecked){
+          try {
+            var response = await deleteDriverApi(id);
+            if (response?.status === 200) {
+              if(response.data.status==='success'){
+                setDeleteWarning(!DeleteWarning)
+                toast.success(response?.data?.msg)
+              }
+            } 
+            else {
+              toast.error(response?.error);
+            }
+          }
+          catch (error) {
+            console.error('Error during login:', error);
+          }
+        }
+    }
+
+
+    const UpdateDriverDataById = async () => {
+        if(validateEditFields()){
+            try {
+            const formData = new FormData();
+            
+            formData.append("driverName", getDriverIdDataName)
+            formData.append("driverEmail", getDriverIdDataEmail)
+            formData.append("driverAddress", getDriverIdDataAddress)
+            formData.append("phoneNo", getDriverIdDataPhone)
+            formData.append("gender", getDriverIdDataGender) 
+            
+            var response = await updateDriverDataApi(driverIDD, formData);
+        
+            if (response?.status === 200) {
+                console.log('200')
+                console.log(response)
+              if (response.data.status === 'success') {
+                console.log('success')
+                setEditWarning(!EditWarning);
+                toast.success(response?.data?.msg)
+              }
+              else{
+                console.log('fail')
+              }
+            } else {
+              toast.error(response?.error);
+            }
+          } catch (error) {
+            console.error('Error during update:', error);
+          }
+        }
+    };
+
+
+
+    // **************************************   Pagination   *************************************************
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = allSamplePaperData.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Pagination links/buttons
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    // **************************************   Pagination   *************************************************
+
+
+    return (
+        <>
+            <Container>
+                <div className="container-fluid">
+                    <div className="row pt-3 ps-3">
+                        <div className="row pb-3 ps-0">
+                            <div className="col-lg-3 col-md-8 col-sm-12 flex-frow-1">
+                                <nav className='mainBreadCrum font14 ps-0' aria-label="breadcrumb">
+                                    <ol className="breadcrumb mb-1">
+                                        <li className="breadcrumb-item"><a href="/" className='bredcrumText text-decoration-none'>Home</a></li>
+                                        <li className="breadcrumb-item active bredcrumActiveText" aria-current="page">Sample Paper</li>
+                                    </ol>
+                                </nav>
+                                <p className='font16 ps-0 fontWeight500'>Sample Paper</p>
+                            </div>
+                            <div className="col-lg-9 col-md-8 col-sm-12">
+                                <div className="row">
+                                    <div className="col-md-3 col-sm-6 text-end ps-0">
+                                        <Link className="btn ps-2 pe-2 ExportBtns bg-white" type="submit" to='/superAdminAddSchools'>
+                                            <span className='font16 textVerticalCenter'>
+                                                <Icon icon="fa-solid:file-csv" width="1.4em" height="1.4em" style={{ color: "#008479" }} />
+                                                <span className='ms-1'>Export to CSV</span>
+                                            </span>
+                                        </Link>
+                                    </div>
+                                    <div className="col-md-2 col-sm-6 ps-0">
+                                        <Link className="btn ps-2 pe-2 ExportBtns bg-white" type="submit" to='/superAdminAddSchools'>
+                                            <span className='font16 textVerticalCenter'>
+                                                <Icon icon="fluent:document-pdf-24-filled" width="1.4em" height="1.4em" style={{ color: "#008479" }} />
+                                                <span className='ms-1'>Export to PDF</span>
+                                            </span>
+                                        </Link>
+                                    </div>
+                                    <div className="col-md-6 col-sm-6 p-0">
+                                        <div className="row">
+                                            <div className="col-md-9 col-sm-6 p-0">
+                                                <form className="d-flex" role="search">
+                                                    <input className="form-control formcontrolsearch" type="search" placeholder="Search" aria-label="Search" />
+                                                    <button className="btn searchButtons text-white" type="submit"><span className='font16'>Search</span></button>
+                                                </form>
+                                            </div>
+                                            <div className="col-md-3 col-sm-6 text-end">
+                                                <button className="btn ps-0 pe-0 addCategoryButtons text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_staticBackdrop" aria-controls="add_staticBackdrop"><span className='font16 textVerticalCenter'>+ Add Sample Paper</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row pb-3">
+                            <div className="bg-white rounded-2 p-4">
+                                <form class="row g-3">
+                                    <div class="col-md-4 col-sm-6 col-12">
+                                        <label for="inputEmail4" class="form-label font14">Class</label>
+                                        <select class="form-select font14" aria-label="Default select example" onChange={handleChange}>
+                                            <option >--- Choose ---</option>
+                                            {allClassData?.map((option, index) => (
+                                                <option key={option.classId} value={`${index}, ${option?.classId}`}>
+                                                    {option.classNo}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-12">
+                                        <label for="inputEmail4" class="form-label font14">Section</label>
+                                        <select class="form-select font14" aria-label="Default select example" onChange={(e) => setSectionId(e.target.value)}>
+                                            <option >--- Choose ---</option>
+                                            {allClassData[classNo]?.section?.map(option => (
+                                                <option key={option.classSecId} value={option.classSecId}>
+                                                    {option.sectionName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-12">
+                                        <label for="inputEmail4" class="form-label font14">Subject</label>
+                                        <select class="form-select font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
+                                            <option >--- Choose ---</option>
+                                            {allClassData[classNo]?.subjects?.map(option => (
+                                                <option key={option.subjectId} value={option.subjectId}>
+                                                    {option.subjectName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <p className='text-center p-3'>
+                                        <button type='button' className='btn addCategoryButtons text-white' onClick={getAllSamplePaper}>Search</button>
+                                        <button type='button' className='btn cancelButtons ms-3' onClick={cancelSearch}>Cancel</button>
+                                    </p>
+                                </form>
+                                {SearchBtn
+                                    ?
+                                    <>
+                                        <div className="row">
+                                            <div className="overflow-scroll">
+                                                <table className="table align-middle table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th className='tableHeading text-center'><span className='font14'>#</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Title</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Class</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Section</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Subject</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Teacher Name</span></th>
+                                                            <th className='tableHeading '><span className='font14'>Sample Paper Details</span></th>
+                                                            <th className='tableHeading text-center'><span className='font14'>Action</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {currentItems.map((item, index) => (
+                                                            <tr key={item.id} className='align-middle'>
+                                                                <th className='text-center greyText'><span className='font14'>{(currentPage - 1) * itemsPerPage + index + 1}</span></th>
+                                                                <td className='greyText'>
+                                                                    <span className='font14 align-self-start'>{item.title}</span>
+                                                                </td>
+                                                                <td className='greyText'>
+                                                                    <span className='font14 align-self-start'>{item.classId}</span>
+                                                                </td>
+                                                                <td className='greyText'>
+                                                                    <span className='font14 align-self-start'>{item.aa}</span>
+                                                                </td>
+                                                                <td className='greyText'>
+                                                                    <span className='font14 align-self-start'>{item.subjectName}</span>
+                                                                </td>
+                                                                <td className='greyText'>
+                                                                    <span className='font14 align-self-start'>{item.teacherName}</span>
+                                                                </td>
+                                                                <td className='greyText'>
+                                                                    <p className='font14 align-self-start m-0'>
+                                                                        <Icon icon="bxs:file-pdf" width="1.3em" height="1.3em" style={{ color: 'red' }} />
+                                                                        <Link className='ms-2' to='' onClick={() => getDownloadSamplePaperData(item.sampleId)}>Download</Link>
+                                                                    </p>
+                                                                </td>
+                                                                <td className='text-center'>
+                                                                    <div className="dropdown dropdownbtn">
+                                                                        <button className="btn btn-sm actionButtons dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                            <span>Action</span>
+                                                                        </button>
+                                                                        <ul className="dropdown-menu dropdown-menu-end">
+                                                                            <li>
+                                                                                <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Edit_staticBackdrop" aria-controls="Edit_staticBackdrop">
+                                                                                    Edit
+                                                                                </button>
+                                                                            </li>
+                                                                            <li>
+                                                                                {/* <button className="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Delete</button> */}
+                                                                                <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Delete_staticBackdrop" aria-controls="Delete_staticBackdrop">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                                <div className="d-flex">
+                                                    <div className="ms-auto">
+                                                        <ul className="pagination">
+                                                            {pageNumbers.map((number) => (
+                                                                <li key={number} className="page-item">
+                                                                    <button
+                                                                        className={`btn me-2 ${currentPage === number ? 'activeBtn' : 'page-link '}`}
+                                                                        onClick={() => paginate(number)}
+                                                                    >
+                                                                        {number}
+                                                                    </button>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className="d-flex justify-content-center p-5">
+                                            <img src="./images/search.svg" alt="" className='img-fluid' />
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <Toaster />
+
+
+    {/* *********************************************************************************************************************************************************************************************************************** */}
+    {/* *********************************************************************************************************************************************************************************************************************** */}
+
+
+                    <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
+                        <div className="offcanvas-header border-bottom border-2 p-1">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
+                                    <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                </svg>
+                            </Link>
+                            <h2 className="offcanvas-title" id="staticBackdropLabel">Driver Edit</h2>
+                        </div>
+                        <div className="offcanvas-body p-0">
+                            <div>
+                                {EditWarning
+                                    ?
+                                    <>
+                                        <div>
+                                            {/* <p className='modalLightBorder orangeText p-2'>{getDriverIdDataName}</p> */}
+                                            <div className="p-3">
+                                                <form>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Name</label>
+                                                        <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataName} onChange={(e) => handleDriverNameChange(e.target.value)} />
+                                                        <span className='text-danger'>{getDriverIdDataNameError}</span>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Email</label>
+                                                        <input type="mail" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataEmailError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataEmail} onChange={(e) => handleDriverEmailChange(e.target.value)} />
+                                                        <span className='text-danger'>{getDriverIdDataEmailError}</span>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Address</label>
+                                                        <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataAddressError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataAddress} onChange={(e) => handleDriverAddressChange(e.target.value)} />
+                                                        <span className='text-danger'>{getDriverIdDataAddressError}</span>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Phone Number</label>
+                                                        <input type="tel" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataPhoneError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataPhone} onChange={(e) => handleDriverPhoneChange(e.target.value)} />
+                                                        <span className='text-danger'>{getDriverIdDataPhoneError}</span>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Gender</label>
+                                                        <select className={`form-select font14 ${getDriverIdDataGenderError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={getDriverIdDataGender} onChange={(e) => handleDriverGenderChange(e.target.value)}>
+                                                            <option>----- Select Gender -----</option>
+                                                            <option value='Male'>Male</option>
+                                                            <option value='Female'>Female</option>
+                                                        </select>
+                                                        <span className='text-danger'>{getDriverIdDataGenderError}</span>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Image</label>
+                                                        <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataImageError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataImage.split('/').pop()} onChange={(e) => handleDriverImageChange(e.target.files)} />
+                                                        <span className='text-danger'>{getDriverIdDataImageError}</span>
+                                                    </div>
+                                                </form>
+                                                <p className='text-center p-3'>
+                                                    <button className='btn addButtons text-white' onClick={UpdateDriverDataById}>Update Driver</button>
+                                                    <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefresh}>Cancel</button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div>
+                                            <p className='modalLightBorder p-2 mb-0'>Driver List</p>
+                                            <div className="mt-3  ">
+                                                <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
+                                                <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
+                                                    <p className='warningHeading'>Successful Updated</p>
+                                                    <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
+                                                </div>
+                                                <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnAdd}>Continue</button>
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+    {/* **********************************************************************************************************************************************************************************/}
+    {/* ************************************************************************************************************************************************************************************/}
+
+
+
+
+                    <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Delete_staticBackdrop" aria-labelledby="staticBackdropLabel">
+                        <div className="offcanvas-header ps-0 modalHighborder p-1">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
+                                    <path fill="#B50000" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                </svg>
+                            </Link>
+                            <span className="offcanvas-title" id="staticBackdropLabel">Packages</span>
+                        </div>
+                        <div className="offcanvas-body p-0">
+                            <div>
+                                {DeleteWarning
+                                    ?
+                                    <>
+                                        <div className=''>
+                                            <p className='modalLightBorder p-2'>Driver</p>
+                                            <p className='text-center p-3'> <img src="./images/errorI.svg" className='img-fluid' alt="" /></p>
+                                            <p className='text-center warningHeading'>Are you Sure?</p>
+                                            <p className='text-center greyText warningText pt-2'>This Action will be permanently delete<br />the Profile Data</p>
+                                            <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
+                                            <p className='text-center p-3'>
+                                                <button className='btn deleteButtons text-white' onClick={() => DeleteDriverDataById(delDriverIDD)}>Delete</button>
+                                                <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                            </p>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div >
+                                            <p className='border-bottom p-3'>Driver</p>
+                                            <div className="">
+                                                <div className='deleteSVG border border-2 p-4 rounded-circle'><img src="./images/deleteicon.svg" alt="" /></div>
+                                                <div className="deletetext border m-4 border-2 greydiv ms-5 rounded-3 text-center greyText p-5">
+                                                    <p className='warningHeading'>Successful Deleted</p>
+                                                    <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
+                                                </div>
+                                                <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+
+    {/* ***********************************************************************************************************************************************************************************/}
+    {/* ***********************************************************************************************************************************************************************************/}
+
+
+
+                    <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="add_staticBackdrop" aria-labelledby="staticBackdropLabel">
+                        <div className="offcanvas-header border-bottom border-2 p-1">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
+                                    <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                </svg>
+                            </Link>
+                            <h2 className="offcanvas-title" id="staticBackdropLabel">Student Edit</h2>
+                        </div>
+                        <div className="offcanvas-body p-0">
+                            <div>
+                                {AddWarning
+                                    ?
+                                    <>
+                                        <div>
+                                            {/* <p className='modalLightBorder orangeText p-2'>{getStudentIdDataName}</p> */}
+                                            <div className="p-3">
+                                                <form>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="exampleInputAdd1" className='form-label greyText'>Address</label>
+                                                        <input type="address" className={`form-control p-2 formcontrolinput ${addressError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" rows={2} />
+                                                        <span className='text-danger'>{addressError}</span>
+                                                    </div>
+                                                </form>
+                                                <p className='text-center p-3'>
+                                                    <button className='btn contbtn text-white' onClick={AddNewSamplePaper} data-bs-toggle="offcanvas" data-bs-target="#Add_staticBackdrop" aria-controls="Add_staticBackdrop">Add Sample Paper</button>
+                                                    <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefresh}>Cancel</button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div>
+                                            <p className='modalLightBorder p-2 mb-0'>Student List</p>
+                                            <div className="mt-3  ">
+                                                <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
+                                                <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
+                                                    <p className='warningHeading'>Successful Updated</p>
+                                                    <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
+                                                </div>
+                                                <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnAdd}>Continue</button>
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+
+    {/* ***********************************************************************************************************************************************************************************/}
+    {/* ***********************************************************************************************************************************************************************************/}
+
+
+
+
+                </div>
+            </Container>
+        </>
+    )
+}
+
+export default SamplePaper
