@@ -69,11 +69,11 @@ const AddDropPoint = () => {
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setAllRouteData(response?.data?.routes);
-          toast.success(response?.data?.msg)
+          toast.success(response?.data?.message)
         }
       }
       else {
-        toast.error(response?.data?.msg)
+        toast.error(response?.data?.message)
       }
     }
     catch (error) {
@@ -103,14 +103,14 @@ const AddDropPoint = () => {
 
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
-          toast.success(response?.data?.msg)
+          toast.success(response?.data?.message)
           setTimeout(() => {
             navigate('/dropPoint');
           }, 1000);
         }
       }
       else {
-        console.log(response?.data?.msg);
+        console.log(response?.data?.message);
       }
     }
     catch (error) {

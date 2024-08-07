@@ -102,11 +102,11 @@ const NewPassSet = () => {
                 var response = await setPassApi(pass);
                 if(response?.status===200){
                   if(response?.data?.status==='success'){
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     navigate('/forgetsuccess');
                   }
                   else{
-                    toast.error(response?.data?.msg)
+                    toast.error(response?.data?.message)
                   }
                 }
             }

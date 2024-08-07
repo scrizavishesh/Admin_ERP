@@ -184,17 +184,17 @@ const SingleStudentAdmission = () => {
             if (response?.status === 200) {
                 console.log(response?.status, '200')
                 if (response?.data?.status === 'success') {
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setTimeout(() => {
                         navigate('/allStudent');
                     }, 700);
                 }
                 else {
-                    toast.error(response?.data?.msg)
+                    toast.error(response?.data?.message)
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (error) {
@@ -738,14 +738,14 @@ export default SingleStudentAdmission
 //             if (response?.status === 200) {
 //                 console.log(response?.status, '200')
 //                 if (response?.data?.status === 'success') {
-//                     toast.success(response?.data?.msg)
+//                     toast.success(response?.data?.message)
 //                     setTimeout(() => {
 //                         navigate('/allStudent');
 //                     }, 700);
 //                 }
 //             }
 //             else {
-//                 toast.error(response?.data?.msg);
+//                 toast.error(response?.data?.message);
 //             }
 //         }
 //         catch (error) {

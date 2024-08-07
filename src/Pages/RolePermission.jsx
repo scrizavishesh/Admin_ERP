@@ -593,9 +593,7 @@ const RolePermission = () => {
                           featureData.map(item => (
                             <option value={item.planFeatureId}>{item.featureName}</option>
                           ))
-
                         }
-
                       </select>
                     </div>
                   </div>

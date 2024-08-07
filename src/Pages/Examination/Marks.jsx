@@ -69,7 +69,7 @@ const Marks = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -83,7 +83,7 @@ const Marks = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setSessionData(response?.data?.sessions);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     // setTotalItems(10);
                 }
             }
@@ -109,7 +109,7 @@ const Marks = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -126,12 +126,12 @@ const Marks = () => {
                     setMarksData(response?.data?.Marks);
                     console.log(response?.data?.Marks, 'marks data at get api for 1st time');
                     // setTotalItems(10)
-                    toast.success(response.data.msg);
+                    toast.success(response.data.message);
                 }
             }
             else {
                 setloaderState(false);
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (e) {

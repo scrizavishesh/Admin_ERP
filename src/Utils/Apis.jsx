@@ -1,24 +1,24 @@
-// import axios from 'axios'
-// const token = `Bearer ${localStorage.getItem('token')}`;
+import axios from 'axios'
+const token = `Bearer ${localStorage.getItem('token')}`;
 const forgetTooken = `Bearer ${localStorage.getItem('forgteToken')}`;
 // const token = localStorage.getItem('token');
 
-// const LocalGirjeshIP= 'http://10.5.51.4:5000';
-const Domain= 'https://www.auth.edu2all.in';
+const LocalGirjeshIP= 'http://10.5.51.4:5000';
+const Domain= 'http://auth.edu2all.in:5000';
 
 // ******************************************************************************************************
                             // Login  //
 // ******************************************************************************************************
 
 
-// export const loginApi = async(data) => {
-//     var res = await axios.post(`${Domain}/login/all`,data);
-//     if (res) {
-//         return res;
-//     }else{
-//        return [];
-//     }
-// }
+export const loginApi = async(data) => {
+    var res = await axios.post(`${Domain}/login/all`,data);
+    if (res) {
+        return res;
+    }else{
+       return [];
+    }
+}
 
 export const logoutApi = async() => {
     axios.defaults.headers.common["Authorization"] = token;
@@ -138,7 +138,7 @@ export const updateStudentApi = async (id, data) => {
 
 export const deleteStudentApi = async (id) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.delete(`${Domain}/student/deleteByStId/${id}`);
+    var res = await axios.delete(`192.168.20.109:5000/student/deleteByStId/${id}`);
     if (res) {
         return res;
     }else{
@@ -1154,36 +1154,320 @@ export const getAllEventsApi = async(searchKey) => {
 
 
 
-
-// Saqib Code 
-
-
-
-import axios from 'axios'
-
-const token = ` Bearer ${localStorage.getItem('token')}`;
-// console.log('my-token',token)
-
-const newngrok1= 'http://auth.edu2all.in:5000';
-// const newngrok1= 'http://10.5.51.4:5000';
-// const girjeshServer = '10.5.50.47:5000';
+// ******************************************************************************************************
+                                    // Fee Type  //
+// ******************************************************************************************************
 
 
-// ***************************************************************************************
-                            // Login  //
-// ***************************************************************************************
+export const getAllFeeTypeApi = async(searchKey, pageNo, pageSize) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/type/getAll?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
 
+export const addNewFeeTypeApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/type/addFeeType`, data );
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
 
-export const loginApi = async(data) => {
-
-    let res = await axios.post(`${Domain}/login/all`,data);
-
+export const getFeeTypeByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/type/getById/${id}`);
     if (res) {
         return res;
     }else{
        return [];
     }
 }
+
+export const updateFeeTypeByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/type/updateById/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteFeeTypeByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/type/deleteById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+
+// ******************************************************************************************************
+                                    // Fee Group  //
+// ******************************************************************************************************
+
+
+export const getAllFeeGroupApi = async(searchKey, pageNo, pageSize) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/group/getAll?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewFeeGroupApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/group/addGroup`, data );
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
+
+export const getFeeGroupByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/group/getById/${id}`);
+    if (res) {
+        return res;
+    }else{
+       return [];
+    }
+}
+
+export const updateFeeGroupByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/group/updateFeeGroup/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteFeeGroupByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/group/deleteById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // Fee Master  //
+// ******************************************************************************************************
+
+
+export const getAllFeeMasterApi = async(searchKey, pageNo, pageSize) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/master/getAll?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewFeeMasterApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/master/add`, data );
+    if (res) {
+        return res;
+        FeeType
+        return [];
+    }
+}
+
+export const addNewFeeApi = async (id,data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/feePay/updateById/${id}`, data );
+    if (res) {
+        return res;
+        FeeType
+        return [];
+    }
+}
+
+export const getFeeByPaymentIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/feePay/getByPaymentId?paymentId=${id}` );
+    if (res) {
+        return res;
+        FeeType
+        return [];
+    }
+}
+
+export const getFeeMasterByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/master/getById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const getFeeMasterByGroupNameApi = async (groupName) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/master/getByGroupName/${groupName}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const updateFeeMasterByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/master/update/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteFeeMasterByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/master/deleteById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteFeeMasterByGroupNameApi = async (name) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/master/deleteByGroupName/${name}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+// ******************************************************************************************************
+                                    // Fee Discount  //
+// ******************************************************************************************************
+
+
+export const getAllFeeDiscountApi = async(searchKey, pageNo, pageSize) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/discount/getAll?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewFeeDiscountApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/discount/add`, data );
+    if (res) {
+        return res;
+        FeeType
+        return [];
+    }
+}
+
+export const getFeeDiscountByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/discount/getById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const updateFeeDiscountByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/discount/update/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteFeeDiscountByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/discount/deleteById/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+// ******************************************************************************************************
+                                    // Collect Fees  //
+// ******************************************************************************************************
+
+
+export const getCollectedStudentsFeeApi = async(classId, classSectionId) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/feePay/getByClassSec?classId=${classId}&classSectionId=${classSectionId}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const getCollectedStudentFeeByIdApi = async(studentId, size, page) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/feePay/getByStId/${studentId}?size=${size}&page=${page}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//saqib code
+
+
+
+
 
 // ########################## Human Resources API start ###########################
 
@@ -1891,7 +2175,6 @@ export const BookManPutApi = async(id,datares) =>{
 // ########################## Book manager list API end ########################### 
 
 
-
 // ########################## Book issue report API start ########################### 
 
 //  post Api 
@@ -1907,9 +2190,9 @@ export const BookIssuePostApi = async(datares) =>{
 }
  
 //   Get All Api 
-export const bookIssueGetAllApi = async() =>{
+export const bookIssueGetAllApi = async(startDate,endDate) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${Domain}/transaction/all`)
+  const res= await axios.get(`${Domain}/transaction/book-transactions?startDate=${startDate}&endDate=${endDate}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2517,9 +2800,9 @@ export const ClassRoitinePostApi = async(datares) =>{
   }  
 }
 // get all api 
-export const ClassRoutineGetAll = async() =>{
+export const ClassRoutineGetAll = async(classNo,sectionName) =>{
    axios.defaults.headers.common["Authorization"] = token;
-  const res= await axios.get(`${Domain}/routine/getAllRoute`)
+  const res= await axios.get(`${Domain}/routine/getBySchClassId?classNo=${classNo}&section=${sectionName}`)
 // console.log('my-response', res)
   if(res) {
    return res;
@@ -2589,7 +2872,6 @@ export const AssignDeleteDeleteApi = async(subjectIdForDelete, staffIdForDelete)
 
 
 
-
 // ########################## Daily attendace API start ########################### 
 
 export const DailyAttendancehGetAll = async(sectionId, date) =>{
@@ -2607,8 +2889,7 @@ export const DailyAttendancehGetAll = async(sectionId, date) =>{
 //  post Api 
 export const DailyAttendancePostApi = async(datares) =>{
    axios.defaults.headers.common["Authorization"] = token;
-//   const res= await axios.post(`${girjeshServer}/routine/addRoutine`,datares)
-  const res= await axios.post(`${Domain}/routine/addRoutine`,datares)
+  const res= await axios.post(`${Domain}/attendance/create`,datares)
   if(res) {
    return res;
   }
@@ -2616,11 +2897,32 @@ export const DailyAttendancePostApi = async(datares) =>{
    return []
   }  
 }
+//  Put Data Api 
+export const MyDailyAttendancePutApi = async(datares) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/attendance/update`,datares)
+   // console.log('my-response-get-by-id', res2)
 
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+}
 
+export const DailyAttendancehGetAllBymonth = async(sectionId2,month,year,search) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/attendance/search-month?sectionId=${sectionId2}&month=${month}&year=${year}&searchKey=${search}&page=${1}&size=${10}`,)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
 // ########################## Daily attendace API end ########################### 
-
-
 
 // ########################## Assign Class teacher APIs start ########################### 
 
@@ -2700,5 +3002,346 @@ export const AssignClassTeacherPutApi = async(section, teacher) =>{
     return []
    }
 }
+// ########################## Assign Class teacher APIs end ########################### 
 
-// ########################## Daily attendace API end ########################### 
+
+
+
+
+// ########################## StaffAttendance APIs start ########################### 
+
+export const StaffAttendanceGetAllApi = async(date,roleid) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/staffAttendance/search-date?roleId=${roleid}&date=${date}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+//  post Api 
+export const TakeAttendancePostApi = async(datares) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.post(`${Domain}/staffAttendance/create`,datares)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }  
+}
+//  Put Data Api 
+export const SatffAttendancePutApi = async(data) =>{
+   
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/staffAttendance/update`, data)
+   // console.log('my-response-get-by-id', res2)
+
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+}
+
+export const AttendanceGetAllBymonth = async(roleid,month,year,search) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/staffAttendance/search-month?roleId=${roleid}&month=${month}&year=${year}&searchKey=${search}&page=${1}&size=${10}`,)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+// ########################## StaffAttendance APIs end ########################### 
+
+
+
+
+// ########################## Income category APIs start ########################### 
+
+//  post Api 
+export const IncomeCategoryPostApi = async(formData) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.post(`${Domain}/account-category/create`,formData)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }  
+}
+
+
+//  Income get all api
+export const IncomeCategorygetAllApi = async(income) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/account-category/getAllByType?type=${income}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Delete Api 
+export const IncomeCategoryDeleteApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res2= await axios.delete(`${Domain}/account-category/delete/${id}`)
+  if(res2) {
+   return res2;
+  }
+  else{
+   return []
+  }
+}
+// Get by id
+export const IncomeCategoryGetByIdApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/account-category/getOne/${id}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Put Data Api 
+export const IncomeCategoryPutApi = async(id,formData) =>{
+   
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/account-category/modify/${id}`,formData)
+   // console.log('my-response-get-by-id', res2)
+
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+}
+
+// ########################## Income category APIs end ########################### 
+
+
+
+
+
+// ########################## Expense category APIs start ########################### 
+//  post Api 
+export const ExpenseCategoryPostApi = async(formData) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.post(`${Domain}/account-category/create`,formData)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }  
+}
+
+//  Expense get all api
+export const ExpenseCategorygetAllApi = async(expense) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/account-category/getAllByType?type=${expense}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Delete Api 
+export const ExpenseCategoryDeleteApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res2= await axios.delete(`${Domain}/account-category/delete/${id}`)
+  if(res2) {
+   return res2;
+  }
+  else{
+   return []
+  }
+}
+// Get by id
+export const ExpenseCategoryGetByIdApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/account-category/getOne/${id}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Put Data Api 
+export const ExpenseCategoryPutApi = async(id,formData) =>{
+   
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/account-category/modify/${id}`,formData)
+   // console.log('my-response-get-by-id', res2)
+
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+}
+// ########################## Expense category APIs end ########################### 
+
+
+// ########################## Income APIs end ########################### 
+
+//  post Api 
+export const IncomePostApi = async(formData) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.post(`${Domain}/income-expense/addTransaction`,formData)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }  
+}
+//  income get all api
+export const IncomeAllApi = async(income ,startDate,endDate,categoryId) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/income-expense/getAllByType?type=${income}`)
+//   ,startDate,endDate,categoryId
+//   &categoryId=${categoryId}&startDate=${startDate}&endDate=${endDate}
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+//  Delete Api 
+export const IncomeDeleteApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res2= await axios.delete(`${Domain}/income-expense/delete/${id}`)
+  if(res2) {
+   return res2;
+  }
+  else{
+   return []
+  }
+}
+
+// Get by id
+export const IncomeGetByIdApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/income-expense/getOne/${id}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+//  Put Data Api 
+export const incomePutApi = async(id,formData) =>{
+   
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/income-expense/modify/${id}`,formData)
+   // console.log('my-response-get-by-id', res2)
+
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+
+}
+
+
+// ########################## Income APIs end ########################### 
+
+
+
+
+// ########################## Expense APIs start ########################### 
+
+//  post Api 
+export const ExpensePostApi = async(formData) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.post(`${Domain}/income-expense/addTransaction`,formData)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }  
+}
+//  income get all api
+export const ExpenseAllApi = async(expense) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/income-expense/getAllByType?type=${expense}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Delete Api 
+export const ExpenseDeleteApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res2= await axios.delete(`${Domain}/income-expense/delete/${id}`)
+  if(res2) {
+   return res2;
+  }
+  else{
+   return []
+  }
+}
+
+// Get by id
+export const ExpenseGetByIdApi = async(id) =>{
+   axios.defaults.headers.common["Authorization"] = token;
+  const res= await axios.get(`${Domain}/income-expense/getOne/${id}`)
+// console.log('my-response', res)
+  if(res) {
+   return res;
+  }
+  else{
+   return []
+  }
+}
+
+//  Put Data Api 
+export const ExpensePutApi = async(id,formData) =>{
+   
+   axios.defaults.headers.common["Authorization"] = token;
+   const res2= await axios.put(`${Domain}/income-expense/modify/${id}`,formData)
+   // console.log('my-response-get-by-id', res2)
+
+   if(res2) {
+    return res2;
+   }
+   else{
+    return []
+   }
+
+}
+// ########################## Expense APIs end ########################### 
+
+

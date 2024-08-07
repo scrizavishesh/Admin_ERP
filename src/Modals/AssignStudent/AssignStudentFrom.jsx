@@ -76,7 +76,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch {
@@ -112,7 +112,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -157,13 +157,13 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                 console.log(response)
 
                 if (response?.data?.status === 'success') {
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setAssignStudent(false)
                     navigate('/allStudent')
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (error) {

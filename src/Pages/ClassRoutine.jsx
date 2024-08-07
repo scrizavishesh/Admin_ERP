@@ -415,11 +415,14 @@ const ClassRoutine = () => {
   const [subjectData, setSubjectData] = useState([])
   const [teacherData, setTeacherData] = useState([])
   const [classRoutineData, setClassRoutineData] = useState([])
-  console.log('my class routine data', classRoutineData)
   const [breakType, setBreakType] = useState('')
   const [classNo, setClassNo] = useState('')
   const [classId, setClassId] = useState()
+  console.log('my class id', classId)
+  console.log('my class no', classNo)
+
   const [section, setSection] = useState('')
+  const [sectionName, setSectionName] = useState('')
   const [subjectId, setSubjectId] = useState('')
   const [teacherId, setTeacherId] = useState('')
   // console.log('my teacher id is = ',teacherId)
@@ -483,7 +486,7 @@ const ClassRoutine = () => {
     if (classId && subjectId) {
       MyAllTeacherBySubjectId()
     }
-    MyClassRoutineGetAllApi()
+    // MyClassRoutineGetAllApi()
   }, [classId, subjectId])
 
 
@@ -509,10 +512,12 @@ const ClassRoutine = () => {
 
   // Section by class for section 
   const MySyllabusSectionGetApi = async () => {
+    // console.log('class id inside the section func',classId)
     setLoader(true)
     try {
       const response = await SyllabusSectionGetAllApi(classId);
-      console.log('Section-get-all-api in Syllabus', response);
+
+      console.log('Section-get-all-api in classRoutine', response);
       if (response?.status === 200) {
         toast.success(response?.data?.classes?.message)
         setSectionData(response?.data?.allSections)
@@ -586,7 +591,7 @@ const ClassRoutine = () => {
           toast.success(response?.data?.msg);
           setShow(false)
           setHide(true)
-          MyClassRoutineGetAllApi()
+          // MyClassRoutineGetAllApi()
           setLoader(false)
 
         } else {
@@ -605,11 +610,11 @@ const ClassRoutine = () => {
   const MyClassRoutineGetAllApi = async () => {
     setLoader(true)
     try {
-      const response = await ClassRoutineGetAll();
+      const response = await ClassRoutineGetAll(classNo,sectionName);
       console.log('Class Routine get all api data', response);
       if (response?.status === 200) {
         toast.success(response?.data?.classes?.message)
-        setClassRoutineData(response?.data?.schoolClassSections)
+        setClassRoutineData(response?.data?.timetable)
         setLoader(false)
         // console.log(response?.data?.schoolClassSections, 'section data by class')
       } else {
@@ -637,14 +642,6 @@ const ClassRoutine = () => {
       console.log(error)
     }
   }
-
-
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  const periods = [1, 2, 3, 4, 5, 6, 7, 8];
-
-  // const  routinesByDay  = classRoutineData[0]?.classes[0]?.sections[0]?.routinesByDay;
-  // console.log(routinesByDay,'my data from api in class routine')
-  
 
   return (
     <Container>
@@ -700,7 +697,7 @@ const ClassRoutine = () => {
         <h5 className='ms-3 mb-2 margin-minus22 heading-16' style={{ marginTop: '-22px' }}>Class Routine Details</h5>
 
         <div className="main-content-conatainer pt-1 ">
-          {/* <div className="row p-3">
+          <div className="row p-3">
                 <div className="col-lg-6 col-md-6 col-sm-12  ">
                     <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14">Class</label>
@@ -717,7 +714,7 @@ const ClassRoutine = () => {
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Section</label>
-                    <select class="form-select  form-select-sm form-focus  label-color" onChange={(e)=>setSection(e.target.value)} aria-label="Default select example">
+                    <select class="form-select  form-select-sm form-focus  label-color" onChange={(e)=> setSectionName(e.target.value)} aria-label="Default select example">
                                     <option selected>--Choose--</option>
                                         {
                                           sectionData.map((item=>
@@ -732,10 +729,10 @@ const ClassRoutine = () => {
            
             <div className="row buttons-topss">
                 <div className='my-button11 heading-16'>
-                    <button type="button" class="btn btn-outline-success" onClick={MyClassRoutineSearchGetAllApi}>Search</button>
+                    <button type="button" class="btn btn-outline-success" onClick={MyClassRoutineGetAllApi}>Search</button>
                     <button type="button" class="btn btn-outline-success">Cancel</button>
                 </div>
-             </div> */}
+             </div>
 
 
           <div className=' for-dislay-direction pt-4 pe-2'>
@@ -786,72 +783,39 @@ const ClassRoutine = () => {
           <div className="table-container px-3 pt-1 table-responsive w-100">
             <table className="table table-sm table-bordered">
               <thead className='text-center'>
-                {/* <tr className='heading-16 text-color-000 text-center' style={{ fontWeight: '500' }}>
+                <tr className='heading-16 text-color-000 text-center' style={{ fontWeight: '500' }}>
                   <th className='table-row-bg-color'></th>
                   <th className='table-row-bg-color'> 9 - 9.45 AM</th>
                   <th className='table-row-bg-color'>10 - 10.45 AM</th>
                   <th className='table-row-bg-color'>11 - 11.45 AM</th>
-                  <th className='table-row-bg-color'>12 - 12.45 AM</th>
-                </tr> */}
-
-                {/* {
-                  classRoutineData.map((item, index) => (
-                    
-                    <tr key={index}>
-                        <th className='table-row-bg-color'></th>
-                      <th className=' greyText'>
-                        {
-                          item?.classes?.map((item) => (
-                              item?.sections?.map((item)=>(
-                               item?.routinesByDay?.tuesday?.map((item)=>(
-                                <div>
-                                  {item.startHourTime.slice(0,5)} - {item.endHourTime.slice(0,5)}
-                                </div>
-                               ))
-                              ))
-                          ))
-                        }
-                      </th>
-                    </tr>
-                  ))
-                } */}
-
-                <tr>
-                  <th>Period</th>
-                  {
-                  days.map(day => (
-                    <td key={day}>{day.charAt(0).toUpperCase() + day.slice(1)}</td>
-                  ))
-                  }
+                  <th className='table-row-bg-color'>12 - 12.45 PM</th>
+                  <th className='table-row-bg-color'>1 - 1.45 PM</th>
+                  <th className='table-row-bg-color'>2 - 2.45 PM</th>
+                  <th className='table-row-bg-color'>3 - 3.45 PM</th>
+                  <th className='table-row-bg-color'>4 - 4.45 PM</th>
+               
                 </tr>
               </thead>
-
-
               <tbody className='heading-14 align-middle greyTextColor text-center'>
-                {/* {
-                  periods.map(period => (
-                    <tr key={period}>
-                      <td>{period}</td>
-                      {
-                        days.map(day => {
-                          const routine = routinesByDay[day].find(r => r.period === period);
-                          return (
-                            <td key={day}>
-                              {routine ? (
-                                <div>
-                                  <div>{routine.subject}</div>
-                                  <div>{routine.teacher}</div>
-                                  <div>{routine.startHourTime} - {routine.endHourTime}</div>
-                                </div>
-                              ) : (
-                                <div>No Class</div>
-                              )}
-                            </td>
-                          );
-                        })}
+
+              {
+                  classRoutineData.map((item, index) => (
+                    <tr key={index}>
+                      <td className=' greyText'>{item.day}</td>
+                      <td className=' greyText'>
+                        {
+                          item?.timetable?.map((item) => (
+                            <div>
+                              { item.teacher} <br />
+                              { item.subject}
+                            </div>
+
+                          ))
+                        }
+                      </td>
                     </tr>
                   ))
-                } */}
+                }
 
               </tbody>
             </table>
@@ -1301,3 +1265,14 @@ export default ClassRoutine
     </div>
   ))
 } */}
+
+// thead 
+
+{/* <tr className='heading-16 text-color-000 text-center' style={{ fontWeight: '500' }}>
+                  <th className='table-row-bg-color'></th>
+                  <th className='table-row-bg-color'> 9 - 9.45 AM</th>
+                  <th className='table-row-bg-color'>10 - 10.45 AM</th>
+                  <th className='table-row-bg-color'>11 - 11.45 AM</th>
+                  <th className='table-row-bg-color'>12 - 12.45 AM</th>
+                </tr> */}
+// thead 

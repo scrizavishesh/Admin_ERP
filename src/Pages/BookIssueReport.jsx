@@ -586,7 +586,6 @@ const BookIssueReport = () => {
   const SectionHandle = (e) => {
     const value = e.target.value;
     const [val1, val2] = value.split(',');
-    console.log('section id 123432332', val1)
     setSectionId(parseInt(val1))
     const name = val2.trim()
     setSectionName(name)
@@ -685,15 +684,17 @@ const BookIssueReport = () => {
   // Get All Apis 
   const MyBookIssueGetApi = async () => {
     setLoader(true)
+    console.log('inside then try', startDate,endDate)
     try {
-      const response = await bookIssueGetAllApi();
+      const response = await bookIssueGetAllApi(startDate,endDate);
+   
       console.log(' my Issues book DATA', response);
       if (response?.status === 200) {
-        toast.success(response?.data?.message)
-        setIssuesdata(response?.data?.TransactionList)
+        toast.success(response?.data?.msg)
+        setIssuesdata(response?.data?.bookTransaction)
         setLoader(false)
       } else {
-        toast.error(response?.data?.message);
+        toast.error(response?.data?.msg);
       }
     } catch (error) {
       console.log(error)
@@ -780,11 +781,13 @@ const BookIssueReport = () => {
     MyIssueBookDeleteApi(IdForDelete)
   }
 
-
   //  Date range 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-console.log('my both date =', startDate,endDate)
+
+  console.log('my both date1 =', startDate)
+  console.log('my both date2 =', endDate)
+
   const handleDateChange = (dates) => {
     setStartDate(formatDate(dates[0]));
     setEndDate(formatDate(dates[1]));
@@ -795,7 +798,8 @@ console.log('my both date =', startDate,endDate)
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    return "${year}-${month}-${day}";
+    return `${year}-0${month}-${day}`;
+    // return "${year}-${month}-${day}";
   };
 
   return (
@@ -835,6 +839,7 @@ console.log('my both date =', startDate,endDate)
 
           <div className="row p-3 d-flex justify-content-center">
             <div className="ps-0 col-lg-6 col-md-6 col-sm-12">
+
               <div class="dropdown">
                 <input type="text" class="form-control form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" />
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -850,6 +855,7 @@ console.log('my both date =', startDate,endDate)
                   />
                 </div>
               </div>
+              
             </div>
           </div>
 
@@ -858,7 +864,7 @@ console.log('my both date =', startDate,endDate)
           {/* ####### buttons ######  */}
           <div className="row mb-3 buttons-topss">
             <div className='my-button11 heading-16'>
-              <button type="button" class="btn btn-outline-success my-button112233" >Search</button>
+              <button type="button" class="btn btn-outline-success my-button112233" onClick={MyBookIssueGetApi}>Search</button>
               <button type="button" class="btn btn-outline-success">Cancel</button>
             </div>
           </div>
@@ -888,12 +894,12 @@ console.log('my both date =', startDate,endDate)
                   issuesData.map((item, index) => (
                     <tr className='heading-14' >
                       <td className=' greyText pe-0'>{index + 1}</td>
-                      <td className=' greyText pe-0'>{item.book.bookName}</td>
+                      <td className=' greyText pe-0'>{item.bookName}</td>
                       <td className=' greyText pe-0'>{item.issueDate}</td>
                       <td className=' greyText pe-0 my-anchor-view'>{item.returnDate}</td>
                       <td className=' greyText pe-0'>{item.returnDelay}</td>
                       <td className=' greyText pe-0'>{item.studentId}</td>
-                      <td className=' greyText pe-0'>{item.book.bookName}</td>
+                      <td className=' greyText pe-0'>{item.bookName}</td>
                       <td className={` pe-0 ${item.bookStatus === 'Issued' ? 'my-issue-status' : ''}`}>
                         <p className={` pe-0 ${item.bookStatus === 'Issued' ? 'my-issue-status' : `${item.bookStatus === 'Lost' ? 'my-lost-status' : 'my-return-status'}`}`}>{item.bookStatus}</p>
                       </td>

@@ -184,7 +184,7 @@ const DropPoint = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -199,7 +199,7 @@ const DropPoint = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -218,11 +218,11 @@ const DropPoint = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setgetDropPointIdDataName(response?.data?.drops?.stopName);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -248,7 +248,7 @@ const DropPoint = () => {
             if (response?.status === 200) {
                 if (response.data.status === 'success') {
                     setEditWarning(!EditWarning);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
                 else {
                     console.log('fail')
@@ -287,7 +287,7 @@ const DropPoint = () => {
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {

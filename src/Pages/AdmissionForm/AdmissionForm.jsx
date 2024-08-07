@@ -58,10 +58,11 @@ const AdmissionForm = () => {
                         <nav className='mainBreadCrum font14 ps-0' aria-label="breadcrumb">
                             <ol className="breadcrumb mb-1">
                                 <li className="breadcrumb-item"><a href="/" className='bredcrumText text-decoration-none'>Home</a></li>
-                                <li className="breadcrumb-item active bredcrumActiveText" aria-current="page">Admissions</li>
+                                <li className="breadcrumb-item" aria-current="page"><a href="/" className='bredcrumText text-decoration-none'>Admissions</a></li>
+                                <li className="breadcrumb-item active bredcrumActiveText" aria-current="page">Admission Form</li>
                             </ol>
                         </nav>
-                        <p className='font16 ps-0 fontWeight500'>Admin List</p>
+                        <p className='font16 ps-0 fontWeight500'>Admission Form</p>
                     </div>
                     <div className="row pb-3">
                         <div className="bg-white rounded-2 p-4">

@@ -57,11 +57,11 @@ const ViewStudentDetails = ({ studentGetId }) => {
           setEmergencyNo(response?.data?.student?.emergencyNo);
           setStudentPh(response?.data?.student?.studentPhone);
           setStudentImage(response?.data?.student?.studentImage);
-          toast.success(response?.data?.msg)
+          toast.success(response?.data?.message)
         }
       }
       else {
-        toast.error(response?.data?.msg);
+        toast.error(response?.data?.message);
       }
     }
     catch {

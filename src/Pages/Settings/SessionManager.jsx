@@ -213,7 +213,7 @@ const SessionManager = () => {
                 if (response?.data?.status === 'success') {
                     setSessionData(response?.data?.sessions);
                     setActiveSession(response?.data?.activeSession)
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setTotalItems(10);
                 }
             }
@@ -233,7 +233,7 @@ const SessionManager = () => {
                     setEndDateEdit(response?.data?.session?.endDate);
                     console.log(response?.data?.session?.startDate);
                     console.log(response?.data?.session?.endDate);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
         }
@@ -257,12 +257,12 @@ const SessionManager = () => {
                     console.log(response)
 
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setAddWarning(!AddWarning)
                     }
                 }
                 else {
-                    console.log(response?.data?.msg);
+                    console.log(response?.data?.message);
                 }
             }
             catch (error) {
@@ -282,7 +282,7 @@ const SessionManager = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (error) {
@@ -301,7 +301,7 @@ const SessionManager = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setSessionData(response?.data?.sessions);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
         }

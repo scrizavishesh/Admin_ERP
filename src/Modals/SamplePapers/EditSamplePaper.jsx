@@ -107,7 +107,7 @@ const EditSamplePaper = ({EditItemId}) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -124,7 +124,7 @@ const EditSamplePaper = ({EditItemId}) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -143,7 +143,7 @@ const EditSamplePaper = ({EditItemId}) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -168,7 +168,7 @@ const EditSamplePaper = ({EditItemId}) => {
                 console.log(response)
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setEditSamplePaper(!EditSamplePaper);
                     }
                 }

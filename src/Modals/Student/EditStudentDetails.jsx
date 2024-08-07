@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getAllClassApi, getStudentDataByIdApi, updateStudentApi } from '../../Utils/Apis';
+import { getAllClassApi, getAllFeeMasterApi, getStudentDataByIdApi, updateStudentApi } from '../../Utils/Apis';
 import toast from 'react-hot-toast';
 import DataLoader from '../../Layouts/Loader';
 
@@ -9,6 +9,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
   //loader State
   const [loaderState, setloaderState] = useState(false);
   // Data State
+  const [allFeeMaster, setAllFeeMaster] = useState([]);
   const [allClassData, setAllClassData] = useState([]);
   const [allSecAccToClassData, setAllSecAccToClassData] = useState([]);
   const [EditWarning, setEditWarning] = useState(true);
@@ -30,6 +31,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
   const [emergencyNo, setEmergencyNo] = useState('')
   const [studentPh, setStudentPh] = useState('')
   const [studentImage, setStudentImage] = useState('')
+  const [FeeMaster, setFeeMaster] = useState('')
   // Error State
   const [studentNameError, setStudentNameError] = useState('')
   const [bloodGroupError, setBloodGroupError] = useState('')
@@ -50,10 +52,11 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
   const [studentImageError, setStudentImageError] = useState('')
   // Chnage type of input State
   const [changeImageType, setChangeImageType] = useState(true)
+  const [FeeMasterError, setFeeMasterError] = useState('')
 
   // Use Effect Call
   useEffect(() => {
-    getStudentDataById();
+    if (studentGetId) { getStudentDataById(); }
   }, [studentGetId, onReload, allSecAccToClassData])
 
   useEffect(() => {
@@ -62,6 +65,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
 
   useEffect(() => {
     getAllClassData();
+    getAllFeeMasterData()
   }, [token])
 
   // API Function Calls
@@ -87,7 +91,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     try {
       setloaderState(true);
       var response = await getStudentDataByIdApi(studentGetId);
-      setTimeout(()=>{
+      setTimeout(() => {
         if (response?.status === 200) {
           if (response?.data?.status === 'success') {
             setStudentName(response?.data?.student?.studentName);
@@ -107,17 +111,46 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
             setEmergencyNo(response?.data?.student?.emergencyNo);
             setStudentPh(response?.data?.student?.studentPhone);
             setStudentImage(response?.data?.student?.studentImage);
-            toast.success(response?.data?.msg);
+            toast.success(response?.data?.message);
             setloaderState(false);
           }
         }
         else {
-          toast.error(response?.data?.msg);
+          toast.error(response?.data?.message);
         }
       }, 5000)
     }
     catch {
 
+    }
+  }
+
+  const getAllFeeMasterData = async () => {
+    try {
+      setloaderState(true);
+      const searchByKey = ''; 
+      const pageNo = ''; 
+      const pageSize = '';
+      var response = await getAllFeeMasterApi(searchByKey, pageNo, pageSize);
+      console.log(response, 'fee master')
+      if (response?.status === 200) {
+        if (response?.data?.status === 'success') {
+          setloaderState(false);
+          setAllFeeMaster(response?.data?.feeMaster);
+          toast.success(response.data.message);
+        }
+        else {
+          setloaderState(false);
+          toast.error(response?.data?.message);
+        }
+      }
+      else {
+        setloaderState(false);
+        console.log(response?.data?.message);
+      }
+    }
+    catch (error) {
+      console.log('Error Facing during Get All Fee Group API - ', error)
     }
   }
 
@@ -140,8 +173,9 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     const studentAddressValidate = validateAddress(studentAddress);
     const emergencyNoValidate = validateEmergencyNo(emergencyNo);
     const studentImageValidate = validateStudentImage(studentImage);
+    const FeeMasterValidate = validateFeeMaster(FeeMaster);
 
-    if (studentNameValidate || bloodGroupValidate || fatherNameValidate || motherNameValidate || parentNoValidate || studentPhValidate || studentEmailValidate || parentEmailValidate || fatherOccupationValidate || motherOccupationValidate || classNoValidate || sectionValidate || studentDOBValidate || genderValidate || studentAddressValidate || emergencyNoValidate || studentImageValidate) {
+    if (studentNameValidate || bloodGroupValidate || fatherNameValidate || motherNameValidate || parentNoValidate || studentPhValidate || studentEmailValidate || parentEmailValidate || fatherOccupationValidate || motherOccupationValidate || classNoValidate || sectionValidate || studentDOBValidate || genderValidate || studentAddressValidate || emergencyNoValidate || studentImageValidate || FeeMasterValidate) {
       setStudentNameError(studentNameValidate);
       setBloodGroupError(bloodGroupValidate);
       setFatherNameError(fatherNameValidate);
@@ -158,7 +192,8 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
       setGenderError(genderValidate);
       setStudentAddressError(studentAddressValidate);
       setEmergencyNoError(emergencyNoValidate);
-      setStudentImageError(studentImageValidate);
+      // setStudentImageError(studentImageValidate);
+      setFeeMasterError(FeeMasterValidate)
       return;
     }
 
@@ -178,7 +213,8 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     setGenderError('');
     setStudentAddressError('');
     setEmergencyNoError('');
-    setStudentImageError('');
+    setFeeMasterError('')
+    // setStudentImageError('');
 
     try {
       setloaderState(true);
@@ -200,12 +236,13 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
       formData.append("emergencyNo", emergencyNo);
       formData.append("studentPh", studentPh);
       formData.append("studentImage", studentImage);
+      formData.append("feeGroupName", FeeMaster);
 
       var response = await updateStudentApi(studentGetId, formData);
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setloaderState(false);
-          toast.success(response?.data?.msg)
+          toast.success(response?.data?.message)
           setEditWarning(!EditWarning);
         }
         else {
@@ -232,6 +269,18 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(value)) {
       return '* Invalid characters !!';
+    }
+    return '';
+  };
+
+  const handleFeeMasterChange = (value) => {
+    setFeeMaster(value);
+    setFeeMasterError(validateFeeMaster(value))
+  }
+
+  const validateFeeMaster = (value) => {
+    if (value === '') {
+      return '* Fee Master is required';
     }
     return '';
   };
@@ -512,7 +561,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
       setGenderError(genderValidate);
       setStudentAddressError(studentAddressValidate);
       setEmergencyNoError(emergencyNoValidate);
-      setStudentImageError(studentImageValidate);
+      // setStudentImageError(studentImageValidate);
       return;
     }
 
@@ -532,7 +581,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     setGenderError('');
     setStudentAddressError('');
     setEmergencyNoError('');
-    setStudentImageError('');
+    // setStudentImageError('');
 
   }
 
@@ -685,6 +734,18 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
                   </div>
                   <span className='text-danger'>{studentImageError}</span>
                 </div>
+                <div className="mb-3">
+                  <label htmlFor="validationDefault01" className="form-label font14">Fee Master*</label>
+                  <select className={`form-select font14 ${FeeMasterError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={FeeMaster} onChange={(e) => handleFeeMasterChange(e.target.value)}>
+                    <option value=''>--- Choose ---</option>
+                    {allFeeMaster?.map(option => (
+                      <option key={option.feeGroup} value={option.feeGroup}>
+                        {option.feeGroup}
+                      </option>
+                    ))}
+                  </select>
+                  <span className='text-danger'>{FeeMasterError}</span>
+                </div>
               </form>
               <p className='text-center p-3'>
                 <button className='btn updateButtons text-white' onClick={UpdateStudentByID}>Update</button>
@@ -703,7 +764,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
                 <p className='warningHeading'>Successful Updated</p>
                 <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
               </div>
-              <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={()=> {onReload, setEditWarning(true), setAbc('Hey, I am updated one ')}}>Continue</button>
+              <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => { onReload, setEditWarning(true), setAbc('Hey, I am updated one ') }}>Continue</button>
             </div>
           </div>
         </>

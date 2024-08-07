@@ -114,7 +114,7 @@ const MarksTable = ({ marksData, className, sectionName, subjectName, sessionSel
                 console.log('4th')
                 if (response?.data?.status === 'success') {
                     console.log(response, 'res after success');
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
         }

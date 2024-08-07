@@ -413,24 +413,7 @@ const Departments = () => {
   const [searchKey, setSearchKey] = useState('')
   const [isValidNameRequired, setIsValidNameRequired] = useState(false);
 
-  const UpdateHandleBtn = (e) => {
-
-    if (show === true && hide === false) {
-      setShow(false)
-      setHide(true)
-    } else {
-      setShow(true)
-    }
-  }
-
-  const showNamedelete = () => {
-    if (showadd === true && hideedit === false) {
-      setShowadd(false)
-      setHideedit(true)
-    } else {
-      setShowadd(true)
-    }
-  }
+ 
   useEffect((e) => {
     MyDepartmentGetAllApi()
   }, [])
@@ -443,6 +426,7 @@ const Departments = () => {
     // name 
     if (departmentName === "" || !departmentName) {
       setIsValidNameRequired(true)
+      handleTitle()
     }
     else {
     }
@@ -452,7 +436,7 @@ const Departments = () => {
   // name 
   const handleTitle = (e2) => {
     setDepartmentName(e2);
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex =  /^[A-Za-z\s]+$/;
     setIsValidNameRequired(nameRegex.test(e2));
 
     if (e2 === "") {
@@ -555,11 +539,11 @@ const Departments = () => {
 
   // Department Put api 
   const MyDepartmentPutApi = async (id) => {
-    // console.log('my id for update',id)
+    console.log('my id for update',id)
     setLoader(true)
     try {
       const formData = new FormData()
-      formData.append('departmentName', departmentDataById)
+      formData.append('departmentName', departmentName)
 
       const response = await DepartmentPutApi(id, formData);
       console.log('MY_SUBJECT___put-Api', response)

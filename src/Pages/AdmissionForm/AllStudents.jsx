@@ -105,7 +105,6 @@ const AllStudents = () => {
   const token = localStorage.getItem('token');
 
   const [abc, setAbc] = useState('');
-  console.log(abc, 'value from edit')
 
   //loader State
   const [loaderState, setloaderState] = useState(false);
@@ -217,7 +216,7 @@ const AllStudents = () => {
         if (response?.status === 200) {
           if (response.data.status === 'success') {
             setDeleteWarning(!DeleteWarning)
-            toast.success(response?.data?.msg)
+            toast.success(response?.data?.message)
           }
         }
         else {

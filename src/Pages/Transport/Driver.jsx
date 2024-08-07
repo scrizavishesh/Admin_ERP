@@ -189,7 +189,7 @@ const Driver = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -208,7 +208,7 @@ const Driver = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -230,7 +230,7 @@ const Driver = () => {
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -267,7 +267,7 @@ const Driver = () => {
                     if (response.data.status === 'success') {
                         console.log('success')
                         setEditWarning(!EditWarning);
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                     else {
                         console.log('fail')
@@ -294,11 +294,11 @@ const Driver = () => {
                     setOriginalDriverIdDataEmail(response?.data?.driver?.driverEmail);
                     setgetDriverIdDataGender(response?.data?.driver?.gender);
                     setgetDriverIdDataImage(response?.data?.driver?.driverImage);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -566,7 +566,7 @@ const Driver = () => {
 
 
                 <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
-                    <div className="offcanvas-header border-bottom border-2 p-1">
+                    <div className="offcanvas-header border-bottom border-2 p-2">
                         <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                 <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />

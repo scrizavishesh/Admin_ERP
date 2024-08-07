@@ -102,11 +102,11 @@ const EditExam = ({ EditId }) => {
                     setStartingTime(response?.data?.Details?.startingTime);
                     setEndingTime(response?.data?.Details?.endingTime);
                     setTotalMarks(response?.data?.Details?.totalMarks);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -125,7 +125,7 @@ const EditExam = ({ EditId }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -140,7 +140,7 @@ const EditExam = ({ EditId }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -158,7 +158,7 @@ const EditExam = ({ EditId }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -185,7 +185,7 @@ const EditExam = ({ EditId }) => {
                 console.log(response, 'offline exam')
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         console.log(response, 'res after success');
                         setEditExam(!EditExam)
                     }

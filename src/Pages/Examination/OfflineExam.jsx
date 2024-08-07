@@ -166,8 +166,6 @@ const OfflineExam = () => {
     };
 
 
-
-
     // const handleChange = (e) => {
     //     const value = e.target.value;
     //     const [val1, val2] = value.split(',');
@@ -196,7 +194,7 @@ const OfflineExam = () => {
                     if (response.data.status === 'success') {
                         setloaderState(false);
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -219,11 +217,11 @@ const OfflineExam = () => {
                     setAllOfflineExamData(response?.data?.examDetails);
                     setTotalPages(response.data.totalPages)
                     setCurrentPage(response.data.currentPage)
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch {
@@ -250,11 +248,11 @@ const OfflineExam = () => {
                     setloaderState(false);
                     setAllOfflineExamData(response?.data?.examDetails);
                     setTotalItems(10);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (e) {
@@ -273,7 +271,7 @@ const OfflineExam = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -292,7 +290,7 @@ const OfflineExam = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -312,7 +310,7 @@ const OfflineExam = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {

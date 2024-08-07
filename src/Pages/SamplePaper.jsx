@@ -135,7 +135,7 @@ const SamplePaper = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     // Pagination
 
@@ -180,7 +180,7 @@ const SamplePaper = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (e) {
@@ -198,15 +198,18 @@ const SamplePaper = () => {
             console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
+                    setloaderState(false)
                     console.log(response, 'after success')
                     toast.success(response.data.message)
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                setloaderState(false)
+                console.log(response?.data?.message);
             }
         }
         catch (e) {
+            setloaderState(false)
             console.log('Error during downloading :',e);
 
         }
@@ -224,7 +227,7 @@ const SamplePaper = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -240,7 +243,7 @@ const SamplePaper = () => {
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -348,7 +351,7 @@ const SamplePaper = () => {
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.subjects?.map(option => (
                                             <option key={option.subjectId} value={option.subjectId}>
-                                                {option.subjectName} {option.subjectId}
+                                                {option.subjectName}
                                             </option>
                                         ))}
                                     </select>
@@ -384,7 +387,7 @@ const SamplePaper = () => {
                                                         </thead>
                                                         <tbody>
                                                             {allSamplePaperData.map((item, index) => (
-                                                                <tr key={item.id} className='align-middle'>
+                                                                <tr key={item.sampleId} className='align-middle'>
                                                                     <th className='text-center greyText'><span className='font14'>{index + 1}</span></th>
                                                                     <td className='greyText'>
                                                                         <span className='font14 align-self-start'>{item.title}</span>

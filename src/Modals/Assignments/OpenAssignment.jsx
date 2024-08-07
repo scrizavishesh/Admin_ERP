@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getAssignmentByIdDataApi, getDownloadAssignmentDataApi } from '../../Utils/Apis';
 import { Icon } from '@iconify/react';
 import toast, { Toaster } from 'react-hot-toast';
+import { Page } from 'react-pdf';
 // import { Document, Page, pdfjs } from 'react-pdf';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = `cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -62,7 +63,7 @@ const OpenAssignment = () => {
             if (response?.status === 200 && response?.data?.status === 'success') {
                 setAllAssignmentData(response?.data?.Assignment);
             } else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         } catch (e) {
             
@@ -78,7 +79,7 @@ const OpenAssignment = () => {
                 setPdfBase64(pdfData);
                 toast.success('Assignment Downloaded');
             } else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         } catch (e) {
             console.log(e);

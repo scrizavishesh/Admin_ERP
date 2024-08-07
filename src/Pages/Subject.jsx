@@ -743,7 +743,7 @@ const Subject = () => {
                 <tr className='heading-16 text-color-000' style={{ fontWeight: '500' }}>
                   <th className='' style={{ width: '100px' }}>#</th>
                   <th style={{ width: '250px' }}>Subject Name</th>
-                  <th style={{ width: '680px' }}>Subject Id</th>
+                  <th style={{ width: '630px' }}>Subject Id</th>
                   <th >Actions</th>
                 </tr>
               </thead>

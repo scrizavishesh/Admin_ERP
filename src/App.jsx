@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import DashboardLayout from './Dashboard/DashboardLayout';
 import WithoutAuth from './Main/WithoutAuth';
+import Main from './Main/Main';
 
 function App() {
 

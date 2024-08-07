@@ -108,14 +108,14 @@ const AddDriver = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false)
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setTimeout(() => {
                         navigate('/driver');
                     }, 1500);
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (error) {

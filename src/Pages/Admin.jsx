@@ -602,6 +602,7 @@ const ManageFaq = () => {
               </ol>
             </nav>
           </div>
+          
           <div className='d-flex g-1 for-media-query'>
             <button type="button " className="btn export1 btn-outline-secondary my-own-outline-btn me-2 ">
               <span>

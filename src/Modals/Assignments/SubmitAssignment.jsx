@@ -84,7 +84,7 @@ const SubmitAssignment = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (e) {
@@ -104,7 +104,7 @@ const SubmitAssignment = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (e) {

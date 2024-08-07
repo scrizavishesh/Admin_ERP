@@ -95,7 +95,7 @@ const AddSamplePaper = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -114,7 +114,7 @@ const AddSamplePaper = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -139,7 +139,7 @@ const AddSamplePaper = () => {
                 console.log(response)
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setAddSamplePaper(!AddSamplePaper);
                     }
                 }
@@ -432,7 +432,7 @@ export default AddSamplePaper
 //             }
 //             }
 //             else{
-//             console.log(response?.data?.msg);
+//             console.log(response?.data?.message);
 //             }
 //         }
 //         catch{
@@ -457,7 +457,7 @@ export default AddSamplePaper
 //                 console.log(response, 'exam cate')
 //                 if (response?.status === 200) {
 //                     if (response?.data?.status === 'success') {
-//                         toast.success(response?.data?.msg)
+//                         toast.success(response?.data?.message)
 //                         console.log(response, 'res after success');
 //                         setAddSamplePaper(!AddSamplePaper)
 //                     }

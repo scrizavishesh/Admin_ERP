@@ -406,7 +406,6 @@ font-size: 12px;
 
 const AssignClassTeacher = () => {
 
-
     const [loader, setLoader] = useState(false)
     const [forDelete, setForDelete] = useState(false)
 
@@ -447,11 +446,11 @@ const MyTeacherGetApi = async() => {
       const response = await GeyAllTeacherLightWeightGetAll();
       console.log('get-all-teacher-all-api',response);
       if (response?.status === 200) {
-        toast.success(response?.data?.classes?.msg)
+        toast.success(response?.data?.classes?.message)
         setTeacherData(response?.data?.allStaff)
         setLoader(false)
       } else {
-        toast.error(response?.data?.classes?.msg);
+        toast.error(response?.data?.classes?.message);
       }
     } catch (error) {
       console.log(error)
@@ -777,7 +776,6 @@ const MyAssignClassTeachgerGetApi = async () => {
                                             <label for="exampleFormControlInput1" className="form-label label-color heading-16">Teacher</label>
                                             <select class="form-select form-focus label-color heading-14 " onChange={(e) => setTeacher(e.target.value)} aria-label="Default select example">
                                                 <option selected>--Choose</option>
-
                                                 {
                                             teacherData.map(item =>(
                                             <option value={item.id}>{item.staffName}</option>

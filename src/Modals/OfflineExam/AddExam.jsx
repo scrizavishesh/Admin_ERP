@@ -93,7 +93,9 @@ const AddExam = ({ offlineExamState }) => {
     const getAllExamCategoryData = async () => {
         try {
             const searchKey = '';
-            var response = await getExamCategoryDataApi(searchKey);
+            const page = '';
+            const size = '';
+            var response = await getExamCategoryDataApi(searchKey, page, size);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setExamCategoryData(response?.data?.categories);
@@ -101,7 +103,7 @@ const AddExam = ({ offlineExamState }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -116,7 +118,7 @@ const AddExam = ({ offlineExamState }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -127,14 +129,16 @@ const AddExam = ({ offlineExamState }) => {
     const getAllRoomData = async () => {
         try {
             const searchKey = '';
-            var response = await getRoomDataApi(searchKey);
+            const page = '';
+            const size = '';
+            var response = await getRoomDataApi(searchKey, page, size);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setAllRoomData(response?.data?.rooms);
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -158,16 +162,16 @@ const AddExam = ({ offlineExamState }) => {
                 var response = await addNewOfflineExamApi(formData);
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setAddExam(!AddExam)
                         setDataUpdate(!dataUpdate)
                     }
                     else{
-                        toast.error(response?.data?.msg)
+                        toast.error(response?.data?.message)
                     }
                 }
                 else{
-                    toast.error(response?.data?.msg)
+                    toast.error(response?.data?.message)
                 }
             }
             catch {

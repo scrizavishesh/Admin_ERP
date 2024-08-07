@@ -7,7 +7,8 @@ import Main from '../Main/Main';
 const Container = styled.div`
     display: flex;
     width: 100%;
-    position: fixed;
+    height: 100vh;
+    /* position: fixed; */
 
     /* .hideScrollBar {
         overflow-y: scroll !important;
@@ -32,14 +33,14 @@ const Container = styled.div`
 
 const SidebarContainer = styled.div`
     flex-shrink: 0;
-    width: ${(props) => (props.sidebarOpen ? '224px' : '64px')};
-    /* width: ${(props) => (props.sidebarOpen ? '14%' : '4%')}; */
+    width: ${(props) => (props.sidebaropen ? '224px' : '64px')};
+    /* width: ${(props) => (props.sidebaropen ? '14%' : '4%')}; */
     transition: width 0.6s ease, transform 0.6s ease;
     background-color: var(--sidebarBackground);
-    /* z-index: 2; */
+    z-index: 2;
 
     @media screen and (max-width: 1000px) {
-        transform: translateX(${(props) => (props.sidebarOpen ? '0' : '-100%')});
+        transform: translateX(${(props) => (props.sidebaropen ? '0' : '-100%')});
         position: absolute;
         z-index: 999;
         top: 0;
@@ -50,22 +51,22 @@ const SidebarContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-    width: ${(props) => (props.sidebarOpen ? '85%' : '96%')};
+    width: ${(props) => (props.sidebaropen ? '85%' : '96%')};
     transition: all width 0.6s ease; 
-    height: 100vh;
-    /* overflow : scroll; */
-    z-index: 1;
+    background-color: #F2F3F6;
 
     @media screen and (max-width: 1000px) {
         width: 100% !important;
     }
 `;
 
+
 const SidebarContext = createContext();
 export const useSidebarContext = () => useContext(SidebarContext);
 
 const DashboardLayout = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 1000);
+    const [sidebaropen, setSidebarOpen] = useState(() => window.innerWidth > 1000);
+    // console.log(sidebaropen, typeof(sidebaropen))
 
     useEffect(() => {
         const handleResize = () => {
@@ -77,23 +78,21 @@ const DashboardLayout = () => {
     }, []);
 
     const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
+        setSidebarOpen(!sidebaropen);
     };
 
     return (
-        <SidebarContext.Provider value={{ sidebarOpen, toggleSidebar }}>
+        <SidebarContext.Provider value={{ sidebaropen, toggleSidebar }}>
             <Container>
-                <SidebarContainer sidebarOpen={sidebarOpen} className='hideScrollBar'>
-                    <Sidebar className='h-100 '/>
+                <SidebarContainer className='overflow-scroll h-100' sidebaropen={sidebaropen}>
+                    <Sidebar />
                 </SidebarContainer>
-                <MainContainer sidebarOpen={sidebarOpen} className='hideScrollBar'>
-                    <div className="container-fluid heighhhttt">
-                        <div className="row bg-white">
-                            <Navbar />
-                        </div>
-                        <div className="row mainContent overflow-scroll">
-                            <Main />
-                        </div>
+                <MainContainer className="container-fluid overflow-scroll h-100" sidebaropen={sidebaropen}>
+                    <div className="row bg-white">
+                        <Navbar />
+                    </div>
+                    <div className="row overflow-scroll">
+                        <Main />
                     </div>
                 </MainContainer>
             </Container>

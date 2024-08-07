@@ -143,11 +143,11 @@ const MyAccount = () => {
                     console.log(response?.data?.admin?.adminDOB, 'data')
                     console.log(response?.data?.admin?.adminPhoto, 'data')
                     validationCheck();
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setloaderState(false);
                 }
                 else {
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
         }
@@ -201,12 +201,12 @@ const MyAccount = () => {
             var response = await AdminAccountApi(formData);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     navigate('/allStudent')
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (error) {

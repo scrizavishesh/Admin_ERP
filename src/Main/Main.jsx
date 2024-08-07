@@ -19,7 +19,6 @@ import SamplePaper from '../Pages/SamplePaper'
 import Assignment from '../Pages/Assignment'
 import SchoolSetting from '../Pages/Settings/SchoolSetting'
 import SessionManager from '../Pages/Settings/SessionManager'
-import GradeBook from '../Pages/Settings/GradeBook'
 import PaymentSettings from '../Pages/Settings/PaymentSettings'
 import Subscription from '../Pages/Settings/Subscription'
 import MyAccount from '../Pages/Settings/MyAccount'
@@ -32,8 +31,23 @@ import PageNotFound from '../Pages/PageNotFound'
 import styled from 'styled-components';
 import DropPoint from '../Pages/Transport/DropPoint'
 import AllRoute from '../Pages/Transport/Route'
+import CollectFees from '../Pages/CollectFees'
+import SearchFeePayment from '../Pages/SearchFeePayment'
+import SearchDueFees from '../Pages/SearchDueFees'
+import FeesMaster from '../Pages/FeesMaster'
+import FeesGroup from '../Pages/FeesGroup'
+import FeesType from '../Pages/FeesType'
+import FeesDiscount from '../Pages/FeesDiscount'
+import FeesCarryForward from '../Pages/FeesCarryForward'
+import FeesReminder from '../Pages/FeesReminder'
+import CollectStudentFee from '../Pages/CollectStudentFee'
+import StudentProfilePage from '../Pages/StudentProfilePage'
+import ViewParticularFeeMaster from '../Modals/FeeMaster/ViewParticularFeeMaster'
+import ViewAllFeeMaster from '../Modals/FeeMaster/ViewAllFeeMaster'
 
-// Saqib 
+
+
+
 
 
 import Admin from '../Pages/Admin';
@@ -79,6 +93,22 @@ import AssignLeave from '../Pages/AssignLeave';
 import LeaveStatus from '../Pages/LeaveStatus';
 import AssignSubjectTeacher from '../Pages/AssignSubjectTeacher';
 import AssignClassTeacher from '../Pages/AssignClassTeacher';
+import Discount from '../Pages/Discount';
+import Fee from '../Pages/Fee';
+import Fee_collection from '../Pages/Fee_collection';
+import ManageInvoice from '../Pages/ManageInvoice';
+import Due_invoice from '../Pages/Due_invoice';
+import Income from '../Pages/Income';
+import Income_category from '../Pages/Income_category';
+import Expense from '../Pages/Expense';
+import Expense_category from '../Pages/Expense_category';
+import MainUserForm from '../Pages/MainUserForm';
+import User_Contact from '../Pages/User_Contact';
+import User_Per_info from '../Pages/User_Per_info';
+
+
+
+
 
 const Container = styled.div`
 `;
@@ -111,21 +141,29 @@ const Main = () => {
           <Route path='/assignment' element={<Assignment/>}/>
           <Route path='/schoolSetting' element={<SchoolSetting/>}/>
           <Route path='/sessionManager' element={<SessionManager/>}/>
-          {/* <Route path='/gradeBook' element={<GradeBook/>}/> */}
           <Route path='/paymentSettings' element={<PaymentSettings/>}/>
           <Route path='/subscription' element={<Subscription/>}/>
           <Route path='/myAccount' element={<MyAccount/>}/>
           <Route path='/allStudent' element={<AllStudents/>}/>
           <Route path='/assignment/openAssignment/:id' element={<OpenAssignment/>}/>
           <Route path='/assignment/submitAssignment/:id' element={<SubmitAssignment/>}/>
-          <Route path="/iii" element={<iii/>} />
 
+          <Route path='/collectFees' element={<CollectFees/>}/>
+          <Route path='/collectStudentFee/:id' element={<CollectStudentFee/>}/>
+          <Route path='/studentProfilePage/:id' element={<StudentProfilePage/>}/>
+          <Route path='/searchFeePayment' element={<SearchFeePayment/>}/>
+          <Route path='/searchDueFees' element={<SearchDueFees/>}/>
+          <Route path='/feesMaster' element={<FeesMaster/>}/>
+          <Route path='/viewParticularFeeMaster' element={<ViewParticularFeeMaster/>}/>
+          <Route path='/viewAllFeeMaster' element={<ViewAllFeeMaster/>}/>
+          <Route path='/feesGroup' element={<FeesGroup/>}/>
+          <Route path='/feesType' element={<FeesType/>}/>
+          <Route path='/feesDiscount' element={<FeesDiscount/>}/>
+          <Route path='/feesCarryForword' element={<FeesCarryForward/>}/>
+          <Route path='/feesReminder' element={<FeesReminder/>}/>
+          <Route path='/TakeAttendance' element={<TakeAttendance/>}/>
+          
 
-
-
-
-
-          {/* Saqib */}
 
 
 
@@ -164,7 +202,7 @@ const Main = () => {
           <Route exact path='/notice' element={<Notice/>}/>
           <Route exact path='/noticeview' element={<NoticeViewPage/>}/>
           <Route exact path='/event' element={<Event/>}/>
-          {/* <Route exact path='/' element={<Login/>}/> */}
+          <Route exact path='/' element={<Login/>}/>
           <Route exact path='/section' element={<Section/>}/>
           <Route exact path='/rolepermissiongetall' element={<RolePermisGetAll/>}/>
           <Route exact path='/onlinecourse' element={<OnlineCourse/>}/>
@@ -172,6 +210,19 @@ const Main = () => {
           <Route exact path='/leavestatus' element={<LeaveStatus/>}/>
           <Route exact path='/assignsubjectteacher' element={<AssignSubjectTeacher/>}/>
           <Route exact path='/assignclassteacher' element={<AssignClassTeacher/>}/>
+          <Route exact path='/discount' element={<Discount/>}/>
+          <Route exact path='/fee' element={<Fee/>}/>
+          <Route exact path='/feecollection' element={<Fee_collection/>}/>
+          <Route exact path='/manageinvoice' element={<ManageInvoice/>}/>
+          <Route exact path='/dueinvoisce' element={<Due_invoice/>}/>
+          <Route exact path='/income' element={<Income/>}/>
+          <Route exact path='/incomecategory' element={<Income_category/>}/>
+          <Route exact path='/expense' element={<Expense/>}/>
+          <Route exact path='/expensecategory' element={<Expense_category/>}/>
+          <Route exact path='/mainuserform' element={<MainUserForm/>}/>
+          <Route exact path='/usercontact' element={<User_Contact/>}/>
+          <Route exact path='/userperinfo' element={<User_Per_info/>}/>
+
 
 
           <Route path="*" element={<PageNotFound />} />

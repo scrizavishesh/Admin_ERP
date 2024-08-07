@@ -170,7 +170,7 @@ const ExamCategory = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -191,7 +191,7 @@ const ExamCategory = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -234,7 +234,7 @@ const ExamCategory = () => {
                     if (response.data.status === 'success') {
                         setloaderState(false);
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -266,7 +266,7 @@ const ExamCategory = () => {
                 if (response.data.status === 'success') {
                     setloaderState(false);
                     setEditExamCategory(!EditExamCategory);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             } else {
                 toast.error(response?.error);

@@ -156,7 +156,7 @@ const Vehicle = () => {
     const [vehicleIdNumber, setVehicleIdNumber] = useState('');
     const [vehicleIdModel, setVehicleIdModel] = useState('');
     const [vehicleIdChassisNumber, setVehicleIdChassisNumber] = useState('');
-    const [vehicleIdDriver, setVehicleIdDriver] = useState('');
+    const [vehicleIdDriver, setVehicleIdDriver] = useState(0);
     const [vehicleIdSeatCapacity, setVehicleIdSeatCapacity] = useState('');
     const [vehicleIdRoute, setVehicleIdRoute] = useState('');
 
@@ -193,10 +193,10 @@ const Vehicle = () => {
             if (response?.status === 200 && response?.data?.status === 'success') {
                 setloaderState(false);
                 setVehicleData(response?.data?.vehicles);
-                setTotalItems(10);
+                // setTotalItems(10);
                 toast.success(response.data.message);
             } else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         } catch (error) {
             console.error('Error fetching vehicle data:', error);
@@ -205,29 +205,39 @@ const Vehicle = () => {
 
     const getAllRouteData = async () => {
         try {
+            setloaderState(true);
             const response = await getAllRouteApi();
             if (response?.status === 200 && response?.data?.status === 'success') {
+                setloaderState(false);
                 setAllRouteData(response?.data?.routes);
-                console.log(response?.data?.routes);
+                toast.success(response?.data?.message);
             } else {
-                console.log(response?.data?.msg);
+                setloaderState(false);
+                toast.error(response?.data?.message);
             }
         } catch (error) {
+            setloaderState(false);
             console.error('Error fetching route data:', error);
         }
     };
 
     const getAllDriverData = async () => {
         try {
-            const response = await getDriverDataApi('');
+            setloaderState(true);
+            const searchKey='';
+            const pageNo='';
+            const size='';
+            const response = await getDriverDataApi(searchKey, pageNo, size);
             if (response?.status === 200 && response?.data?.status === 'success') {
                 setDriverData(response?.data?.drivers);
-                setTotalItems(response?.data?.totalDrivers);
                 toast.success(response.data.message);
+                setloaderState(false);
             } else {
-                console.log(response?.data?.msg);
+                toast.error(response?.data?.message);
+                setloaderState(false);
             }
         } catch (error) {
+            setloaderState(false);
             console.error('Error fetching driver data:', error);
         }
     };
@@ -247,7 +257,7 @@ const Vehicle = () => {
                 const response = await deleteVehicleApi(id);
                 if (response?.status === 200 && response.data.status === 'success') {
                     setDeleteWarning(!deleteWarning);
-                    toast.success(response?.data?.msg);
+                    toast.success(response?.data?.message);
                 } else {
                     toast.error(response?.error);
                 }
@@ -270,9 +280,9 @@ const Vehicle = () => {
                 setVehicleIdDriver(vehicle?.driver?.driverId);
                 setVehicleIdSeatCapacity(vehicle?.seatCapacity);
                 setVehicleIdRoute(vehicle?.routeClass?.routeId);
-                toast.success(response?.data?.msg);
+                toast.success(response?.data?.message);
             } else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         } catch (error) {
             console.error('Error fetching vehicle data by id:', error);
@@ -295,9 +305,9 @@ const Vehicle = () => {
                 const response = await updateVehicleDataApi(vehicleId, formData);
                 if (response?.status === 200 && response.data.status === 'success') {
                     setEditWarning(!editWarning);
-                    toast.success(response?.data?.msg);
+                    toast.success(response?.data?.message);
                 } else {
-                    toast.error(response?.data?.msg);
+                    toast.error(response?.data?.message);
                 }
             } catch (error) {
                 console.error('Error during update:', error);
@@ -720,7 +730,7 @@ const Vehicle = () => {
                     {/* ***********************************************************************************************************************************************************************************/}
 
 
-
+<Toaster/>
                 </div>
             </Container>
         </>

@@ -60,6 +60,7 @@ const Container = styled.div`
     .greydiv{
         background-color: #FBFBFB;
     }
+
     .formdltcheck:checked{
         background-color: #B50000;
         border-color: #B50000;
@@ -134,7 +135,7 @@ const Assignment = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     // Pagination
 
@@ -150,7 +151,10 @@ const Assignment = () => {
 
     useEffect(() => {
         getAllClassData();
-    }, [token, refreshDelete, allAssignmentData, pageNo]);
+        if(pageNo){
+            getAllAssignment();
+        }
+    }, [token, refreshDelete, pageNo]);
 
 
     const handlePageClick = (event) => {
@@ -168,6 +172,7 @@ const Assignment = () => {
     const getAllAssignment = async () => {
         try {
             var response = await getSearhAssignmentDataApi(classId, sectionId, subjectId, pageNo, pageSize);
+            console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setSearchBtn(true)
@@ -199,7 +204,7 @@ const Assignment = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -214,7 +219,7 @@ const Assignment = () => {
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -320,7 +325,7 @@ const Assignment = () => {
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.subjects?.map(option => (
                                             <option key={option.subjectId} value={option.subjectId}>
-                                                {option.subjectName} {option.subjectId}
+                                                {option.subjectName}{option.subjectId}
                                             </option>
                                         ))}
                                     </select>

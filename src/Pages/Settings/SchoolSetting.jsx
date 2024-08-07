@@ -120,13 +120,10 @@ const SchoolSetting = () => {
                     setSchoolSocial3(response?.data?.school?.socialLink3)
                     setSchoolPhoto(response?.data?.school?.schoolPhoto)
                     setloaderState(false);
-                    setTimeout(() => {
-                        validationCheck();
-                    }, 1500)
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
                 else {
-                    toast.error(response?.data?.msg)
+                    toast.error(response?.data?.message)
                 }
             }
         }
@@ -184,7 +181,7 @@ const SchoolSetting = () => {
             var response = await updateSchoolDataByIdAPI(formData);
             if (response?.status === 200) {
                 if (response.data.status === 'success') {
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setTimeout(() => {
                         navigate('/');
                     }, 1000);
@@ -351,44 +348,44 @@ const SchoolSetting = () => {
     };
 
 
-    // validate the data the is retrived by get By Id
-    const validationCheck = () => {
-        const schoolNameValidate = validateSchoolName(schoolName);
-        const schoolPhoneValidate = validateSchoolPhone(schoolPhone);
-        const schoolAddressValidate = validateSchoolAddress(schoolAddress);
-        const schoolInfoValidate = validateSchoolInfo(schoolInfo);
-        const schoolEmailRecpTitleValidate = validateSchoolEmail(schoolEmailRecpTitle);
-        const schoolSocial1Validate = validateSocialLink1(schoolSocial1);
-        const schoolSocial2Validate = validateSocialLink2(schoolSocial2);
-        const schoolSocial3Validate = validateSocialLink3(schoolSocial3);
-        const schoolWarningValidate = validateWarningText(schoolWarning);
-        const schoolPhotoValidate = validateSchoolPhoto(schoolPhoto);
+    // // validate the data the is retrived by get By Id
+    // const validationCheck = () => {
+    //     const schoolNameValidate = validateSchoolName(schoolName);
+    //     const schoolPhoneValidate = validateSchoolPhone(schoolPhone);
+    //     const schoolAddressValidate = validateSchoolAddress(schoolAddress);
+    //     const schoolInfoValidate = validateSchoolInfo(schoolInfo);
+    //     const schoolEmailRecpTitleValidate = validateSchoolEmail(schoolEmailRecpTitle);
+    //     const schoolSocial1Validate = validateSocialLink1(schoolSocial1);
+    //     const schoolSocial2Validate = validateSocialLink2(schoolSocial2);
+    //     const schoolSocial3Validate = validateSocialLink3(schoolSocial3);
+    //     const schoolWarningValidate = validateWarningText(schoolWarning);
+    //     const schoolPhotoValidate = validateSchoolPhoto(schoolPhoto);
 
-        if (schoolNameValidate || schoolPhoneValidate || schoolAddressValidate || schoolInfoValidate || schoolEmailRecpTitleValidate || schoolSocial1Validate || schoolSocial2Validate || schoolSocial3Validate || schoolWarningValidate || schoolPhotoValidate) {
-            setSchoolNameError(schoolNameValidate);
-            setSchoolPhoneError(schoolPhoneValidate);
-            setSchoolAddressError(schoolAddressValidate);
-            setSchoolInfoError(schoolInfoValidate);
-            setSchoolEmailRecpTitleError(schoolEmailRecpTitleValidate);
-            setSchoolSocial1Error(schoolSocial1Validate);
-            setSchoolSocial2Error(schoolSocial2Validate);
-            setSchoolSocial3Error(schoolSocial3Validate);
-            setSchoolWarningError(schoolWarningValidate);
-            setSchoolPhotoError(schoolPhotoValidate);
-            return;
-        }
+    //     if (schoolNameValidate || schoolPhoneValidate || schoolAddressValidate || schoolInfoValidate || schoolEmailRecpTitleValidate || schoolSocial1Validate || schoolSocial2Validate || schoolSocial3Validate || schoolWarningValidate || schoolPhotoValidate) {
+    //         setSchoolNameError(schoolNameValidate);
+    //         setSchoolPhoneError(schoolPhoneValidate);
+    //         setSchoolAddressError(schoolAddressValidate);
+    //         setSchoolInfoError(schoolInfoValidate);
+    //         setSchoolEmailRecpTitleError(schoolEmailRecpTitleValidate);
+    //         setSchoolSocial1Error(schoolSocial1Validate);
+    //         setSchoolSocial2Error(schoolSocial2Validate);
+    //         setSchoolSocial3Error(schoolSocial3Validate);
+    //         setSchoolWarningError(schoolWarningValidate);
+    //         setSchoolPhotoError(schoolPhotoValidate);
+    //         return;
+    //     }
 
-        setSchoolNameError('')
-        setSchoolPhoneError('')
-        setSchoolAddressError('')
-        setSchoolInfoError('')
-        setSchoolEmailRecpTitleError('')
-        setSchoolSocial1Error('')
-        setSchoolSocial2Error('')
-        setSchoolSocial3Error('')
-        setSchoolWarningError('')
-        setSchoolPhotoError('')
-    }
+    //     setSchoolNameError('')
+    //     setSchoolPhoneError('')
+    //     setSchoolAddressError('')
+    //     setSchoolInfoError('')
+    //     setSchoolEmailRecpTitleError('')
+    //     setSchoolSocial1Error('')
+    //     setSchoolSocial2Error('')
+    //     setSchoolSocial3Error('')
+    //     setSchoolWarningError('')
+    //     setSchoolPhotoError('')
+    // }
 
 
 

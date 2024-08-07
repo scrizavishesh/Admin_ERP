@@ -79,6 +79,7 @@ const AdminDashboard = () => {
     try {
       setloaderState(true);
       var response = await getAllNoticeApi(searchByKey);
+      console.log(response)
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setloaderState(false);
@@ -157,7 +158,7 @@ const AdminDashboard = () => {
                   <div className="d-flex pe-0">
                     <div className="w-100"><h1 className='orangeText'>56</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
-                    <div className="flex-shrink-1 p-1"><Link to='/allSchoolsPage'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
+                    <div className="flex-shrink-1 p-1"><Link to='/teacher'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
                 </div>
               </div>
@@ -174,7 +175,7 @@ const AdminDashboard = () => {
                   <div className="d-flex pe-0">
                     <div className="w-100"><h1 className='orangeText'>785</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
-                    <div className="flex-shrink-1 p-1"><Link to='/allSchoolsPage'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
+                    <div className="flex-shrink-1 p-1"><Link to='/allStudent'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
                 </div>
               </div>
@@ -191,7 +192,7 @@ const AdminDashboard = () => {
                   <div className="d-flex pe-0">
                     <div className="w-100"><h1 className='orangeText'>30</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
-                    <div className="flex-shrink-1 p-1"><Link to='/allSchoolsPage'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
+                    <div className="flex-shrink-1 p-1"><Link to='/other_staff'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
                 </div>
               </div>
@@ -267,18 +268,18 @@ const AdminDashboard = () => {
                   <div className="d-flex p-1">
                     <div className="flex-fill"><h2>Notice Board</h2></div>
                     <div className="flex-fill text-end">
-                      <Link className='p-1 rounded-2 borderOrange text-black text-decoration-none font12'>
+                      <Link className='p-1 rounded-2 borderOrange text-black text-decoration-none font12' to='/notice'>
                         View All
                       </Link>
                     </div>
                   </div>
                 </div>
                 <div className="p-2">
-                {NoticeData === null ?
-                  NoticeData?.map((item, index) => (
+                {NoticeData.length > 0 ?
+                  NoticeData.slice(0,2).map((item, index) => (
                     <div className="pt-2" key={index}>
                       <h2 className='p-1 ps-2 pe-2 text-white bgOrange rounded-4 text-decoration-none'>{item?.noticeDate}</h2>
-                      <h2 className='border-bottom border-1 pt-3 pb-3 text-grey'>{item?.noticeDescription}</h2>
+                      <h2 className='border-bottom border-1 pt-3 pb-3 text-grey'>{item?.description}</h2>
                       <h5 className='greyText pt-3'>{item?.noticeTitle} | {item?.noticeTime}</h5>
                     </div>
                   ))
@@ -294,15 +295,15 @@ const AdminDashboard = () => {
                   <div className="d-flex p-1">
                     <div className="flex-fill"><h2>Upcoming Events</h2></div>
                     <div className="flex-fill text-end">
-                      <Link className='p-1 rounded-2 borderOrange text-black text-decoration-none font12'>
+                      <Link className='p-1 rounded-2 borderOrange text-black text-decoration-none font12' to='/event'>
                         View All
                       </Link>
                     </div>
                   </div>
                 </div>
                 <div className="card greyTopborders greyBottomborders border-0 p-1">
-                  {EventData === null ?
-                    EventData?.map((item, index) => (
+                  {EventData.length > 0 ?
+                    EventData.slice(0,5).map((item, index) => (
                       <div className="p-0 mt-1 mb-1 eventBorder eventBg" key={index}>
                         <div className="d-flex p-2 border-left-orange">
                           <div className="flex-fill"><h2 className='font14'>{item?.eventName}</h2></div>

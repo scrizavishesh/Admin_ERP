@@ -90,7 +90,7 @@ const AddVehicle = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -114,7 +114,7 @@ const AddVehicle = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch(error) { 
@@ -140,7 +140,7 @@ const AddVehicle = () => {
 
     const handleSeatCapacity = (value) => {
         setSeatCapacity(value)
-        setSeatCapacityError('')
+        setSeatCapacityError(validateSeat(value))
     }
 
     const vehicleModelRegex = /^[A-Za-z0-9 .\-_/]+$/;
@@ -177,55 +177,14 @@ const AddVehicle = () => {
         return '';
     };
 
-
-    // const validateFields = () => {
-    //     let isValid = true;
-
-    //     if (!vehicleNumber) {
-    //         setVehicleNumberError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setVehicleNumberError('');
-    //     }
-
-    //     if (!vehicleModel) {
-    //         setVehicleModelError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setVehicleModelError('');
-    //     }
-
-    //     if (!chassisNumber) {
-    //         setChassisNumberError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setChassisNumberError('');
-    //     }
-
-    //     if (!assignDriver) {
-    //         setAssignDriverError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setAssignDriverError('');
-    //     }
-
-    //     if (!route) {
-    //         setRouteError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setRouteError('');
-    //     }
-
-    //     if (!seatCapacity) {
-    //         setSeatCapacityError('* This Field is required');
-    //         isValid = false;
-    //     } else {
-    //         setSeatCapacityError('');
-    //     }
-
-    //     return isValid;
-    // };
-
+    const validateSeat = (value) => {
+        if (!value.trim()) {
+            return '*Chassis number is required';
+        } else if (!seatRegex.test(value)) {
+            return 'Invalid characters in Seat Capacity !!';
+        }
+        return '';
+    };
 
     const validateFields = () => {
         let isValid = true;
@@ -284,14 +243,14 @@ const AddVehicle = () => {
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
                         setloaderState(false)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setTimeout(() => {
                             navigate('/vehicle');
                         }, 1000);
                     }
                 }
                 else{
-                    toast.error(response?.data?.msg);
+                    toast.error(response?.data?.message);
                     setloaderState(false)
                 }
             }
@@ -299,6 +258,9 @@ const AddVehicle = () => {
                 toast.error(error);
                 setloaderState(false)
             }
+        }
+        else{
+            toast.error('Please Validate All Fields Correctly')
         }
     }
 

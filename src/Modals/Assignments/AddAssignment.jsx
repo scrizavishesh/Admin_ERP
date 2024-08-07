@@ -104,7 +104,7 @@ const AddAssignment = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -121,7 +121,7 @@ const AddAssignment = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch (e) {
@@ -148,7 +148,7 @@ const AddAssignment = () => {
                 var response = await addNewAssignmentAPI(formData);
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         setAddAssignment(!AddAssignment);
                     }
                 }

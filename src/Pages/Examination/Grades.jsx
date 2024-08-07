@@ -188,7 +188,7 @@ const Grades = () => {
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch { }
@@ -203,7 +203,7 @@ const Grades = () => {
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                     }
                 }
                 else {
@@ -253,7 +253,7 @@ const Grades = () => {
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch { }

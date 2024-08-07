@@ -96,11 +96,11 @@ const VerifyOTP = () => {
                 var response = await verifyOTPApi(OTP);
                 if(response?.status===200){
                   if(response?.data?.status==='success'){
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     navigate('/setNewPass');
                   }
                   else{
-                    toast.error(response?.data?.msg)
+                    toast.error(response?.data?.message)
                   }
                 }
             }

@@ -121,11 +121,11 @@ const EditAssignment = ({ EditItemId }) => {
                     setEndingDate(response?.data?.Assignment?.endDate);
                     setStatuus(response?.data?.Assignment?.status);
                     setAssignmentUpload(response?.data?.Assignment?.assignmentPath);
-                    toast.success(response?.data?.msg);
+                    toast.success(response?.data?.message);
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch (e) {
@@ -142,7 +142,7 @@ const EditAssignment = ({ EditItemId }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -160,7 +160,7 @@ const EditAssignment = ({ EditItemId }) => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -187,7 +187,7 @@ const EditAssignment = ({ EditItemId }) => {
                 console.log(response, 'exam cate')
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        toast.success(response?.data?.msg)
+                        toast.success(response?.data?.message)
                         // console.log(response, 'res after success');
                         setEditAssignment(!EditAssignment);
                     }

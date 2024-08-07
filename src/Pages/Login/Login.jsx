@@ -75,6 +75,16 @@ const Container = styled.div`
         color: #ADADBD;
         font-size: 14px;
     }
+
+    .form-check-input:checked{
+        background-color: var(--greenTextColor);
+        border-color: var(--greenTextColor);
+    }
+
+    .form-check-input{
+        box-shadow: none !important;
+    }
+
 `;
 
 const Login = () => {
@@ -170,7 +180,7 @@ const Login = () => {
                         window.location.reload();
                     }
                     else {
-                        toast.error(response?.data?.msg)
+                        toast.error(response?.data?.message)
                         console.log('login fail')
                     }
                 }

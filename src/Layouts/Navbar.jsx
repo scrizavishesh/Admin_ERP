@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSidebarContext } from '../Dashboard/DashboardLayout';
+import { Icon } from '@iconify/react';
 
 const Container = styled.div`
     padding: 0% !important;
@@ -16,7 +17,7 @@ const Navbar = () => {
         <Container>
             <div className="container-fluid bg-white sticky-top">
                 <div className="row p-1">
-                    <div className="col-md-6 col-sm-6 col-6">
+                    <div className="col-md-4 col-sm-6 col-6">
                         <div className="d-flex">
                             <div className="flex-grow-1 p-2 align-self-center">
                                 <button className="btn togglebtn" onClick={toggleSidebar}>
@@ -25,19 +26,20 @@ const Navbar = () => {
                                     </svg>
                                 </button>
                             </div>
-                            <div className="p-2 d-none align-self-center">
+                            <div className="p-2 align-self-center">
                                 <form className="d-flex" role="search">
-                                    <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" />
-                                    <button className="btn searchButtons text-white font14" type="submit">
-                                        <span>Search</span>
-                                    </button>
+                                    <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
+                                    <button className="btn searchhhButtons text-white " type="button"><span className='font14'>Search</span></button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-6 col-sm-6 col-6">
+                    <div className="col-md-8 col-sm-6 col-6">
                         <div className="d-flex">
                             <div className="flex-grow-1 p-2 align-self-center"></div>
+                            <div className="p-2 align-self-center">
+                                <Icon icon="mingcute:notification-newdot-line" width="1.8em" height="1.8em"  style={{color: '#000'}} />
+                            </div>
                             <div className="p-2 ms-auto">
                                 <Link className="btn d-flex p-0" to="#" role="button">
                                     <div className="row">

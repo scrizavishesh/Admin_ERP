@@ -154,7 +154,7 @@ const Marksheet = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -174,7 +174,7 @@ const Marksheet = () => {
                 }
             }
             else {
-                toast.error(response?.data?.msg);
+                toast.error(response?.data?.message);
             }
         }
         catch { }
@@ -197,12 +197,12 @@ const Marksheet = () => {
                     setSearchBtn(false)
                     setloaderState(false);
                     setMarksheetData(response?.data?.markSheet);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                     setTotalItems(10);
                 }
             }
             else {
-                toast.error(response?.data?.msg)
+                toast.error(response?.data?.message)
             }
         }
         catch (error) {

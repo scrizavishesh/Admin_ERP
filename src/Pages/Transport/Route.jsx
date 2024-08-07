@@ -159,12 +159,13 @@ const AllRoute = () => {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
                     setRouteData(response?.data?.routes);
-                    setTotalItems(response?.data?.totalRoutes)
+                    setCurrentPage(response?.data?.currentPage)
+                    setTotalPages(response?.data?.totalPages)
                     toast.success(response.data.msg);
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -179,7 +180,7 @@ const AllRoute = () => {
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch { }
@@ -211,11 +212,11 @@ const AllRoute = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setgetRouteIdDataName(response?.data?.route?.routeName);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
             }
             else {
-                console.log(response?.data?.msg);
+                console.log(response?.data?.message);
             }
         }
         catch {
@@ -246,7 +247,7 @@ const AllRoute = () => {
                 if (response.data.status === 'success') {
                     console.log('success')
                     setEditWarning(!EditWarning);
-                    toast.success(response?.data?.msg)
+                    toast.success(response?.data?.message)
                 }
                 else {
                     console.log('fail')
