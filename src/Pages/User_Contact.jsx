@@ -56,7 +56,9 @@ overflow : scroll;
 `;
 
 
-const User_Contact = () => {
+const User_Contact = (data) => {
+
+    console.log('data idd from parent in contact',data)
 
     // const [SingleStudent, setSingleStudent] = useState(true);
     // const [ExcelUpload, setExcelUpload] = useState(false);
@@ -96,19 +98,19 @@ const User_Contact = () => {
                                 </div>
                                 <div className="row">
                                     {
-                                        singleState === 'contact' && (<Conta_contac />)
+                                        singleState === 'contact' && (<Conta_contac  data={data} />)
                                     }
                                     {
-                                        singleState === 'allowance' && ( <Conta_allown />)
+                                        singleState === 'allowance' && ( <Conta_allown data={data} />)
                                     }
                                     {
-                                        singleState === 'commission' && ( <Contac_commis/>)
+                                        singleState === 'commission' && ( <Contac_commis data={data}/>)
                                     }
                                     {
-                                        singleState === 'statutory_Deductions' && ( <Contact_statu/>)
+                                        singleState === 'statutory_Deductions' && ( <Contact_statu data={data} />)
                                     }
                                     {
-                                        singleState === 'reimbursements' && ( <Conta_reimburse />)
+                                        singleState === 'reimbursements' && ( <Conta_reimburse data={data} />)
                                     }
                                 </div>
                             </div>

@@ -56,8 +56,11 @@ const Container = styled.div`
     border-radius: 0;
 }
 .my-nav-link{
-    color: #000;
+    color: #000 !important;
+    border-bottom: 1px solid #000 !important;
     pointer-events: none !important;
+    border-radius: 0 !important;
+    
 }
 .for-padding{
     /* padding: 0px 0px 2px 60px; */
@@ -69,7 +72,24 @@ const Container = styled.div`
 `;
 // ## style css area end ####  
 
+
+
 const MainUserForm = () => {
+
+
+    const [Active, setActive] = useState(false)
+    const [Id, setId] = useState()
+
+    console.log('iddd from childd', Id)
+
+    const FuncId = (value) => {
+        setId(value);
+        if (value) {
+            setActive(true);
+        }
+    }
+
+
     return (
         <Container>
             <div className="container-fluid p-4">
@@ -88,23 +108,22 @@ const MainUserForm = () => {
                             </div>
                             <div className='li-links'>
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
-                                    <Link class="nav-link active my-nav-link d-flex ms-3" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                               
+                                    <Link class="nav-link active  d-flex ms-3" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
                                         <span className='flex-grow-1 heading-16'>Basic Information</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
 
-                                    <Link class="nav-link  my-nav-link d-flex ms-3" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                                    <Link class={`nav-link   d-flex ms-3 ${ Active ===  true ? '' : " my-nav-link" }`} id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
                                         <span className='flex-grow-1 heading-16'>Contact</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
 
-                                    <Link class="nav-link my-nav-link d-flex ms-3" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-
+                                    <Link class={`nav-link   d-flex ms-3 ${ Active ===  true ? '' : " my-nav-link" }`}id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
                                         <span className='flex-grow-1 heading-16'>Personal Information</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
-                                    <Link class="nav-link my-nav-link d-flex ms-3" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+                                    <Link class={`nav-link   d-flex ms-3 ${ Active ===  true ? '' : " my-nav-link" }`} id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">
                                         <span className='flex-grow-1 heading-16'>Profile Picture</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
@@ -112,7 +131,7 @@ const MainUserForm = () => {
                                         <span className='flex-grow-1 heading-16'>Account Information</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link> */}
-                                    <Link class="nav-link my-nav-link d-flex ms-3" id="v-pills-settings-tab2" data-bs-toggle="pill" data-bs-target="#v-pills-settings2" type="button" role="tab" aria-controls="v-pills-settings2" aria-selected="false">
+                                    <Link class={`nav-link   d-flex ms-3 ${ Active ===  true ? '' : " my-nav-link" }`} id="v-pills-settings-tab2" data-bs-toggle="pill" data-bs-target="#v-pills-settings2" type="button" role="tab" aria-controls="v-pills-settings2" aria-selected="false">
                                         <span className='flex-grow-1 heading-16'>Documents </span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
@@ -120,7 +139,7 @@ const MainUserForm = () => {
                                         <span className='flex-grow-1 heading-16'>Timesheet Agenda</span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link> */}
-                                    <Link class="nav-link my-nav-link d-flex ms-3" id="v-pills-settings-tab4" data-bs-toggle="pill" data-bs-target="#v-pills-settings4" type="button" role="tab" aria-controls="v-pills-settings4" aria-selected="false">
+                                    <Link class={`nav-link   d-flex ms-3 ${ Active ===  true ? '' : " my-nav-link" }`} id="v-pills-settings-tab4" data-bs-toggle="pill" data-bs-target="#v-pills-settings4" type="button" role="tab" aria-controls="v-pills-settings4" aria-selected="false">
                                         <span className='flex-grow-1 heading-16'>Change Password </span>
                                         <Icon icon="iconamoon:arrow-right-2-light" width="1.5em" height="1.5em" />
                                     </Link>
@@ -133,23 +152,23 @@ const MainUserForm = () => {
                         <div className="col-lg-9">
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0" >
-                                    <User_basic_infomation />
+                                    <User_basic_infomation setFunction={FuncId} />
                                 </div>
-                                <div class="tab-pane fade  for-disabled"  id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-                                    <User_Contact />
+                                <div class="tab-pane fade  for-disabled" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                                    <User_Contact data={Id}/>
                                 </div>
                                 <div class="tab-pane fade for-disabled" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
-                                    <User_Per_info />
+                                    <User_Per_info  data={Id}/>
                                 </div>
                                 <div class="tab-pane fade for-disabled" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
-                                    <User_Prof_pic />
+                                    <User_Prof_pic  data={Id}/>
                                 </div>
 
                                 <div class="tab-pane fade for-disabled" id="v-pills-settings2" role="tabpanel" aria-labelledby="v-pills-settings-tab2" tabindex="0">
-                                    <User_Documnt />
+                                    <User_Documnt  data={Id}/>
                                 </div>
                                 <div class="tab-pane fade for-disabled" id="v-pills-settings4" role="tabpanel" aria-labelledby="v-pills-settings-tab4" tabindex="0">
-                                    <User_Chan_pass />
+                                    <User_Chan_pass  data={Id}/>
                                 </div>
                             </div>
                         </div>

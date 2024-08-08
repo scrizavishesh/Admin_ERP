@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { UserContactGetAllApi } from '../Utils/Apis'
 
 // ## style css area start ####  
 
@@ -374,7 +375,65 @@ font-size: 12px;
 `;
 // ## style css area end ####  
 
-const Conta_contac = () => {
+const Conta_contac = ({ data }) => {
+  const staffId = data.data;
+
+  console.log('child to child data in state nowwwwww', staffId)
+  const [loader, setLoader] = useState(false)
+  const [forDelete, setForDelete] = useState(false)
+  const [hide, setHide] = useState(false)
+  const [show, setShow] = useState(true)
+  const [searchKey, setSearchKey] = useState('')
+  const [showdelete, setShowdelete] = useState(true)
+  const [hidedelete, setHidedelete] = useState(false)
+  const [IdForDelete, setIdForDelete] = useState()
+  const [IdForUpdate, setIdForUpdate] = useState()
+  const [showadd, setShowadd] = useState(true)
+  const [hideedit, setHideedit] = useState(false)
+
+  const [contractStart, setContractStart] = useState()
+  const [basicSalary, setBasicSalary] = useState()
+  const [departmnt, setDepartmnt] = useState()
+  const [hourlyRate, setHourlyRate] = useState()
+  const [designation, setDesignation] = useState()
+  const [payslip, setPayslip] = useState()
+
+  const [officeShift, setOfficeShift] = useState()
+  const [LeaveCate, setLeaveCate] = useState()
+  const [contractEnd, setContractEnd] = useState()
+  const [lastName, setLastName] = useState()
+  const [status, setStatus] = useState()
+  console.log('true false',status)
+
+
+
+   // User post Api 
+   const ContactDataApi = async () => {
+    const formData = new FormData()
+    formData.append('contactDate', contractStart);
+    formData.append('basicSalary', basicSalary);
+    formData.append('hourlyRate', hourlyRate);
+    formData.append('contractEnd', contractEnd);
+    formData.append('paySlipType', payslip);
+    formData.append('shift', officeShift);
+   
+    setLoader(true)
+    try {
+        const response = await UserContactGetAllApi(staffId,formData);
+        console.log('my staff post api response', response)
+        if (response?.data?.status === "success") {
+            toast.success(response?.data?.message);
+            setStatus(response?.data?.status)
+            // setFunction(response?.data?.otherstaff?.staffStatus)
+
+            setLoader(false)
+        } else {
+            toast.error(response?.data?.message);
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
   return (
     <Container>
       <div className="container-fluid pt-2">
@@ -382,72 +441,47 @@ const Conta_contac = () => {
           <div className="col-lg-4 col-md-4 col-sm-12  ">
             <div className="mb-3 pe-3 pt- for-media-margin">
               <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Contract Date</label>
-              <input type="date" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" onChange={(e) => handleEmail(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="24-02-2024" />
+              <input type="date" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : contractStart} onChange={(e) => setContractStart(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="24-02-2024" />
             </div>
             <div className="mb-3 pe-3 pt- for-media-margin">
               <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Basic Salary</label>
-              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" onChange={(e) => handleEmail(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="15000" />
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : basicSalary}  onChange={(e) => setBasicSalary(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="15000" />
             </div>
           </div>
           <div className="col-lg-4 col-md-4 col-sm-12  ">
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Department</label>
-              <select class="form-select  form-select-sm form-focus label-color" onChange={(e) => handleClass(e)} aria-label="Default select example">
-                <option value="" >Human Resource</option>
-                {/* {
-                        classData.map(item =>
-                          <option value={`${item.classId} , ${item.classNo}`}>{item.classNo}</option>
-                        )
-                      } */}
-              </select>
+          <div className="mb-3 pe-3 pt- for-media-margin">
+              <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Department</label>
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : departmnt}  onChange={(e) => setDepartmnt(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="24-02-2024" />
             </div>
+          
             <div className="mb-3 pt- for-media-margin">
               <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Hourly Rate</label>
-              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" onChange={(e) => handleEmail(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="100" />
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : hourlyRate}  onChange={(e) => setHourlyRate(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="100" />
             </div>
           </div>
           <div className="col-lg-4 col-md-4 col-sm-12">
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14 label-color">Designation</label>
-              <select class="form-select  form-select-sm form-focus   label-color" onChange={(e) => setSectionId(e.target.value)} aria-label="Default select example">
-                <option value="">HR</option>
-                {/* {
-                        sectionData.map(item =>
-                          <option value={item.sectionId}>{item.sectionName}</option>
-                        )
-                      } */}
-              </select>
+          <div className="mb-3 pt- for-media-margin">
+              <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Designation</label>
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : designation}  onChange={(e) => setDesignation(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="100" />
             </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14 label-color">Payslip Type</label>
-              <select class="form-select  form-select-sm form-focus   label-color" onChange={(e) => setSectionId(e.target.value)} aria-label="Default select example">
-                <option value="">Per Month</option>
-                {/* {
-                        sectionData.map(item =>
-                          <option value={item.sectionId}>{item.sectionName}</option>
-                        )
-                      } */}
-              </select>
+            <div className="mb-3 pt- for-media-margin">
+              <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Payslip Type</label>
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : payslip}  onChange={(e) => setPayslip(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="100" />
             </div>
+          
+           
           </div>
         </div>
         <div className="row px-3">
           <div className="col-lg-6 col-md-6 col-sm-12 ">
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Office Shift</label>
-              <select class="form-select  form-select-sm form-focus label-color" onChange={(e) => handleClass(e)} aria-label="Default select example">
-                <option value="" >Morning Shift</option>
-                {/* {
-                        classData.map(item =>
-                          <option value={`${item.classId} , ${item.classNo}`}>{item.classNo}</option>
-                        )
-                      } */}
-              </select>
+          <div className="mb-3 pt- for-media-margin">
+              <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Office Shift</label>
+              <input type="text" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : officeShift}  onChange={(e) => setOfficeShift(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="100" />
             </div>
             <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Leave Categories </label>
 
             <form class="form-floating">
-              <input type="email" class="form-control" id="floatingInputValue" placeholder="" />
+              <input type="email" class="form-control" id="floatingInputValue" value={status === "success" ? '' : LeaveCate}  onChange={(e) => setLeaveCate(e)} placeholder="" />
             </form>
 
             <p className='label-color heading-14'>If All is selected, then all leave categories will show to employee which are
@@ -456,17 +490,17 @@ const Conta_contac = () => {
           <div className="col-lg-6 col-md-6 col-sm-12 ">
             <div className="mb-3  pt- for-media-margin">
               <label for="exampleFormControlInput1" className="form-label    heading-14 label-color">Contract End</label>
-              <input type="date" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" onChange={(e) => handleEmail(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="Date of Leaving" />
+              <input type="date" className="form-control form-focus-input form-control-sm heading-14 grey-input-text-color input-border-color" value={status === "success" ? '' : contractEnd}  onChange={(e) => setContractEnd(e.target.value)} style={{ borderRadius: '5px', marginTop: '-5px' }} id="exampleFormControlInput12" placeholder="Date of Leaving" />
             </div>
-            <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Role Description </label>
+            {/* <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Role Description </label>
             <form class="form-floating">
               <input type="email" class="form-control" id="floatingInputValue" placeholder="" />
-            </form>
+            </form> */}
           </div>
         </div>
         <div className="row mt-2 buttons-topss">
           <div className='my-button11 heading-16'>
-            <button type="button" class="btn btn-outline-success my-green" >Update Contract</button>
+            <button type="button" class="btn btn-outline-success my-green"  onClick={ContactDataApi}>Submit Contract</button>
             <button type="button" class="btn btn-outline-success">Cancel</button>
           </div>
         </div>

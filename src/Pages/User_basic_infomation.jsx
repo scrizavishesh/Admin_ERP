@@ -7,7 +7,8 @@ import { StaffPostApi } from '../Utils/Apis'
 import { RolePermissionGetApi } from '../Utils/Apis'
 // import { IncomeCategorygetAllApi } from '../Utils/Apis'
 
-const User_basic_infomation = () => {
+const User_basic_infomation = ({setFunction}) => {
+
 
     const [loader, setLoader] = useState(false)
     const [forDelete, setForDelete] = useState(false)
@@ -42,7 +43,7 @@ const User_basic_infomation = () => {
     const [secondAddress, setSecondAddress] = useState()
     const [emptyValue, setemptyValue] = useState()
     const [userId, setUserId] = useState()
-
+ 
     const [rolePermisAllData, setRolePermisAllData] = useState([])
     console.log('roles data', rolePermisAllData)
 
@@ -50,6 +51,7 @@ const User_basic_infomation = () => {
         MyRolPermisGetAllApi()
     }, [])
 
+  
     // Role permission Get All Api  from role permission page  
     const MyRolPermisGetAllApi = async () => {
         try {
@@ -77,15 +79,6 @@ const User_basic_infomation = () => {
         formData.append('staffImage', image);
         formData.append('staffLastName', lastName);
         formData.append('staffDOB', dob);
-        formData.append('staffStatus', status);
-        formData.append('maritalStatus', maritalStatus);
-        formData.append('bloodGroup', bloodGroup);
-        formData.append('nationality', nationality);
-        formData.append('state', state);
-        formData.append('city', city);
-        formData.append('pinCode', pinCode);
-        formData.append('religion', religion);
-        formData.append('address2', secondAddress);
 
         setLoader(true)
         try {
@@ -95,6 +88,8 @@ const User_basic_infomation = () => {
                 toast.success(response?.data?.message);
                 setemptyValue(response?.data?.status)
                 setUserId(response?.data?.status)
+                setFunction(response?.data?.otherstaff?.id)
+                // setFunction(response?.data?.otherstaff?.staffStatus)
 
                 setLoader(false)
             } else {
@@ -104,7 +99,6 @@ const User_basic_infomation = () => {
             console.log(error)
         }
     }
-
 
 
     return (
@@ -189,7 +183,7 @@ const User_basic_infomation = () => {
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color "> Citizenship</label>
-                            <select class="form-select  form-select-sm form-focus label-color" onChange={(e) => handle(e.target.value)} aria-label="Default select example">
+                            <select class="form-select  form-select-sm form-focus label-color"  aria-label="Default select example">
                                 <option  >--Choose--</option>
                                 <option value="indian" >Indian</option>
                                 <option value="other" >Other</option>
@@ -227,7 +221,7 @@ const User_basic_infomation = () => {
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color "> Religion</label>
-                            <select class="form-select  form-select-sm form-focus label-color" value={emptyValue === "success" ? '' : religion} onChange={(e) => setReligion(e)} aria-label="Default select example">
+                            <select class="form-select  form-select-sm form-focus label-color" value={emptyValue === "success" ? '' : religion} onChange={(e) => setReligion(e.target.value)} aria-label="Default select example">
                                 <option  >--Choose--</option>
                                 <option value="muslim" >Muslim</option>
                                 <option value="hindu" >Hindu</option>

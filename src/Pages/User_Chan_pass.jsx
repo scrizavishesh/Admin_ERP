@@ -1,6 +1,9 @@
 import React from 'react'
 
-const User_Chan_pass = () => {
+const User_Chan_pass = (data) => {
+
+    console.log('data idd from parent in User change password',data)
+    
     return (
         <>
             <div className="container-fluid">

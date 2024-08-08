@@ -3,7 +3,8 @@ const token = `Bearer ${localStorage.getItem('token')}`;
 const forgetTooken = `Bearer ${localStorage.getItem('forgteToken')}`;
 // const token = localStorage.getItem('token');
 
-const LocalGirjeshIP= 'http://10.5.51.4:5000';
+// const LocalGirjeshIP= 'http://10.5.51.4:5000';
+// const Domain= 'http://auth.edu2all.in:5000';
 const Domain= 'https://www.auth.edu2all.in';
 
 // ******************************************************************************************************
@@ -594,9 +595,9 @@ export const getAllSessionDataAPI = async() => {
 }
 
 
-export const updateSessionDataApi = async (id, data) => {
+export const deleteSessionApi = async (id) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.put(`${Domain}/session/editSession/${id}`, data);
+    var res = await axios.delete(`${Domain}/session/deleteById/${id}`);
     if (res) {
         return res;
     }else{
@@ -3345,3 +3346,141 @@ export const ExpensePutApi = async(id,formData) =>{
 // ########################## Expense APIs end ########################### 
 
 
+// ########################## user contact APIs start ########################### 
+
+export const UserContactGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/contact/addContract/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const UserAllowanceGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/allowance/addAllowance/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const UserCommissionGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/commissions/addCommission/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const UserStueGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/statutory/addStatutory/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const UserReimbirmntGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/reimb/addReimbursement/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const SocialGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/social/addSocial/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const BankGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/bank/bankDetail/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const EmergencyGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/emergency/addCon/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const UpdateImageGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.put(`${Domain}/otherStaff/editStaff/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const DocumntGetAllApi = async(id, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+ //   const res= await axios.post(${girjeshServer}/document/addDocument/${id},formData)
+   const res= await axios.post(`${Domain}/document/addDocument/${id}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+
+
+// get all 
+export const PayrollGetAllApi = async(month, year) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/payroll/view?month=${month}&year=${year}`)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const ContractGetAllApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/contact/getByStaffId/${id}`)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ } 

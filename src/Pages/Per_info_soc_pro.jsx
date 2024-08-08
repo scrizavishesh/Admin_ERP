@@ -1,6 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { SocialGetAllApi } from '../Utils/Apis'
 
-const Per_info_soc_pro = () => {
+
+const Per_info_soc_pro = ({data}) => {
+
+    const staffId = data.data;
+
+  console.log('child to child data in state nowwwwww', staffId)
+ 
+  const [forDelete, setForDelete] = useState(false)
+  const [hide, setHide] = useState(false)
+  const [show, setShow] = useState(true)
+  const [searchKey, setSearchKey] = useState('')
+  const [showdelete, setShowdelete] = useState(true)
+  const [hidedelete, setHidedelete] = useState(false)
+  const [IdForDelete, setIdForDelete] = useState()
+  const [IdForUpdate, setIdForUpdate] = useState()
+  const [showadd, setShowadd] = useState(true)
+  const [hideedit, setHideedit] = useState(false)
+  const [status, setStatus] = useState()
+
+  const [faceBookUrl, setFaceBookUrl] = useState()
+  const [linkedInUrl, setLinkedInUrl] = useState()
+  const [twitterUrl, settwitterUrl] = useState()
+  const [insttaaa, setInsttaaa] = useState('')
+  const [googlePlus, setGooglePlus] = useState()
+  
+  console.log('true false',status)
+  const [loader, setLoader] = useState(false)
+
+
+
+
+   // User post Api 
+   const ContactDataApi = async () => {
+
+    const formData = new FormData()
+    formData.append('faceBookUrl', faceBookUrl);
+    formData.append('linkedInUrl', linkedInUrl);
+    formData.append('instagramUrl', insttaaa);
+    formData.append('twitterUrl', twitterUrl);
+    formData.append('googlePlus', googlePlus);
+   
+   
+    setLoader(true)
+    try {
+        const response = await SocialGetAllApi(staffId,formData);
+        console.log('my staff post api response in SOCIALLLLLLLL', response)
+        if (response?.data?.status === "success") {
+            toast.success(response?.data?.message);
+            setStatus(response?.data?.status)
+            // setFunction(response?.data?.otherstaff?.staffStatus)
+
+            setLoader(false)
+        } else {
+            toast.error(response?.data?.message);
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
     return (
         <>
             <div className="container-fluid">
@@ -21,7 +83,7 @@ const Per_info_soc_pro = () => {
                                     </defs>
                                 </svg>
                             </span>
-                            <input type="text" class="form-control form-control-sm" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+                            <input type="text" class="form-control form-control-sm" value={status === "success" ? '' : faceBookUrl}  onChange={(e)=> setFaceBookUrl(e.target.value)} placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
                         </div>
 
                         <label for="basic-url" class="form-label mb-0">Twitter</label>
@@ -40,7 +102,7 @@ const Per_info_soc_pro = () => {
                                 </svg>
 
                             </span>
-                            <input type="text" class="form-control form-control-sm" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+                            <input type="text" class="form-control form-control-sm" value={status === "success" ? '' : twitterUrl}  onChange={(e)=> settwitterUrl(e.target.value)} placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
                         </div>
 
                         <label for="basic-url" class="form-label mb-0">Google Plus</label>
@@ -86,7 +148,7 @@ const Per_info_soc_pro = () => {
                                 </svg>
 
                             </span>
-                            <input type="text" class="form-control form-control-sm" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+                            <input type="text" class="form-control form-control-sm" value={status === "success" ? '' : googlePlus}  onChange={(e)=> setGooglePlus(e.target.value)} placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
                         </div>
                         <label for="basic-url" class="form-label mb-0">Linkedin</label>
                         <div class="input-group mb-3">
@@ -106,12 +168,12 @@ const Per_info_soc_pro = () => {
                                 </svg>
 
                             </span>
-                            <input type="text" class="form-control form-control-sm" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+                            <input type="text" class="form-control form-control-sm" value={status === "success" ? '' : linkedInUrl}  onChange={(e)=> setLinkedInUrl(e.target.value)} placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
                         </div>
 
                         <div className="row mt-4 buttons-tops">
                             <div className='my-button11 heading-14'>
-                                <button type="button" class="btn btn-outline-success my-green heading-12" >Update Social</button>
+                                <button type="button" class="btn btn-outline-success my-green heading-12" onClick={ContactDataApi}>Submit Social</button>
                                 <button type="button" class="btn btn-outline-success heading-12 ms-1    ">Cancel</button>
                             </div>
                         </div>

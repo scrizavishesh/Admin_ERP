@@ -106,11 +106,8 @@ import MainUserForm from '../Pages/MainUserForm';
 import User_Contact from '../Pages/User_Contact';
 import User_Per_info from '../Pages/User_Per_info';
 
-
-
-
-
 const Container = styled.div`
+  background-color: #F2F3F6;
 `;
 
 const Main = () => {
@@ -161,7 +158,7 @@ const Main = () => {
           <Route path='/feesDiscount' element={<FeesDiscount/>}/>
           <Route path='/feesCarryForword' element={<FeesCarryForward/>}/>
           <Route path='/feesReminder' element={<FeesReminder/>}/>
-          <Route path='/TakeAttendance' element={<TakeAttendance/>}/>
+          {/* <Route path='/issueItem' element={<IssueItem/>}/> */}
           
 
 

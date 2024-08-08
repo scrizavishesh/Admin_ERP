@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components'
-import { activeSessionDataApi, addNewSessionApi, getAllSessionDataAPI, getSessionDataByIdAPI, updateSessionApi, updateSessionDataApi } from '../../Utils/Apis';
+import { activeSessionDataApi, addNewSessionApi, deleteSessionApi, getAllSessionDataAPI, getSessionDataByIdAPI, updateSessionApi } from '../../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from 'react-paginate';
 
@@ -10,6 +10,11 @@ const Container = styled.div`
     height: 92vh;
     .mainBreadCrum{
         --bs-breadcrumb-divider: '>' !important;
+    }
+
+    .formdltcheck:checked{
+        background-color: #B50000;
+        border-color: #B50000;
     }
 
     .bredcrumText{
@@ -120,7 +125,7 @@ const SessionManager = () => {
     const [activeSessionData, setActiveSession] = useState();
 
     const [sessionData, setSessionData] = useState([]);
-    const [sessionVal, setSessionVal] = useState(false);
+    const [sessionVal, setSessionVal] = useState();
     const [sessionError, setSessionError] = useState('');
 
     const [sessionId, setSessionId] = useState('');
@@ -139,9 +144,8 @@ const SessionManager = () => {
     const [endDateEditError, setEndDateEditError] = useState('');
 
     const [sessionEditId, setSessionEditId] = useState('');
-
-    const [refreshUpdate, setRefreshUpdate] = useState(false);
-    const [refreshDelete, setRefreshDelete] = useState(false);
+    const [DeleteId, setDeleteId] = useState('');
+    const [isChecked, setIsChecked] = useState();
 
     // Pagination
 
@@ -160,18 +164,6 @@ const SessionManager = () => {
     const handlePageClick = (event) => {
         setPageNo(event.selected + 1); // as event start from 0 index
     };
-
-
-
-    const PageRefreshOnDelete = () => {
-        setDeleteWarning(!DeleteWarning);
-        setRefreshDelete(!refreshDelete);
-    }
-
-    const PageRefreshOnAdd = () => {
-        setAddWarning(!AddWarning);
-        setRefreshUpdate(!refreshUpdate);
-    }
 
     const handleStartDateChange = (e) => {
         const selectedDate = new Date(e.target.value);
@@ -194,11 +186,6 @@ const SessionManager = () => {
         setStartDateEditError('')
     };
 
-    const handleStatusEditChange = (e) => {
-        setStatusEdit(e.target.value);
-        setStatusEditError('')
-    };
-
     const handleEndDateEditChange = (e) => {
         const selectedDate = new Date(e.target.value);
         const formattedDate = selectedDate.toISOString().split('T')[0];
@@ -211,10 +198,13 @@ const SessionManager = () => {
             var response = await getAllSessionDataAPI(pageNo, pageSize);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
+                    console.log(response)
                     setSessionData(response?.data?.sessions);
-                    setActiveSession(response?.data?.activeSession)
+                    setActiveSession(response?.data?.activeSession?.currentYear)
                     toast.success(response?.data?.message)
-                    setTotalItems(10);
+                    setAddWarning(true)
+                    setEditWarning(true)
+                    setDeleteWarning(true)
                 }
             }
         }
@@ -300,7 +290,8 @@ const SessionManager = () => {
             console.log(response, 'session manager')
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    setSessionData(response?.data?.sessions);
+                    // setSessionData(response?.data?.sessions);
+                    setEditWarning(false)
                     toast.success(response?.data?.message)
                 }
             }
@@ -308,11 +299,6 @@ const SessionManager = () => {
         catch (error) {
             console.log('Error During Get Session', error);
         }
-    }
-
-    const PageRefreshOnUpdate = () => {
-        setEditWarning(!EditWarning);
-        setRefreshUpdate(!refreshUpdate);
     }
 
     const validateFields = () => {
@@ -334,6 +320,25 @@ const SessionManager = () => {
         return isValid;
     };
 
+    const DeleteSessionById = async (id) => {
+        if (isChecked) {
+            try {
+                var response = await deleteSessionApi(id);
+                if (response?.status === 200) {
+                    if (response.data.status === 'success') {
+                        setDeleteWarning(!DeleteWarning)
+                        toast.success(response?.data?.message)
+                    }
+                }
+                else {
+                    toast.error(response?.error);
+                }
+            }
+            catch (error) {
+                console.error('Error during delete:', error);
+            }
+        }
+    }
 
 
     return (
@@ -382,8 +387,10 @@ const SessionManager = () => {
                                             <button className="btn searchButtons text-white " type="button"><span className='font14'>Search</span></button>
                                         </form>
                                     </div>
-                                    <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start p-0">
-                                        <button className="btn ps-0 pe-0 addCategoryButtons text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_staticBackdrop" aria-controls="add_staticBackdrop"><span className='font14 textVerticalCenter'>+ Add Assignment</span></button>
+                                    <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
+                                        <div className="row">
+                                        <button className="btn ps-0 pe-0 addButtons text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#Add_staticBackdrop" aria-controls="Add_staticBackdrop"><span className='font14 textVerticalCenter'>+ Add Session</span></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -436,7 +443,7 @@ const SessionManager = () => {
                                                         </button>
                                                     </li>
                                                     <li>
-                                                        <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Delete_staticBackdrop" aria-controls="Delete_staticBackdrop" onClick={() => DeleteBtnClicked(item.sessionId)}>
+                                                        <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Delete_staticBackdrop" aria-controls="Delete_staticBackdrop" onClick={() => setDeleteId(item.sessionId)}>
                                                             Delete
                                                         </button>
                                                     </li>
@@ -512,7 +519,7 @@ const SessionManager = () => {
                                             <p className='warningHeading'>Successful Updated</p>
                                             <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnAdd}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllSession}>Continue</button>
                                     </div>
                                 </div>
                             </>
@@ -573,7 +580,7 @@ const SessionManager = () => {
                                             <p className='warningHeading'>Successful Updated</p>
                                             <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnUpdate}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllSession}>Continue</button>
                                     </div>
                                 </div>
                             </>
@@ -610,7 +617,7 @@ const SessionManager = () => {
                                     <p className='text-center greyText warningText pt-2'>This Action will be permanently delete<br />the Profile Data</p>
                                     <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
                                     <p className='text-center p-3'>
-                                        <button className='btn deleteButtons text-white' onClick={() => DeleteSamplePaperDataById(DeleteItemId)}>Delete</button>
+                                        <button className='btn deleteButtons text-white' onClick={()=> DeleteSessionById(DeleteId)}>Delete</button>
                                         <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
                                     </p>
                                 </div>
@@ -625,7 +632,7 @@ const SessionManager = () => {
                                             <p className='warningHeading'>Successful Deleted</p>
                                             <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllSession}>Continue</button>
                                     </div>
                                 </div>
                             </>

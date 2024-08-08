@@ -131,6 +131,7 @@ const AllStudents = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [deleteStudentIdData, setDeleteStudentIdData] = useState(false);
   const [studentGetId, setStudentGetId] = useState('');
+  const [RelaodDataVal, setReloadDataVal] = useState(false);
 
   // Pagination
 
@@ -144,7 +145,7 @@ const AllStudents = () => {
   useEffect(() => {
     getAllStudentData();
     getAllClassData();
-  }, [token, ClassIdValue, searchBySection, refreshDelete, refreshUpdate, refreshPage, pageNo]);
+  }, [token, ClassIdValue, searchBySection, RelaodDataVal, pageNo]);
 
 
   const handlePageClick = (event) => {
@@ -201,6 +202,9 @@ const AllStudents = () => {
     setRefreshDelete(!refreshDelete);
   }
 
+  const RelaodData = () => {
+    setReloadDataVal(true);
+  }
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -373,7 +377,7 @@ const AllStudents = () => {
           <h2 className="offcanvas-title" id="staticBackdropLabel">Student Edit</h2>
         </div>
         <div className="offcanvas-body p-0">
-          <EditStudentDetails studentGetId={studentGetId} onReload={getAllStudentData} abc={setAbc} />
+          <EditStudentDetails studentGetId={studentGetId} onReload={RelaodData}/>
         </div>
       </div>
 
@@ -394,7 +398,7 @@ const AllStudents = () => {
           <h2 className="offcanvas-title" id="staticBackdropLabel">View Profile</h2>
         </div>
         <div className="offcanvas-body p-0 modalLightBorder">
-          <ViewStudentDetails studentGetId={studentGetId} />
+          <ViewStudentDetails studentGetId={studentGetId}/>
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import { getAllClassApi, getAllFeeMasterApi, getStudentDataByIdApi, updateStuden
 import toast from 'react-hot-toast';
 import DataLoader from '../../Layouts/Loader';
 
-const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
+const EditStudentDetails = ({ studentGetId, onReload }) => {
 
   const token = localStorage.getItem('token');
   //loader State
@@ -91,34 +91,33 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
     try {
       setloaderState(true);
       var response = await getStudentDataByIdApi(studentGetId);
-      setTimeout(() => {
-        if (response?.status === 200) {
-          if (response?.data?.status === 'success') {
-            setStudentName(response?.data?.student?.studentName);
-            setBloodGroup(response?.data?.student?.bloodGroup);
-            setFatherName(response?.data?.student?.fatherName);
-            setMotherName(response?.data?.student?.motherName);
-            setParentNo(response?.data?.student?.parentNo);
-            setStudentEmail(response?.data?.student?.studentEmail);
-            setParentEmail(response?.data?.student?.parentEmail);
-            setFatherOccupation(response?.data?.student?.fatherOccupation);
-            setMotherOccupation(response?.data?.student?.motherOccupation);
-            setClassNo(response?.data?.student?.classNo);
-            setSection(response?.data?.student?.classSection);
-            setstudentDOB(response?.data?.student?.dateOfBirth);
-            setGender(response?.data?.student?.studentGender);
-            setStudentAddress(response?.data?.student?.address);
-            setEmergencyNo(response?.data?.student?.emergencyNo);
-            setStudentPh(response?.data?.student?.studentPhone);
-            setStudentImage(response?.data?.student?.studentImage);
-            toast.success(response?.data?.message);
-            setloaderState(false);
-          }
+      console.log(response, 'student iddddd')
+      if (response?.status === 200) {
+        if (response?.data?.status === 'success') {
+          setStudentName(response?.data?.student?.studentName);
+          setBloodGroup(response?.data?.student?.bloodGroup);
+          setFatherName(response?.data?.student?.fatherName);
+          setMotherName(response?.data?.student?.motherName);
+          setParentNo(response?.data?.student?.parentNo);
+          setStudentEmail(response?.data?.student?.studentEmail);
+          setParentEmail(response?.data?.student?.parentEmail);
+          setFatherOccupation(response?.data?.student?.fatherOccupation);
+          setMotherOccupation(response?.data?.student?.motherOccupation);
+          setClassNo(response?.data?.student?.classNo);
+          setSection(response?.data?.student?.classSection);
+          setstudentDOB(response?.data?.student?.dateOfBirth);
+          setGender(response?.data?.student?.studentGender);
+          setStudentAddress(response?.data?.student?.address);
+          setEmergencyNo(response?.data?.student?.emergencyNo);
+          setStudentPh(response?.data?.student?.studentPhone);
+          setStudentImage(response?.data?.student?.studentImage);
+          toast.success(response?.data?.message);
+          setloaderState(false);
         }
-        else {
-          toast.error(response?.data?.message);
-        }
-      }, 5000)
+      }
+      else {
+        toast.error(response?.data?.message);
+      }
     }
     catch {
 
@@ -244,6 +243,7 @@ const EditStudentDetails = ({ studentGetId, onReload, setAbc }) => {
           setloaderState(false);
           toast.success(response?.data?.message)
           setEditWarning(!EditWarning);
+          onReload(true);
         }
         else {
           setloaderState(false);

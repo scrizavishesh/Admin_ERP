@@ -22,6 +22,18 @@ const Container = styled.div`
         list-style: none !important;
     }
 
+    .show{
+        height: 100%;
+        overflow: hidden;
+        transition: height .35s ease !important;
+    }
+
+    .hide{
+        height: 0;
+        overflow: hidden;
+        transition: height .35s !important;
+    }
+
     .modalHighborder{
         border-bottom: 2px solid var(--modalBorderColor);
     }
@@ -172,6 +184,18 @@ const Sidebar = () => {
     const token = localStorage.getItem('token');
     const { sidebaropen, toggleSidebar } = useSidebarContext();
 
+    const [UserDropOpen, setUserDropOpen] = useState(false);
+    const [AdmissionDropOpen, setAdmissionDropOpen] = useState(false);
+    const [TransportDropOpen, setTransportDropOpen] = useState(false);
+    const [ExaminationDropOpen, setExaminationDropOpen] = useState(false);
+    const [AcademicDropOpen, setAcademicDropOpen] = useState(false);
+    const [AccountingDropOpen, setAccountingDropOpen] = useState(false);
+    const [HrDropOpen, setHrDropOpen] = useState(false);
+    const [FeeCollectionDropOpen, setFeeCollectionDropOpen] = useState(false);
+    const [InventoryDropOpen, setInventoryDropOpen] = useState(false);
+    const [LibraryDropOpen, setLibraryDropOpen] = useState(false);
+    const [SettingsDropOpen, setSettingsDropOpen] = useState(false);
+
     const location = useLocation();
 
     const [activeLink, setActiveLink] = useState(() => {
@@ -184,33 +208,193 @@ const Sidebar = () => {
         const currentPath = location.pathname === '/' ? 'dashboard' : location.pathname.slice(1);
         setActiveLink(currentPath);
         localStorage.setItem('activeLink', currentPath);
-    }, [location.pathname]);
+    }, [token, location.pathname]);
 
     const handleActiveLink = (link) => {
         setActiveLink(link);
         localStorage.setItem('activeLink', link);
     };
 
-    useEffect(()=>{
-    },[token])
-
-    const handleLogout = async() =>{
-        try{
+    const handleLogout = async () => {
+        try {
             var response = await logoutApi();
             console.log(response)
-            if(response?.status===200){
-                if(response?.data?.status==='success'){
+            if (response?.status === 200) {
+                if (response?.data?.status === 'success') {
                     localStorage.removeItem('token')
                     navigate('/')
-                    window.location.reload(); 
+                    window.location.reload();
                 }
             }
-            else{
+            else {
                 console.log(response?.data?.msg);
             }
         }
-        catch{
+        catch {
 
+        }
+    }
+
+    const handleActiveWithOutDrop = (val) => {
+        handleActiveLink(val);
+        setUserDropOpen(false)
+        setAccountingDropOpen(false);
+        setAdmissionDropOpen(false)
+        setTransportDropOpen(false)
+        setExaminationDropOpen(false)
+        setAcademicDropOpen(false)
+        setHrDropOpen(false)
+        setFeeCollectionDropOpen(false)
+        setInventoryDropOpen(false)
+        setLibraryDropOpen(false)
+        setSettingsDropOpen(false)
+    }
+
+    const handleActiveDropAndLink = (val) => {
+        handleActiveLink(val)
+
+        if (val === 'admin') {
+            setUserDropOpen(!UserDropOpen)
+            setAccountingDropOpen(false);
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'admissionForm') {
+            setAdmissionDropOpen(!AdmissionDropOpen)
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'driver') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(!TransportDropOpen)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'examCategory') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(!ExaminationDropOpen)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'dailyattendance') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(!AcademicDropOpen)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'discount') {
+            setAccountingDropOpen(!AccountingDropOpen);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'userrole') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(!HrDropOpen)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'booklistmanager') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(!LibraryDropOpen)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'collectFees') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(!FeeCollectionDropOpen)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
+        }
+        else if (val === 'schoolSetting') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(false)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(!SettingsDropOpen)
+        }
+        else if (val === 'issueItem') {
+            setAccountingDropOpen(false);
+            setUserDropOpen(false)
+            setAdmissionDropOpen(false)
+            setTransportDropOpen(false)
+            setExaminationDropOpen(false)
+            setAcademicDropOpen(false)
+            setHrDropOpen(false)
+            setFeeCollectionDropOpen(false)
+            setInventoryDropOpen(!InventoryDropOpen)
+            setLibraryDropOpen(false)
+            setSettingsDropOpen(false)
         }
     }
 
@@ -226,47 +410,52 @@ const Sidebar = () => {
                         <Icon className='toggle-icon' icon="emojione:left-arrow" width="1.7em" height="1.7em" onClick={toggleSidebar} />
                     </div>
                 </StickyHeader>
-                
+
 
                 {/* Sidebar Items */}
 
                 <div className="row p-0">
-                <ul className='p-0'>
+                    <ul className='p-0'>
                         <li>
-                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dashboard' ? 'active' : ''}`} onClick={() => handleActiveLink('dashboard')} >
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dashboard' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('dashboard')} >
                                 <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Dashboard</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/users" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Admin' || activeLink === 'Teacher' || activeLink === 'Accountant' || activeLink === 'Librarian' || activeLink === 'other_staff' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAddon" onClick={() => handleActiveLink('Admin')} >
-                                <Icon icon="fa:user-o" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Users</h3>
+                            <Link to="/users" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admin' || activeLink === 'teacher' || activeLink === 'accountant' || activeLink === 'librarian' || activeLink === 'other_staff' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAddon" onClick={() => handleActiveDropAndLink('admin')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="fa:user-o" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Users</h3>
+                                </div>
+                                <div className="">
+                                    {UserDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseAddon" className="collapse collapse-menu">
-                                 {/* {`collapse collapse-menu ${sidebaropen === '' ? '' : 'ps-1'}`} */}
+                            <div id="collapseAddon" className={`collapse collapse-menu ${UserDropOpen ? 'show' : 'hide'}`}>
+                                {/* {`collapse collapse-menu ${sidebaropen === '' ? '' : 'ps-1'}`} */}
                                 <ul className='dashed'>
                                     <li>
-                                        <Link to="/admin" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Admin' ? 'active' : ''}`} onClick={() => handleActiveLink('Admin')} >
+                                        <Link to="/admin" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admin' ? 'active' : ''}`} onClick={() => handleActiveLink('admin')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                              {/* codicon:dash */}
+                                            {/* codicon:dash */}
                                             <h3 className="menu-text">Admin</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/teacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Teacher' ? 'active' : ''}`} onClick={() => handleActiveLink('Teacher')} >
+                                        <Link to="/teacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'teacher' ? 'active' : ''}`} onClick={() => handleActiveLink('teacher')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Teacher</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/accountant" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Accountant' ? 'active' : ''}`} onClick={() => handleActiveLink('Accountant')} >
+                                        <Link to="/accountant" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'accountant' ? 'active' : ''}`} onClick={() => handleActiveLink('accountant')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Accountant</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/librarian" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Librarian' ? 'active' : ''}`} onClick={() => handleActiveLink('Librarian')} >
+                                        <Link to="/librarian" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'librarian' ? 'active' : ''}`} onClick={() => handleActiveLink('librarian')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Librarian</h3>
                                         </Link>
@@ -287,11 +476,16 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/admissionForm" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' || activeLink === 'allStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAdmission" onClick={() => handleActiveLink('admissionForm')} >
-                                <Icon icon="ri:id-card-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Admissions</h3>
+                            <Link to="/admissionForm" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' || activeLink === 'allStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAdmission" onClick={() => handleActiveDropAndLink('admissionForm')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="ri:id-card-line" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Admissions</h3>
+                                </div>
+                                <div className="">
+                                    {AdmissionDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseAdmission" className="collapse collapse-menu">
+                            <div id="collapseAdmission" className={`collapse collapse-menu ${AdmissionDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/admissionForm" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
@@ -309,11 +503,16 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' || activeLink === 'vehicle' || activeLink === 'route' || activeLink === 'dropPoint' || activeLink === 'assignStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseTransport" onClick={() => handleActiveLink('driver')} >
-                                <Icon icon="fluent-mdl2:bus" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Transport</h3>
+                            <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' || activeLink === 'vehicle' || activeLink === 'route' || activeLink === 'dropPoint' || activeLink === 'assignStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseTransport" onClick={() => handleActiveDropAndLink('driver')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="fluent-mdl2:bus" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Transport</h3>
+                                </div>
+                                <div className="">
+                                    {TransportDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseTransport" className="collapse collapse-menu">
+                            <div id="collapseTransport" className={`collapse collapse-menu ${TransportDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' ? 'active' : ''}`} onClick={() => handleActiveLink('driver')} >
@@ -349,11 +548,16 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/examCategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'examCategory' || activeLink === 'offlineExam' || activeLink === 'marks' || activeLink === 'grades' || activeLink === 'marksheet' || activeLink === 'promotion' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseExamination" onClick={() => handleActiveLink('examCategory')} >
-                                <Icon icon="icon-park-outline:id-card-v" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Examination</h3>
+                            <Link to="/examCategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'examCategory' || activeLink === 'offlineExam' || activeLink === 'marks' || activeLink === 'grades' || activeLink === 'marksheet' || activeLink === 'promotion' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseExamination" onClick={() => handleActiveDropAndLink('examCategory')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="icon-park-outline:id-card-v" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Examination</h3>
+                                </div>
+                                <div className="">
+                                    {ExaminationDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseExamination" className="collapse collapse-menu">
+                            <div id="collapseExamination" className={`collapse collapse-menu ${ExaminationDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/examCategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'examCategory' ? 'active' : ''}`} onClick={() => handleActiveLink('examCategory')} >
@@ -395,20 +599,25 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/academic" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dailyAttendance' || activeLink === 'dailyAttendance' || activeLink === 'classList' || activeLink === 'sections' || activeLink === 'classRoutine' || activeLink === 'subject' || activeLink === 'assignSubjectTeacher' || activeLink === 'syllabus' || activeLink === 'classRoom' || activeLink === 'departments' || activeLink === 'assignClassTeacher' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAcademic" onClick={() => handleActiveLink('dailyAttendance')} >
-                                <Icon icon="ph:graduation-cap" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Academic</h3>
+                            <Link to="/academic" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dailyattendance' || activeLink === 'classlist' || activeLink === 'sections' || activeLink === 'classroutine' || activeLink === 'subject' || activeLink === 'assignsubjectteacher' || activeLink === 'syllabus' || activeLink === 'Classroom' || activeLink === 'Department' || activeLink === 'assignclassteacher' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAcademic" onClick={() => handleActiveDropAndLink('dailyattendance')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="ph:graduation-cap" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Academic</h3>
+                                </div>
+                                <div className="">
+                                    {AcademicDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseAcademic" className="collapse collapse-menu">
+                            <div id="collapseAcademic" className={`collapse collapse-menu ${AcademicDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
-                                        <Link to="/dailyattendance" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dailyAttendance' ? 'active' : ''}`} onClick={() => handleActiveLink('dailyAttendance')} >
+                                        <Link to="/dailyattendance" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dailyattendance' ? 'active' : ''}`} onClick={() => handleActiveLink('dailyattendance')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Daily Attendance</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/classlist" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'classList' ? 'active' : ''}`} onClick={() => handleActiveLink('classList')} >
+                                        <Link to="/classlist" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'classlist' ? 'active' : ''}`} onClick={() => handleActiveLink('classlist')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Class List</h3>
                                         </Link>
@@ -420,7 +629,7 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/classroutine" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'classRoutine' ? 'active' : ''}`} onClick={() => handleActiveLink('classRoutine')} >
+                                        <Link to="/classroutine" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'classroutine' ? 'active' : ''}`} onClick={() => handleActiveLink('classroutine')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Class Routine</h3>
                                         </Link>
@@ -432,7 +641,7 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/assignsubjectteacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignSubjectTeacher' ? 'active' : ''}`} onClick={() => handleActiveLink('assignSubjectTeacher')} >
+                                        <Link to="/assignsubjectteacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignsubjectteacher' ? 'active' : ''}`} onClick={() => handleActiveLink('assignsubjectteacher')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Assign Subject Teacher</h3>
                                         </Link>
@@ -444,19 +653,19 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/Classroom" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'classRoom' ? 'active' : ''}`} onClick={() => handleActiveLink('classRoom')} >
+                                        <Link to="/Classroom" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Classroom' ? 'active' : ''}`} onClick={() => handleActiveLink('Classroom')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Class Room</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/Department" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'departments' ? 'active' : ''}`} onClick={() => handleActiveLink('departments')} >
+                                        <Link to="/Department" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Department' ? 'active' : ''}`} onClick={() => handleActiveLink('Department')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Departments</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/assignclassteacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignClassTeacher' ? 'active' : ''}`} onClick={() => handleActiveLink('assignClassTeacher')} >
+                                        <Link to="/assignclassteacher" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignclassteacher' ? 'active' : ''}`} onClick={() => handleActiveLink('assignclassteacher')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Assign Class Teacher</h3>
                                         </Link>
@@ -465,62 +674,67 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/discount" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'accounting' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAccounting" onClick={() => handleActiveLink('acconting')} >
-                                <Icon icon="map:accounting" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Accounting</h3>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'discount' || activeLink === 'fee' || activeLink === 'feecollection' || activeLink === 'manageinvoice' || activeLink === 'dueinvoisce' || activeLink === 'income' || activeLink === 'incomecategory' || activeLink === 'expense' || activeLink === 'expensecategory' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAccounting" onClick={() => handleActiveDropAndLink('discount')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="map:accounting" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Accounting</h3>
+                                </div>
+                                <div className="">
+                                    {AccountingDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseAccounting" className="collapse collapse-menu">
+                            <div id="collapseAccounting" className={`collapse collapse-menu ${AccountingDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
-                                        <Link to="/discount" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/discount" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'discount' ? 'active' : ''}`} onClick={() => handleActiveLink('discount')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Discount</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/fee" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/fee" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'fee' ? 'active' : ''}`} onClick={() => handleActiveLink('fee')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Fee Type</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/feecollection" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/feecollection" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'feecollection' ? 'active' : ''}`} onClick={() => handleActiveLink('feecollection')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Fee Collection</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/manageinvoice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/manageinvoice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'manageinvoice' ? 'active' : ''}`} onClick={() => handleActiveLink('manageinvoice')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Manage Invoice</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/dueinvoisce" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/dueinvoisce" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'dueinvoisce' ? 'active' : ''}`} onClick={() => handleActiveLink('dueinvoisce')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Due Invoice</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/income" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/income" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'income' ? 'active' : ''}`} onClick={() => handleActiveLink('income')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Income</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/incomecategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/incomecategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'incomecategory' ? 'active' : ''}`} onClick={() => handleActiveLink('incomecategory')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Income Category</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/expense" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/expense" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'expense' ? 'active' : ''}`} onClick={() => handleActiveLink('expense')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Expense</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/expensecategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'admissionForm' ? 'active' : ''}`} onClick={() => handleActiveLink('admissionForm')} >
+                                        <Link to="/expensecategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'expensecategory' ? 'active' : ''}`} onClick={() => handleActiveLink('expensecategory')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Expense Category</h3>
                                         </Link>
@@ -529,24 +743,29 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/samplepaper" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'samplepaper' ? 'active' : ''}`} onClick={() => handleActiveLink('samplepaper')} >
+                            <Link to="/samplepaper" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'samplepaper' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('samplepaper')} >
                                 <Icon icon="fluent:document-bullet-list-24-regular" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Sample Paper</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/assignment" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignment' ? 'active' : ''}`} onClick={() => handleActiveLink('assignment')} >
+                            <Link to="/assignment" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'assignment' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('assignment')} >
                                 <Icon icon="el:list-alt" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Assignment</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/HumanResource" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'userrole' || activeLink === 'takeattendance' || activeLink === 'leavestatus' || activeLink === 'assignleave' || activeLink === 'payroll' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseHumanResource" onClick={() => handleActiveLink('userrole')} >
-                                {/* <Icon icon="covid:transmission-virus-human-transmit-1" width="1.5em" height="1.5em" /> */}
-                                <img src="./images/HR.svg" alt="" />
-                                <h3 className="menu-text">Human Resource</h3>
+                            <Link to="/HumanResource" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'userrole' || activeLink === 'takeattendance' || activeLink === 'leavestatus' || activeLink === 'assignleave' || activeLink === 'payroll' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseHumanResource" onClick={() => handleActiveDropAndLink('userrole')} >
+                                <div className="flex-grow-1">
+                                    {/* <Icon icon="covid:transmission-virus-human-transmit-1" width="1.5em" height="1.5em" /> */}
+                                    <img src="./images/HR.svg" alt="" />
+                                    <h3 className="menu-text">Human Resource</h3>
+                                </div>
+                                <div className="">
+                                    {HrDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseHumanResource" className="collapse collapse-menu">
+                            <div id="collapseHumanResource" className={`collapse collapse-menu ${HrDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/userrole" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'userrole' ? 'active' : ''}`} onClick={() => handleActiveLink('userrole')} >
@@ -581,74 +800,17 @@ const Sidebar = () => {
                                 </ul>
                             </div>
                         </li>
-                        {/* <li>
-                            <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveLink('Inventory')} >
-                                <Icon icon="mingcute:profile-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Inventory</h3>
-                            </Link>
-                            <div id="collapseInventory" className="collapse collapse-menu">
-                                <ul className='dashed'>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Issue Item</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Add Item Stock</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Add Item</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Category</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Store</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Supplier</h3>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> */}
-                        {/* <li>
-                            <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAlumni" onClick={() => handleActiveLink('Alumni')} >
-                                <Icon icon="ri:id-card-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Alumni</h3>
-                            </Link>
-                            <div id="collapseAlumni" className="collapse collapse-menu">
-                                <ul className='dashed'>
-                                    <li>
-                                        <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} onClick={() => handleActiveLink('Alumni')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Alumni</h3>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> */}
                         <li>
-                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseLibrary" onClick={() => handleActiveLink('booklistmanager')} >
-                                <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Library</h3>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseLibrary" onClick={() => handleActiveDropAndLink('booklistmanager')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Library</h3>
+                                </div>
+                                <div className="">
+                                    {LibraryDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseLibrary" className="collapse collapse-menu">
+                            <div id="collapseLibrary" className={`collapse collapse-menu ${LibraryDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/booklistmanager" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' ? 'active' : ''}`} onClick={() => handleActiveLink('booklistmanager')} >
@@ -666,35 +828,40 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/holiday" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'holiday' ? 'active' : ''}`} onClick={() => handleActiveLink('holiday')} >
+                            <Link to="/holiday" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'holiday' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('holiday')} >
                                 <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Holiday</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/notice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'notice' ? 'active' : ''}`} onClick={() => handleActiveLink('notice')} >
+                            <Link to="/notice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'notice' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('notice')} >
                                 <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Notice</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/event" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'event' ? 'active' : ''}`} onClick={() => handleActiveLink('event')} >
+                            <Link to="/event" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'event' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('event')} >
                                 <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Event</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/onlinecourse" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'onlinecourse' ? 'active' : ''}`} onClick={() => handleActiveLink('onlinecourse')} >
+                            <Link to="/onlinecourse" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'onlinecourse' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('onlinecourse')} >
                                 <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Online Course</h3>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'collectFees' || activeLink === 'searchFeePayment' || activeLink === 'searchDueFees' || activeLink === 'feesMaster' || activeLink === 'feesGroup' || activeLink === 'feesType' || activeLink === 'feesDiscount' || activeLink === 'feesCarryForword' || activeLink === 'feesReminder' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapsefeeCollection" onClick={() => handleActiveLink('collectFees')} >
-                                <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Fee Collection</h3>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'collectFees' || activeLink === 'searchFeePayment' || activeLink === 'searchDueFees' || activeLink === 'feesMaster' || activeLink === 'feesGroup' || activeLink === 'feesType' || activeLink === 'feesDiscount' || activeLink === 'feesCarryForword' || activeLink === 'feesReminder' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapsefeeCollection" onClick={() => handleActiveDropAndLink('collectFees')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Fee Collection</h3>
+                                </div>
+                                <div className="">
+                                    {FeeCollectionDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapsefeeCollection" className="collapse collapse-menu">
+                            <div id="collapsefeeCollection" className={`collapse collapse-menu ${FeeCollectionDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
                                         <Link to="/collectFees" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'collectFees' ? 'active' : ''}`} onClick={() => handleActiveLink('collectFees')} >
@@ -753,15 +920,71 @@ const Sidebar = () => {
                                 </ul>
                             </div>
                         </li>
+                        {/* <li>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveDropAndLink('issueItem')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Inventory</h3>
+                                </div>
+                                <div className="">
+                                    {InventoryDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
+                            </Link>
+                            <div id="collapseInventory" className={`collapse collapse-menu ${InventoryDropOpen ? 'show' : 'hide'}`}>
+                                <ul className='dashed'>
+                                    <li>
+                                        <Link to="/issueItem" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' ? 'active' : ''}`} onClick={() => handleActiveLink('issueItem')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Issue Item</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Add Item Stock</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Book Issue Report</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Book Issue Report</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Book Issue Report</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Book Issue Report</h3>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li> */}
                         <li></li>
                         <li></li>
                         <li className='borderBottom' ></li>
                         <li>
-                            <Link to="/systemSettingPage" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'schoolSetting' || activeLink === 'sessionManager' || activeLink === 'paymentSettings' || activeLink === 'subscription' || activeLink === 'myAccount' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseSettings" onClick={() => handleActiveLink('schoolSetting')} >
-                                <Icon icon="solar:settings-outline" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Settings</h3>
+                            <Link to="/systemSettingPage" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'schoolSetting' || activeLink === 'sessionManager' || activeLink === 'paymentSettings' || activeLink === 'subscription' || activeLink === 'myAccount' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseSettings" onClick={() => handleActiveDropAndLink('schoolSetting')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="solar:settings-outline" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Settings</h3>
+                                </div>
+                                <div className="">
+                                    {SettingsDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
                             </Link>
-                            <div id="collapseSettings" className="collapse collapse-menu">
+                            <div id="collapseSettings" className={`collapse collapse-menu ${SettingsDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='list-unstyled p-0'>
                                     <li>
                                         <Link to="/schoolSetting" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'schoolSetting' ? 'active' : ''}`} onClick={() => handleActiveLink('schoolSetting')} >
@@ -797,7 +1020,7 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'logout' ? 'active' : ''}`} onClick={() => handleActiveLink('logout')} data-bs-toggle="offcanvas" data-bs-target="#logoutCanvas" aria-controls="logoutCanvas" >
+                            <Link className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'logout' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('logout')} data-bs-toggle="offcanvas" data-bs-target="#logoutCanvas" aria-controls="logoutCanvas" >
                                 <Icon icon="material-symbols:logout" width="1.5em" height="1.5em" />
                                 <h3 className="menu-text">Logout</h3>
                             </Link>
@@ -849,3 +1072,67 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+
+{/* <li>
+                            <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveLink('Inventory')} >
+                                <Icon icon="mingcute:profile-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Inventory</h3>
+                            </Link>
+                            <div id="collapseInventory" className="collapse collapse-menu">
+                                <ul className='dashed'>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Issue Item</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Add Item Stock</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Add Item</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Item Category</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Item Store</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Item Supplier</h3>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li> */}
+{/* <li>
+                            <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAlumni" onClick={() => handleActiveLink('Alumni')} >
+                                <Icon icon="ri:id-card-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Alumni</h3>
+                            </Link>
+                            <div id="collapseAlumni" className="collapse collapse-menu">
+                                <ul className='dashed'>
+                                    <li>
+                                        <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} onClick={() => handleActiveLink('Alumni')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Alumni</h3>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li> */}

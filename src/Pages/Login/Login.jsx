@@ -9,6 +9,15 @@ const Container = styled.div`
 
     height: 100vh;
 
+    .form-check-input:checked{
+        background-color: var(--greenTextColor);
+        border-color: var(--greenTextColor);
+    }
+
+    .form-check-input{
+        box-shadow: none !important;
+    }
+
     .loginmain{
         height: 100vh;
     }
@@ -75,16 +84,6 @@ const Container = styled.div`
         color: #ADADBD;
         font-size: 14px;
     }
-
-    .form-check-input:checked{
-        background-color: var(--greenTextColor);
-        border-color: var(--greenTextColor);
-    }
-
-    .form-check-input{
-        box-shadow: none !important;
-    }
-
 `;
 
 const Login = () => {
@@ -180,7 +179,7 @@ const Login = () => {
                         window.location.reload();
                     }
                     else {
-                        toast.error(response?.data?.message)
+                        toast.error(response?.data?.msg)
                         console.log('login fail')
                     }
                 }
@@ -198,56 +197,54 @@ const Login = () => {
 
     return (
 
-        <>
-            <Container>
-                <div className="conatiner-fluid loginmain">
-                    <div className="row loginrow">
-                        <div className="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center">
-                            <img src="./images/loginimg.svg" alt="" className='img-fluid m-4' />
-                        </div>
-                        <div className="col-lg-6 col-md-12 col-sm-12">
-                            <div className="row me-xl-5 ms-xl-5 ps-xl-5 pe-xl-5">
-                                <p className='text-center'><img src="./images/Scrizalogo.svg" alt="" className='img-fluid' /></p>
-                                <form className='pt-xl-3 pe-xl-5 ps-xl-5 pt-lg-2 pe-lg-2 ps-lg-2'>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-                                        <input type="email" className={`form-control formcontrolinputEmail ${emailError ? 'border-1 border-danger' : ''} `} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='&#xF0E0; Your Email Address' onChange={handleEmailChange} />
-                                        <div>
-                                            <span className='text-danger'>{emailError}</span>
-                                        </div>
+        <Container>
+            <div className="conatiner-fluid loginmain">
+                <div className="row loginrow">
+                    <div className="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-center">
+                        <img src="./images/loginimg.svg" alt="" className='img-fluid m-4' />
+                    </div>
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                        <div className="row me-xl-5 ms-xl-5 ps-xl-5 pe-xl-5 ps-lg-5 pe-lg-5 p-sm-5 m-sm-5 p-3 m-3">
+                            <p className='text-center'><img src="./images/Scrizalogo.svg" alt="" className='img-fluid' /></p>
+                            <form className='pt-xl-3 pe-xl-5 ps-xl-5 pt-lg-2 pe-lg-2 ps-lg-2'>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
+                                    <input type="email" className={`form-control formcontrolinputEmail ${emailError ? 'border-1 border-danger' : ''} `} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='&#xF0E0; Your Email Address' onChange={handleEmailChange} />
+                                    <div>
+                                        <span className='text-danger'>{emailError}</span>
                                     </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                                        <div className="d-flex bg-white">
-                                            <input type={showPassword ? 'text' : 'password'} className={`form-control formcontrolinputpass ${passError ? 'border_danger' : ''} `} id="exampleInputPassword1" placeholder='&#xf084; 6+ Strong Character' onChange={handlePassword} />
-                                            <div className={`formcontrolinputpasseye p-1 ps-2 pe-2  ${passError ? 'border_danger_eye' : ''} `}><span className="align-self-center" onClick={toggleShowPassword}> {showPassword ? <Icon icon="clarity:eye-show-line" width="2em" height="2em" style={{ color: '#008479' }} /> : <Icon icon="clarity:eye-hide-line" width="2em" height="2em" style={{ color: '#d9d7d7' }} />} </span></div>
-                                        </div>
-                                        <div>
-                                            <span className='text-danger'>{passError}</span>
-                                        </div>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                                    <div className="d-flex bg-white">
+                                        <input type={showPassword ? 'text' : 'password'} className={`form-control formcontrolinputpass ${passError ? 'border_danger' : ''} `} id="exampleInputPassword1" placeholder='&#xf084; 6+ Strong Character' onChange={handlePassword} />
+                                        <div className={`formcontrolinputpasseye p-1 ps-2 pe-2  ${passError ? 'border_danger_eye' : ''} `}><span className="align-self-center" onClick={toggleShowPassword}> {showPassword ? <Icon icon="clarity:eye-show-line" width="2em" height="2em" style={{ color: '#008479' }} /> : <Icon icon="clarity:eye-hide-line" width="2em" height="2em" style={{ color: '#d9d7d7' }} />} </span></div>
                                     </div>
-                                    <div className="mb-4 mt-4 form-check d-flex">
-                                        <div className="col-6">
-                                            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                            <label className="form-check-label ps-2" htmlFor="exampleCheck1" onChange={() => setIsRemeberChecked(!isRemeberChecked)}>Remember Me</label>
-                                        </div>
-                                        <div className="col-6 text-end">
-                                            <Link className='text-primary text-decoration-none' to='/forgotPassword'>Forget Password?</Link>
-                                        </div>
+                                    <div>
+                                        <span className='text-danger'>{passError}</span>
                                     </div>
-                                    <div className="d-grid gap-2 col-12 mx-auto">
-                                        <Link type="submit" className="btn btnsubmitOwn text-white" onClick={SubmitLogin}>Submit</Link>
+                                </div>
+                                <div className="mb-4 mt-4 form-check d-flex">
+                                    <div className="col-6">
+                                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+                                        <label className="form-check-label ps-2" htmlFor="exampleCheck1" onChange={() => setIsRemeberChecked(!isRemeberChecked)}>Remember Me</label>
                                     </div>
-                                </form>
-                            </div>
+                                    <div className="col-6 text-end">
+                                        <Link className='text-primary text-decoration-none' to='/forgotPassword'>Forget Password?</Link>
+                                    </div>
+                                </div>
+                                <div className="d-grid gap-2 col-12 mx-auto">
+                                    <Link type="submit" className="btn btnsubmitOwn text-white" onClick={SubmitLogin}>Submit</Link>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <Toaster />
                 </div>
+                <Toaster />
+            </div>
 
-                
-            </Container>
-        </>
+
+        </Container>
     )
 }
 

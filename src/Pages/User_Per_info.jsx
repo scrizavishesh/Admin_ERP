@@ -54,8 +54,9 @@ overflow : scroll;
 `;
 
 
-const User_Per_info = () => {
-
+const User_Per_info = (data) => {
+    console.log('data idd from parent in User Inforrmation',data)
+    
 const [singleState, setSingleState] = useState('social_profile');
 
     return (
@@ -92,13 +93,13 @@ const [singleState, setSingleState] = useState('social_profile');
                                         singleState === 'bio' && (<Per_Info_Bio />)
                                     } */}
                                     {
-                                        singleState === 'social_profile' && ( <Per_info_soc_pro />)
+                                        singleState === 'social_profile' && ( <Per_info_soc_pro  data={data} />)
                                     }
                                     {
-                                        singleState === 'bank_account' && ( <Per_info_bank/>)
+                                        singleState === 'bank_account' && ( <Per_info_bank data={data} />)
                                     }
                                     {
-                                        singleState === 'emergency_contact' && ( <Per_info_emer_cont/>)
+                                        singleState === 'emergency_contact' && ( <Per_info_emer_cont data={data} />)
                                     }
                                     {/* {
                                         singleState === 'reimbursements' && ( <Conta_reimburse />)
