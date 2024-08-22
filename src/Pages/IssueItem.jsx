@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components'
-import { addNewFeeGroupApi, deleteFeeGroupByIdApi, getAllClassApi, getAllFeeGroupApi, getAllOfflineExamApi, getFeeGroupByIdApi, updateFeeGroupByIdApi } from '../Utils/Apis';
+import { addNewIssueItemApi, deleteIssueItemByIdApi, getAllIssueItemApi, getIssueItemByIdApi, returnItemApi, updateIssueItemByIdApi } from '../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
 import DataLoader from '../Layouts/Loader';
 import ReactPaginate from 'react-paginate';
@@ -124,6 +124,24 @@ const Container = styled.div`
   .greyText{
     color: var(--greyTextColor) !important;
   }
+
+  .returnedBtn{
+    background-color: none !important;
+    border: 1px solid var(--returned);
+    color: var(--returned);
+    border-radius: var(--borderRadius14);
+  }
+
+  .clickToReturnBtn{
+    background-color: none !important;
+    border: 1px solid var(--clickToReturn);
+    color: var(--clickToReturn);
+    border-radius: var(--borderRadius14);
+  }
+
+  .modal-footer{
+    border: none !important
+  }
     
 `;
 
@@ -133,19 +151,14 @@ const IssueItem = () => {
   //loader State
   const [loaderState, setloaderState] = useState(false);
   const [searchByKey, setSearchByKey] = useState('');
-  const [feeGroupData, setFeeGroupData] = useState([]);
-  const [feeGroupName, setFeeGroupName] = useState('');
-  const [feeGroupDescription, setFeeGroupDescription] = useState('');
-  const [AddWarning, setAddWarning] = useState(true);
-  const [EditWarning, setEditWarning] = useState(true);
+  const [IssueItemData, setIssueItemData] = useState([]);
   const [DeleteWarning, setDeleteWarning] = useState(true);
-  const [DelFeeGroupIdData, setDelFeeGroupIdData] = useState();
-  const [EditFeeGroupIdData, setEditFeeGroupIdData] = useState();
+  const [DelIssueItemIdData, setDelIssueItemIdData] = useState();
   const [isChecked, setIsChecked] = useState(false);
-  const [EditFeeGroupName, setEditFeeGroupName] = useState('');
-  const [EditFeeGroupDescription, setEditFeeGroupDescription] = useState('');
-  const [OriginalFeeGroupName, setOriginalFeeGroupName] = useState('');
-  const [OriginalFeeGroupDescription, setOriginalFeeGroupDescription] = useState('');
+  const [returnItemId, setReturnItemId] = useState('');
+  const [GetByIdItemName, setGetByIdItemName] = useState('');
+  const [GetByIdItemCategory, setGetByIdItemCategory] = useState('');
+  const [GetByIdItemQuantity, setGetByIdItemQuantity] = useState('');
 
   // Pagination
 
@@ -155,31 +168,29 @@ const IssueItem = () => {
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
-    getAllFeeGroupData();
+    getAllIssueItemData();
   }, [token, pageNo, pageSize])
 
-  useEffect(() => {
-    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => new window.bootstrap.Tooltip(tooltipTriggerEl));
-    return () => {
-      tooltipList.forEach(tooltip => tooltip.dispose());
-    };
-  }, [feeGroupData]);
+  // useEffect(() => {
+  //   const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  //   const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => new window.bootstrap.Tooltip(tooltipTriggerEl));
+  //   return () => {
+  //     tooltipList.forEach(tooltip => tooltip.dispose());
+  //   };
+  // }, [IssueItemData]);
 
-  const getAllFeeGroupData = async () => {
+  const getAllIssueItemData = async () => {
     try {
       setloaderState(true);
-      var response = await getAllFeeGroupApi(searchByKey, pageNo, pageSize);
-      console.log(response)
+      var response = await getAllIssueItemApi(pageNo, pageSize);
+      console.log(response, )
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setloaderState(false);
-          setFeeGroupData(response?.data?.feeGroup);
+          setIssueItemData(response?.data?.issueItem);
           setTotalPages(response?.data?.totalPages);
           setCurrentPage(response?.data?.currentPage);
           toast.success(response.data.message);
-          setAddWarning(true);
-          setEditWarning(true);
           setDeleteWarning(true);
         }
         else {
@@ -197,45 +208,18 @@ const IssueItem = () => {
     }
   }
 
-  const addNewFeeGroup = async () => {
+  const getIssueItemDataById = async (id) => {
     try {
-      const formData = new FormData();
-      formData.append('feeGroupName', feeGroupName);
-      formData.append('description', feeGroupDescription);
-
-      var response = await addNewFeeGroupApi(formData);
-      console.log(response);
-      if (response?.status === 200) {
-        if (response?.data?.status === 'success') {
-          setAddWarning(false);
-          setloaderState(false);
-          toast.success(response?.data?.message)
-        }
-        else {
-          setloaderState(false);
-          toast.error(response?.data?.message)
-        }
-      }
-
-    }
-    catch {
-
-    }
-  }
-
-  const getFeeGroupDataById = async (id) => {
-    try {
-      setEditFeeGroupIdData(id)
+      setReturnItemId(id)
       setloaderState(true);
-      var response = await getFeeGroupByIdApi(id);
+      var response = await getIssueItemByIdApi(id);
       console.log(response)
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setloaderState(false);
-          setEditFeeGroupName(response?.data?.feeGroup?.feeGroupName)
-          setEditFeeGroupDescription(response?.data?.feeGroup?.feeDescription)
-          setOriginalFeeGroupName(response?.data?.feeGroup?.feeGroupName)
-          setOriginalFeeGroupDescription(response?.data?.feeGroup?.feeDescription)
+          setGetByIdItemName(response?.data?.issueItem?.itemName)
+          setGetByIdItemCategory(response?.data?.issueItem?.itemCategory)
+          setGetByIdItemQuantity(response?.data?.issueItem?.itemQuantity)
           toast.success(response?.data?.message);
         }
         else {
@@ -253,23 +237,18 @@ const IssueItem = () => {
     }
   }
 
-  const updateFeeGroupById = async (id) => {
+  const returnItemById = async () => {
     try {
-      const formData = new FormData();
-      if(EditFeeGroupName !== OriginalFeeGroupName){
-        formData.append('feeGroupName', EditFeeGroupName);
-      }
-      if(EditFeeGroupDescription !== OriginalFeeGroupDescription){
-        formData.append('description', EditFeeGroupDescription);
-      }
-
-      var response = await updateFeeGroupByIdApi(EditFeeGroupIdData, formData);
-      console.log(response);
+      var response = await returnItemApi(returnItemId);
+      console.log(response, 'retrurn');
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
-          setEditWarning(false);
           setloaderState(false);
           toast.success(response?.data?.message)
+          getAllIssueItemData();
+          $('.modal').each(function () {
+            $(this).modal('hide');
+          });
         }
         else {
           setloaderState(false);
@@ -283,10 +262,10 @@ const IssueItem = () => {
     }
   }
 
-  const DeleteFeeGroupById = async (id) => {
+  const DeleteIssueItemById = async (id) => {
     if (isChecked) {
       try {
-        var response = await deleteFeeGroupByIdApi(id);
+        var response = await deleteIssueItemByIdApi(id);
         if (response?.status === 200) {
           if (response.data.status === 'success') {
             setDeleteWarning(!DeleteWarning)
@@ -355,12 +334,12 @@ const IssueItem = () => {
                   <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                     <form className="d-flex" role="search">
                       <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                      <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllFeeGroupData}>Search</span></button>
+                      <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllIssueItemData}>Search</span></button>
                     </form>
                   </div>
                   <div className="col-md-4 col-sm-12 col-4">
-                    <div className="row justify-content-end">
-                      <button className="btn addButtons2 text-white font14 textVerticalCenter" type="button" data-bs-toggle="offcanvas" data-bs-target="#addIssueItem" aria-controls="addIssueItem">+ Add Issue Item</button>
+                    <div className="row">
+                      <Link className="text-center addButtons2 text-white font14 text-decoration-none p-2" type="button" to="/addIssueItem">+ Add Issue Item</Link>
                     </div>
                   </div>
                 </div>
@@ -369,173 +348,146 @@ const IssueItem = () => {
           </div>
         </div>
         <div className="row pb-3">
-          <div className="bg-white rounded-2 p-4">
-            <table className="table align-middle table-striped">
-              <thead>
-                <tr>
-                  <th className=''><span className='font14'>#</span></th>
-                  <th><span className='font14'>Name</span></th>
-                  <th><span className='font14'>Description</span></th>
-                  <th className='text-center'><span className='font14'>Action</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                {feeGroupData
-                  ?
-                  feeGroupData.map((item, index) => (
-                    <tr key={item.feeGroupId} className='align-middle'>
-                      <td className='greyText font14'>{index + 1}</td>
-                      <td className='greyText font14'>{item.feeGroupName}</td>
-                      <td className='greyText font14'>
-                        {(item?.feeDescription).length > 100
-                          ?
-                          <>
-                            <span className='me-2'>
-                              {item.feeDescription.substring(0, 120) + "....."}
-                            </span>
-                            <button className='btn p-0' type='button' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title={item.feeDescription}>
-                              <Icon className='' icon="ph:info-fill" width="1.5em" height="1.5em" style={{ color: '#C1C1C1' }} />
-                            </button>
-                          </>
-                          :
-                          item.feeDescription
-                        }
-                      </td>
-                      <td className='text-end'>
-                        <button className='btn ps-1 pe-1 text-black text-decoration-none' type='button' data-bs-toggle="offcanvas" data-bs-target="#editFeeGroup" aria-controls="editFeeGroup" onClick={()=> getFeeGroupDataById(item?.feeGroupId)}>
-                          <Icon icon="carbon:edit" width="1.5em" height="1.5em" style={{ color: '#8F8F8F' }} />
-                        </button>
-                        <button className='btn ps-1 pe-1 text-black text-decoration-none' type='button' data-bs-toggle="offcanvas" data-bs-target="#deleteFeeGroup" aria-controls="deleteFeeGroup" onClick={()=> setDelFeeGroupIdData(item?.feeGroupId)}>
-                          <Icon icon="mi:delete" width="1.5em" height="1.5em" style={{ color: '#8F8F8F' }} />
-                        </button>
-                      </td>
+          <div className="bg-white rounded-2 p-3">
+            {IssueItemData.length > 0
+              ?
+              <>
+                <table className="table align-middle table-striped">
+                  <thead>
+                    <tr>
+                      <th className='font14'>#</th>
+                      <th className='font14'>Item</th>
+                      <th className='font14'>Note</th>
+                      <th className='font14'>Item Category</th>
+                      <th className='font14'>Issue - Return</th>
+                      <th className='font14'>Issue  To</th>
+                      <th className='font14'>Issued by</th>
+                      <th className='font14'>QTY</th>
+                      <th className='font14'>Status</th>
+                      <th className='text-center font14'>Action</th>
                     </tr>
-                  ))
-                  :
-                  <p className='text-danger font14'>No Data Found</p>
-                }
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {IssueItemData.map((item, index) => (
+                      <tr key={item.id} className='align-middle'>
+                        <td className='greyText font14'>{index + 1}</td>
+                        <td className='greyText font14'>{item.itemName}</td>
+                        <td className='greyText font14'>{item.note}</td>
+                        <td className='greyText font14'>{item.itemCategory}</td>
+                        <td className='greyText font14'>{item.issueDate} - {item.returnDate}</td>
+                        <td className='greyText font14'>{item.issuedToName}</td>
+                        <td className='greyText font14'>{item.issuedByName}</td>
+                        <td className='greyText font14'>{item.itemQuantity}</td>
+                        <td className=''>
+                          {item.status == 'ISSUED'
+                            ?
+                            <button type="button" className="btn clickToReturnBtn font14" data-bs-toggle="modal" data-bs-target="#ReturnModal" onClick={() => getIssueItemDataById(item.id)}> Click to Return </button>
+                            :
+                            <button type="button" className="btn returnedBtn font14"> Returned </button>
+                          }
+                        </td>
+                        {/* <td className='greyText font14'>
+                          {(item?.feeDescription).length > 100
+                            ?
+                            <>
+                              <span className='me-2'>
+                                {item.feeDescription.substring(0, 120) + "....."}
+                              </span>
+                              <button className='btn p-0' type='button' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-className="custom-tooltip" data-bs-title={item.feeDescription}>
+                                <Icon className='' icon="ph:info-fill" width="1.5em" height="1.5em" style={{ color: '#C1C1C1' }} />
+                              </button>
+                            </>
+                            :
+                            item.feeDescription
+                          }
+                        </td> */}
+                        <td className='text-center'>
+                          <button className='btn ps-1 pe-1 text-black text-decoration-none' type='button' data-bs-toggle="offcanvas" data-bs-target="#deleteIssueItem" aria-controls="deleteIssueItem" onClick={() => setDelIssueItemIdData(item?.id)}>
+                            <Icon icon="mi:delete" width="1.5em" height="1.5em" style={{ color: '#8F8F8F' }} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-            <div className="d-flex">
-              <p className='font14'>Showing {currentPage} of {totalPages} Pages</p>
-              <div className="ms-auto">
-                <ReactPaginate
-                  previousLabel={<Icon icon="tabler:chevrons-left" width="1.4em" height="1.4em" />}
-                  nextLabel={<Icon icon="tabler:chevrons-right" width="1.4em" height="1.4em" />}
-                  breakLabel={'...'} breakClassName={'break-me'} pageCount={totalPages} marginPagesDisplayed={2} pageRangeDisplayed={10}
-                  onPageChange={handlePageClick} containerClassName={'pagination'} subContainerClassName={'pages pagination'} activeClassName={'active'}
-                />
+                <div className="d-flex">
+                  <p className='font14'>Showing {currentPage} of {totalPages} Pages</p>
+                  <div className="ms-auto">
+                    <ReactPaginate
+                      previousLabel={<Icon icon="tabler:chevrons-left" width="1.4em" height="1.4em" />}
+                      nextLabel={<Icon icon="tabler:chevrons-right" width="1.4em" height="1.4em" />}
+                      breakLabel={'...'} breakClassName={'break-me'} pageCount={totalPages} marginPagesDisplayed={2} pageRangeDisplayed={10}
+                      onPageChange={handlePageClick} containerClassName={'pagination'} subContainerClassName={'pages pagination'} activeClassName={'active'}
+                    />
+                  </div>
+                </div>
+              </>
+              :
+              <>
+                <div className="d-flex justify-content-center p-5">
+                  <img src="./images/search.svg" alt="" className='img-fluid' />
+                </div>
+              </>
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Delete Fee Group */}
+      <div className="modal modal-lg fade" id="ReturnModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="ReturnModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div className="d-flex">
+                <div className="">
+                  <p className="modal-title font14" id="ReturnModalLabel">Confirm Return</p>
+                  <p className="modal-title font12" id="ReturnModalLabel">Are You Sure To Return This Item?</p>
+                </div>
               </div>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body p-0">
+              <div className="overflow-scroll">
+                <table className="table align-middle table-striped m-0">
+                  <thead>
+                    <tr>
+                      <th className='font14'>#</th>
+                      <th className='font14'>Item</th>
+                      <th className='font14'>Item Category</th>
+                      <th className='font14'>Quatity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr></tr>
+                    <tr>
+                      <td className='greyText font14'>1.</td>
+                      <td className='greyText font14'>{GetByIdItemName}</td>
+                      <td className='greyText font14'>{GetByIdItemCategory}</td>
+                      <td className='greyText font14'>{GetByIdItemQuantity}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="modal-footer justify-content-center">
+              <button type="button" className="btn printButtons text-white font14" onClick={returnItemById}>Return</button>
+              <button type="button" className="btn cancelButtons font14" data-bs-dismiss="modal">Cancel</button>
             </div>
           </div>
         </div>
       </div>
 
 
-      {/* Add Fee Group */}
-      <div className="offcanvas offcanvas-end p-2" tabIndex="-1" id="addIssueItem" aria-labelledby="addIssueItemLabel">
+      {/* Delete Issue Item */}
+      <div className="offcanvas offcanvas-end p-2" tabIndex="-1" id="deleteIssueItem" aria-labelledby="deleteIssueItemeLabel">
         <div className="offcanvas-header border-bottom border-2 p-2">
           <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
               <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
             </svg>
           </Link>
-          <h2 className="offcanvas-title" id="addIssueItemLabel">Add Fees Group</h2>
-        </div>
-        <div className="offcanvas-body p-3">
-          {AddWarning
-            ?
-            <>
-              <form className='row' action="">
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
-                  <input type="email" className="form-control font14" id="exampleFormControlInput1" placeholder="Enter Name" onChange={(e) => setFeeGroupName(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
-                  <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" placeholder='Text Description......' onChange={(e) => setFeeGroupDescription(e.target.value)}></textarea>
-                </div>
-              </form>
-              <p className='text-center p-3'>
-                <button className='btn addButtons font14 text-white me-2' onClick={addNewFeeGroup}>Add Fee Group</button>
-                <button className='btn cancelButtons font14' data-bs-dismiss="offcanvas" aria-label="Close" >Cancel</button>
-              </p>
-            </>
-            :
-            <>
-              <div>
-                <div className="mt-3">
-                  <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
-                  <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
-                    <p className='warningHeading'>Successful Updated</p>
-                    <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
-                  </div>
-                  <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllFeeGroupData}>Continue</button>
-                </div>
-              </div>
-            </>
-          }
-        </div>
-      </div>
-
-
-      {/* Edit Fee Group */}
-      <div className="offcanvas offcanvas-end p-2" tabIndex="-1" id="editFeeGroup" aria-labelledby="editFeeGroupLabel">
-        <div className="offcanvas-header border-bottom border-2 p-2">
-          <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
-              <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>
-          </Link>
-          <h2 className="offcanvas-title" id="editFeeGroupLabel">Edit Fees Group</h2>
-        </div>
-        <div className="offcanvas-body p-3">
-          {EditWarning
-            ?
-            <>
-              <form className='row' action="">
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
-                  <input type="email" className="form-control font14" id="exampleFormControlInput1" value={EditFeeGroupName} onChange={(e)=> setEditFeeGroupName(e.target.value)}/>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
-                  <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" value={EditFeeGroupDescription} onChange={(e)=> setEditFeeGroupDescription(e.target.value)}></textarea>
-                </div>
-              </form>
-              <p className='text-center p-3'>
-                <button className='btn addButtons font14 text-white me-2' onClick={() => updateFeeGroupById()}>Edit Fee Group</button>
-                <button className='btn cancelButtons font14' data-bs-dismiss="offcanvas" aria-label="Close" >Cancel</button>
-              </p>
-            </>
-            :
-            <>
-              <div>
-                <div className="mt-3">
-                  <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
-                  <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
-                    <p className='warningHeading'>Successful Updated</p>
-                    <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
-                  </div>
-                  <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllFeeGroupData}>Continue</button>
-                </div>
-              </div>
-            </>
-          }
-        </div>
-      </div>
-
-
-      {/* Delete Fee Group */}
-      <div className="offcanvas offcanvas-end p-2" tabIndex="-1" id="deleteFeeGroup" aria-labelledby="deleteFeeGroupeLabel">
-        <div className="offcanvas-header border-bottom border-2 p-2">
-          <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
-              <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>
-          </Link>
-          <h2 className="offcanvas-title" id="deleteFeeGroupeLabel">Delete Fees Group</h2>
+          <h2 className="offcanvas-title" id="deleteIssueItemeLabel">Delete Fees Group</h2>
         </div>
         <div className="offcanvas-body p-3">
           {DeleteWarning
@@ -547,7 +499,7 @@ const IssueItem = () => {
                 <p className='text-center greyText warningText pt-2'>This Action will be permanently delete<br />the Profile Data</p>
                 <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
                 <p className='text-center p-3'>
-                  <button className='btn deleteButtons text-white' onClick={() => DeleteFeeGroupById(DelFeeGroupIdData)}>Delete</button>
+                  <button className='btn deleteButtons text-white' onClick={() => DeleteIssueItemById(DelIssueItemIdData)}>Delete</button>
                   <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
                 </p>
               </div>
@@ -561,7 +513,7 @@ const IssueItem = () => {
                     <p className='warningHeading'>Successful Deleted</p>
                     <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                   </div>
-                  <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllFeeGroupData}>Continue</button>
+                  <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllIssueItemData}>Continue</button>
                 </div>
               </div>
             </>

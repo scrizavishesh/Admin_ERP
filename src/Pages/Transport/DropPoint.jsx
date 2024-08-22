@@ -143,8 +143,8 @@ const DropPoint = () => {
     const [refreshPage, setRefreshPage] = useState(false);
     const [refreshDelete, setRefreshDelete] = useState(false);
 
-    const [getDropPointIdDataName, setgetDropPointIdDataName] = useState('');
-    const [getDropPointIdDataNameError, setgetDropPointIdDataNameError] = useState('');
+    const [getByIdDropPointName, setgetByIdDropPointName] = useState('');
+    const [getByIdDropPointNameError, setgetByIdDropPointNameError] = useState('');
 
     const [DropPointIDD, setDropPointIDD] = useState('')
     const [delDropPointIDD, setDelDropPointIDD] = useState('')
@@ -160,7 +160,11 @@ const DropPoint = () => {
 
     useEffect(() => {
         getAllDropPointData();
-    }, [token, currentPage, refreshDelete, refreshUpdate, pageNo])
+    }, [token, pageNo])
+
+    useEffect(() => {
+        validateFields();
+    }, [getByIdDropPointName])
 
 
     const handlePageClick = (event) => {
@@ -170,17 +174,17 @@ const DropPoint = () => {
 
     const getAllDropPointData = async () => {
         try {
-            setEditWarning(true);
-            setDeleteWarning(true);
             setloaderState(true);
             var response = await getAllDropPointApi(searchByKey, pageNo, pageSize);
-            console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
                     setDropPointData(response?.data?.drops);
-                    // setTotalItems(response?.data?.totalDropPoints)
-                    toast.success(response.data.msg);
+                    setTotalPages(response?.data?.totalPages);
+                    setCurrentPage(response?.data?.currentPage);
+                    toast.success(response.data.message);
+                    setEditWarning(true);
+                    setDeleteWarning(true);
                 }
             }
             else {
@@ -195,7 +199,7 @@ const DropPoint = () => {
             var response = await getDropPointCSVDataApi();
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    toast.success(response.data.msg);
+                    toast.success(response.data.message);
                 }
             }
             else {
@@ -211,13 +215,12 @@ const DropPoint = () => {
 
     const getDropPointDataById = async (id) => {
         try {
-            console.log(id)
             setDropPointIDD(id);
             var response = await getDropPointDataByIdApi(id);
             console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    setgetDropPointIdDataName(response?.data?.drops?.stopName);
+                    setgetByIdDropPointName(response?.data?.drops?.stopName);
                     toast.success(response?.data?.message)
                 }
             }
@@ -231,40 +234,35 @@ const DropPoint = () => {
     }
 
     const UpdateDropPointDataById = async () => {
-        const dropPointNameValidate = validateDropPointName(getDropPointIdDataName);
+        if (validateFields()) {
+            try {
+                const formData = new FormData();
 
-        if (dropPointNameValidate) {
-            setgetDropPointIdDataNameError(dropPointNameValidate);
-            return;
-        }
-
-        setgetDropPointIdDataNameError('');
-
-        try {
-            const formData = new FormData();
-
-            formData.append("dropName", getDropPointIdDataName)
-            var response = await updateDropPointDataApi(DropPointIDD, formData);
-            if (response?.status === 200) {
-                if (response.data.status === 'success') {
-                    setEditWarning(!EditWarning);
-                    toast.success(response?.data?.message)
+                formData.append("dropName", getByIdDropPointName)
+                var response = await updateDropPointDataApi(DropPointIDD, formData);
+                if (response?.status === 200) {
+                    if (response.data.status === 'success') {
+                        setEditWarning(!EditWarning);
+                        toast.success(response?.data?.message)
+                    }
+                    else {
+                        console.log('fail')
+                    }
+                } else {
+                    toast.error(response?.error);
                 }
-                else {
-                    console.log('fail')
-                }
-            } else {
-                toast.error(response?.error);
+            } catch (error) {
+                console.error('Error during update:', error);
             }
-        } catch (error) {
-            console.error('Error during update:', error);
+        }
+        else {
+            toast.error('Please Validate All Fields Correctly')
         }
     };
 
-
     const handleDropPointNameChange = (value) => {
-        setgetDropPointIdDataName(value);
-        setgetDropPointIdDataNameError(validateDropPointName(value))
+        setgetByIdDropPointName(value);
+        setgetByIdDropPointNameError(validateDropPointName(value))
     }
 
     const validateDropPointName = (value) => {
@@ -278,6 +276,19 @@ const DropPoint = () => {
         return '';
     };
 
+    const validateFields = () => {
+        let isValid = true;
+
+        const dropPointErrorNew = validateDropPointName(getByIdDropPointName)
+        if (dropPointErrorNew) {
+            setgetByIdDropPointNameError(dropPointErrorNew);
+            isValid = false;
+        } else {
+            setgetByIdDropPointNameError('');
+        }
+
+        return isValid;
+    };
 
     const DeleteDropPointDataById = async (id) => {
         if (isChecked) {
@@ -349,7 +360,7 @@ const DropPoint = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllDropPointData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllDropPointData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -441,8 +452,8 @@ const DropPoint = () => {
                                             <form>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Drop Point</label>
-                                                    <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDropPointIdDataNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDropPointIdDataName} onChange={(e) => handleDropPointNameChange(e.target.value)} />
-                                                    <span className='text-danger'>{getDropPointIdDataNameError}</span>
+                                                    <input type="text" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDropPointNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDropPointName} onChange={(e) => handleDropPointNameChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdDropPointNameError}</span>
                                                 </div>
                                             </form>
                                             <p className='text-center p-3'>

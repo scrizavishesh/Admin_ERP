@@ -1,3 +1,5 @@
+//pending beacuse of 500 error in drop by vehicle
+
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getAllClassApi, getVehicleDataApi, getAllDropPointByVehicleApi, assignStudentApi } from '../../Utils/Apis';
@@ -121,53 +123,38 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     }
 
     const AssignStudentData = async () => {
-        const VehicleValidate = validateVehicle(vehicleNum);
-        const ClassNoValidate = validateClass(ClassNo);
-        const SectionValidate = validateSection(Section);
-        const StudentValidate = validateStudent(StudentId);
-        const DropPointValidate = validateDropPoint(DropId);
-
-        if (VehicleValidate || ClassNoValidate || SectionValidate || StudentValidate || DropPointValidate) {
-            setVehicleNumError(VehicleValidate);
-            setClassNoError(ClassNoValidate);
-            setSectionError(SectionValidate);
-            setStudentIdError(StudentValidate);
-            setDropIdError(DropPointValidate);
-            return;
-        }
-
-        setVehicleNumError('');
-        setClassNoError('');
-        setSectionError('');
-        setStudentIdError('');
-        setDropIdError('');
-        try {
-            const formData = new FormData();
-            formData.append("vehicleNo", vehicleNum);
-            formData.append("classNo", ClassNo);
-            formData.append("sec", Section);
-            formData.append("studentId", StudentId);
-            formData.append("dropId", DropId);
-
-            var response = await assignStudentApi(formData);
-
-            console.log(response)
-
-            if (response?.status === 200) {
+        if(validateFields()){
+            try {
+                const formData = new FormData();
+                formData.append("vehicleNo", vehicleNum);
+                formData.append("classNo", ClassNo);
+                formData.append("sec", Section);
+                formData.append("studentId", StudentId);
+                formData.append("dropId", DropId);
+    
+                var response = await assignStudentApi(formData);
+    
                 console.log(response)
-
-                if (response?.data?.status === 'success') {
-                    toast.success(response?.data?.message)
-                    setAssignStudent(false)
-                    navigate('/allStudent')
+    
+                if (response?.status === 200) {
+                    console.log(response)
+    
+                    if (response?.data?.status === 'success') {
+                        toast.success(response?.data?.message)
+                        setAssignStudent(false)
+                        navigate('/allStudent')
+                    }
+                }
+                else {
+                    console.log(response?.data?.message);
                 }
             }
-            else {
-                console.log(response?.data?.message);
+            catch (error) {
+                toast.error('Error during assigning vehicle to a new Student', error)
             }
         }
-        catch (error) {
-            // toast.error('Error during assigning vehicle to a new Student', error)
+        else{
+            toast.error('Please Validate All Fields Correctly')
         }
     }
 
@@ -177,7 +164,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     }
 
     const validateVehicle = (value) => {
-        if (value === '') {
+        if (!value || value == '') {
             return '* Vehicle is required';
         }
         return '';
@@ -189,7 +176,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     }
 
     const validateStudent = (value) => {
-        if (value === '') {
+        if (!value || value == '') {
             return '* Student is required';
         }
         return '';
@@ -201,7 +188,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     }
 
     const validateDropPoint = (value) => {
-        if (value === '') {
+        if (!value || value == '') {
             return '* Drop Point is required';
         }
         return '';
@@ -221,7 +208,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     };
 
     const validateClass = (value) => {
-        if (value === '') {
+        if (!value || value == '') {
             return '* Class is required';
         }
         return '';
@@ -241,11 +228,27 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
     };
 
     const validateSection = (value) => {
-        if (value === '') {
+        if (!value || value == '') {
             return '* Section is required';
         }
         return '';
     };
+
+
+    const validateFields = () => {
+        let isValid = true;
+
+        const getByIdDriverNameErrorNew = validateDriverName(getByIdDriverName)
+        if (getByIdDriverNameErrorNew) {
+            set(getByIdDriverNameErrorNew);
+            isValid = false;
+        } else {
+            setgetByIdDriverNameError('');
+        }
+
+        return isValid;
+    };
+
 
 
     return (
@@ -259,7 +262,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                                 <form className='p-3'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Vehicle</label>
-                                        <select className={`form-select font14 ${vehicleNumError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleVehicle(e.target.value)}>
+                                        <select className={`form-select borderRadius5 font14 ${vehicleNumError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleVehicle(e.target.value)}>
                                             <option value='' selected disabled >--- Select ---</option>
                                             {VehicleData?.map(option => (
                                                 <option key={option.vehicleId} value={option.vehicleNumber}>
@@ -271,7 +274,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Class</label>
-                                        <select className={`form-select font14 ${ClassNoError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleClassChange(e.target.value)}>
+                                        <select className={`form-select borderRadius5 font14 ${ClassNoError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleClassChange(e.target.value)}>
                                             <option value='' selected disabled >--- Select ---</option>
                                             {allClassData?.map((option, index) => (
                                                 <option key={option.classId} value={option?.classNo}>
@@ -283,7 +286,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Section</label>
-                                        <select className={`form-select font14 ${SectionError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleSectionChange(e.target.value)}>
+                                        <select className={`form-select borderRadius5 font14 ${SectionError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleSectionChange(e.target.value)}>
                                             <option value='' selected disabled >--- Select ---</option>
                                             {allSectionData?.map((option, index) => (
                                                 <option key={option.classSecId} value={option?.sectionName}>
@@ -295,7 +298,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Student</label>
-                                        <select className={`form-select font14 ${StudentIdError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleStudent(e.target.value)}>
+                                        <select className={`form-select borderRadius5 font14 ${StudentIdError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleStudent(e.target.value)}>
                                             <option value='' selected disabled >--- Select ---</option>
                                             {allSubjectData?.map(option => (
                                                 <option key={option.studentId} value={option.studentId}>
@@ -307,7 +310,7 @@ const AssignStudentForm = ({AssignStudent, setAssignStudent,  ReloadData }) => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Drop Point</label>
-                                        <select className={`form-select font14 ${DropIdError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleDropPoint(e.target.value)}>
+                                        <select className={`form-select borderRadius5 font14 ${DropIdError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleDropPoint(e.target.value)}>
                                             <option value='' selected disabled >--- Select ---</option>
                                             {allDropData?.map(option => (
                                                 <option key={option.dropId} value={option.dropId}>

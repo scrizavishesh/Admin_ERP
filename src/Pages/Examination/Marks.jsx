@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import MarksTable from '../../Modals/Marks/MarksTable';
+// import MarksTable from '../../Modals/Marks/MarksTable';
 import { getAllClassApi, getAllMarksApi, getAllSessionDataAPI, getExamCategoryDataApi } from '../../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
 import DataLoader from '../../Layouts/Loader';
-import ReactPaginate from 'react-paginate';
+
+const MarksTable = lazy(() => import('../../Modals/Marks/MarksTable'));
 
 const Container = styled.div`
     .form-select{
@@ -33,7 +34,7 @@ const Marks = () => {
 
     const token = localStorage.getItem('token');
     const [SearchBtn, setSearchBtn] = useState(false);
-
+    const [isSearched, setIsSearched] = useState(false);
     const [indexxx, setIndexxx] = useState('');
     const [classId, setClassId] = useState('');
     const [sectionId, setSectionId] = useState('');
@@ -59,11 +60,11 @@ const Marks = () => {
 
     const getAllClassData = async () => {
         try {
-            setSearchBtn(false)
+            // setSearchBtn(false)
             var response = await getAllClassApi();
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    setSearchBtn(true)
+                    // setSearchBtn(true)
                     setAllClassData(response?.data?.classes);
                     toast.success(response?.data?.message)
                 }
@@ -97,7 +98,9 @@ const Marks = () => {
     const getAllExamCategoryData = async () => {
         try {
             const search = '';
-            var response = await getExamCategoryDataApi(search);
+            const page = 0;
+            const size = 0;
+            var response = await getExamCategoryDataApi(search , page , size);
             if (response?.status === 200) {
                 console.log(response, 'ressssssssssssssss')
                 if (response?.data?.status === 'success') {
@@ -117,12 +120,12 @@ const Marks = () => {
 
     const getAllMarksData = async () => {
         try {
+            setIsSearched(true);
             setloaderState(true);
             var response = await getAllMarksApi(classId, sectionId, subjectId, sessionSelect, examCategorySelect);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
-                    setSearchBtn(false)
                     setMarksData(response?.data?.Marks);
                     console.log(response?.data?.Marks, 'marks data at get api for 1st time');
                     // setTotalItems(10)
@@ -184,44 +187,6 @@ const Marks = () => {
                             </nav>
                             <p className='font14 ps-0 fontWeight500'>Manage Marks</p>
                         </div>
-                        {/* <div className="col-xxl-8 col-xl-9 col-lg-12 col-sm-12 pe-0">
-                            <div className="row gap-sm-0 gap-3">
-
-                                <div className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12 text-end">
-                                    <div className="row">
-                                        <div className="col-lg-6 col-sm-6 col-4 text-sm-end text-start ps-0 align-self-center">
-                                            <Link className="btn ps-2 pe-2 ExportBtns bg-white" type="submit">
-                                                <span className='font14 textVerticalCenter'>
-                                                    <Icon icon="fa-solid:file-csv" width="1.4em" height="1.4em" style={{ color: "#008479" }} />
-                                                    <span className='ms-1'>Export to CSV</span>
-                                                </span>
-                                            </Link>
-                                        </div>
-                                        <div className="col-lg-6 col-sm-6 col-4 text-sm-end text-start ps-0 align-self-center">
-                                            <Link className="btn ps-2 pe-2 ExportBtns bg-white" type="submit" to='/superAdminAddSchools'>
-                                                <span className='font14 textVerticalCenter'>
-                                                    <Icon icon="fluent:document-pdf-24-filled" width="1.4em" height="1.4em" style={{ color: "#008479" }} />
-                                                    <span className='ms-1'>Export to PDF</span>
-                                                </span>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 text-end align-self-center">
-                                    <div className="row gap-md-0 gap-sm-3">
-                                        <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
-                                            <form className="d-flex" role="search">
-                                                <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14'>Search</span></button>
-                                            </form>
-                                        </div>
-                                        <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
-                                            <Link className="btn ps-0 pe-0 addButtons text-white" type="submit" to='/addDriver'><span className='font14 textVerticalCenter'>+ ADD Driver</span></Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                     <div className="row pb-3">
                         <div className="bg-white rounded-2 p-4">
@@ -230,7 +195,7 @@ const Marks = () => {
                                     <div className="row">
                                         <div className="col-md-4 col-sm-6 col-12">
                                             <label htmlFor="inputEmail4" className="form-label font14">Exam Category</label>
-                                            <select className="form-select font14" aria-label="Default select example" onChange={(e) => setExamCategorySelect(e.target.value)}>
+                                            <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={(e) => setExamCategorySelect(e.target.value)}>
                                                 <option defaultValue>Select a Exam Category</option>
                                                 {ExamCategoryData?.map((option) => (
                                                     <option key={option.categoryId} value={option?.examCategoryName}>
@@ -241,7 +206,7 @@ const Marks = () => {
                                         </div>
                                         <div className="col-md-4 col-sm-6 col-12">
                                             <label htmlFor="inputEmail4" className="form-label font14">Class</label>
-                                            <select className="form-select font14" aria-label="Default select example" onChange={handleChange}>
+                                            <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={handleChange}>
                                                 <option >--- Choose ---</option>
                                                 {allClassData?.map((option, index) => (
                                                     <option key={option.classId} value={`${index}, ${option?.classId}, ${option.classNo}`}>
@@ -252,7 +217,7 @@ const Marks = () => {
                                         </div>
                                         <div className="col-md-4 col-sm-6 col-12">
                                             <label htmlFor="inputEmail4" className="form-label font14">Section</label>
-                                            <select className="form-select font14" aria-label="Default select example" onChange={handleSection}>
+                                            <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={handleSection}>
                                                 <option >--- Choose ---</option>
                                                 {allClassData[indexxx]?.section?.map(option => (
                                                     <option key={option.classSecId} value={`${option?.classSecId}, ${option.sectionName}`} >
@@ -267,7 +232,7 @@ const Marks = () => {
                                     <div className="row">
                                         <div className="col-lg-6 col-md-4 col-sm-6 col-12">
                                             <label htmlFor="inputEmail4" className="form-label font14">Subject</label>
-                                            <select className="form-select font14" aria-label="Default select example" onChange={handleSubject}>
+                                            <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={handleSubject}>
                                                 <option >--- Choose ---</option>
                                                 {allClassData[indexxx]?.subjects?.map(option => (
                                                     <option key={option.subjectId} value={`${option?.subjectId}, ${option.subjectName}`} >
@@ -278,7 +243,7 @@ const Marks = () => {
                                         </div>
                                         <div className="col-lg-6 col-md-4 col-sm-6 col-12">
                                             <label htmlFor="inputEmail4" className="form-label font14">Session</label>
-                                            <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSessionSelect(e.target.value)}>
+                                            <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={(e) => setSessionSelect(e.target.value)}>
                                                 <option defaultValue>Select a Session</option>
                                                 {sessionData?.map(option => (
                                                     <option key={option.sessionId} value={option.sessionName} >
@@ -291,20 +256,27 @@ const Marks = () => {
                                 </div>
                                 <p className='text-center p-3'>
                                     <button type='button' className='btn updateButtons text-white' onClick={getAllMarksData}>Search</button>
-                                    <button type='button' className='btn cancelButtons ms-3'>Cancel</button>
+                                    <button type='button' className='btn cancelButtons ms-3' onClick={()=>setIsSearched(false)}>Cancel</button>
                                 </p>
                             </form>
                             <div className="row">
-                                {SearchBtn
-                                    ?
-                                    <>
-                                        <div className="d-flex justify-content-center p-5">
-                                            <img src="./images/search.svg" alt="" className='img-fluid' />
-                                        </div>
-                                    </>
-                                    :
-                                    <MarksTable marksData={marksData} className={className} sectionName={sectionName} subjectName={subjectName} sessionSelect={sessionSelect} examCategorySelect={examCategorySelect} />
-                                }
+                                {!isSearched ? (
+                                    <div className="d-flex justify-content-center p-5">
+                                        <img src="./images/search.svg" alt="Search" className='img-fluid' />
+                                    </div>
+                                ) : (
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        {marksData?.length > 0 && (
+                                            <MarksTable
+                                                marksData={marksData}
+                                                subjectName={subjectName}
+                                                className={className}
+                                                sectionName={sectionName}
+                                            />
+                                        )}
+                                    </Suspense>
+                            // <MarksTable marksData={marksData} className={className} sectionName={sectionName} subjectName={subjectName} sessionSelect={sessionSelect} examCategorySelect={examCategorySelect} />
+                                )}
                             </div>
                         </div>
                     </div>

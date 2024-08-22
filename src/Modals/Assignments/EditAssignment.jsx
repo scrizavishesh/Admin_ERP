@@ -309,57 +309,6 @@ const EditAssignment = ({ EditItemId }) => {
                                         <input type="text" id="exampleInputEmail1" className={`form-control font14 ${TitleError ? 'border-1 border-danger' : ''}`} placeholder='Enter Title' value={Title} onChange={(e) => { setTitle(e.target.value), setTitleError(validateTextFields(e.target.value)) }} />
                                         <span className='text-danger'>{TitleError}</span>
                                     </div>
-                                    {/* <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Class</label>
-                                        <select className={`form-select font14 ${ClasssError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={classId} onChange={(e) => handleClassChange(e)}>
-                                            <option >--- Choose ---</option>
-                                            {allClassData?.map((option) => (
-                                                <option key={option.classId} value={option?.classId}>
-                                                    {option?.classNo}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <span className='text-danger'>{ClasssError}</span>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Section</label>
-                                        <select className={`form-select font14 ${SectionIdError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={SectionId} onChange={(e) => setSectionId(e.target.value)}>
-                                            <option >--- Choose ---</option>
-                                            {allSectionData?.map(option => (
-                                                <option key={option.classSecId} value={option.classSecId}>
-                                                    {option.sectionName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <span className='text-danger'>{SectionIdError}</span>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Subject</label>
-                                        <select className={`form-select font14 ${SubjectError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Subject} onChange={(e) => { setSubject(e.target.value), getAllTeacherData(e.target.value) }}
-                                        >
-                                            <option >--- Choose ---</option>
-                                            {allSubjectData?.map((option) => (
-                                                <option key={option.subjectId} value={option.subjectId}>
-                                                    {option.subjectName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <span className='text-danger'>{SubjectError}</span>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Teacher</label>
-                                        <select className={`form-select font14 ${TeacherError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Teacher} onChange={(e) => { setTeacher(e.target.value), setTeacherError('') }}>
-                                            <option defaultValue value=''>--- Choose ---</option>
-                                            {allTeacherData.map(option => (
-                                                <option key={option.staffId} value={option.staffId}>
-                                                    {option.staffName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <span className='text-danger'>{TeacherError}</span>
-                                    </div> */}
-
-
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Class</label>
                                         <select className={`form-select font14 ${ClasssError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={classId} onChange={(e) => handleClassChange(e.target.value)}>
@@ -470,3 +419,59 @@ const EditAssignment = ({ EditItemId }) => {
 }
 
 export default EditAssignment
+
+
+
+
+
+
+
+                                    {/* <div className="mb-3">
+                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Class</label>
+                                        <select className={`form-select font14 ${ClasssError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={classId} onChange={(e) => handleClassChange(e)}>
+                                            <option >--- Choose ---</option>
+                                            {allClassData?.map((option) => (
+                                                <option key={option.classId} value={option?.classId}>
+                                                    {option?.classNo}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <span className='text-danger'>{ClasssError}</span>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Section</label>
+                                        <select className={`form-select font14 ${SectionIdError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={SectionId} onChange={(e) => setSectionId(e.target.value)}>
+                                            <option >--- Choose ---</option>
+                                            {allSectionData?.map(option => (
+                                                <option key={option.classSecId} value={option.classSecId}>
+                                                    {option.sectionName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <span className='text-danger'>{SectionIdError}</span>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Subject</label>
+                                        <select className={`form-select font14 ${SubjectError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Subject} onChange={(e) => { setSubject(e.target.value), getAllTeacherData(e.target.value) }}
+                                        >
+                                            <option >--- Choose ---</option>
+                                            {allSubjectData?.map((option) => (
+                                                <option key={option.subjectId} value={option.subjectId}>
+                                                    {option.subjectName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <span className='text-danger'>{SubjectError}</span>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleInputEmail1" className="form-label font14">Teacher</label>
+                                        <select className={`form-select font14 ${TeacherError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Teacher} onChange={(e) => { setTeacher(e.target.value), setTeacherError('') }}>
+                                            <option defaultValue value=''>--- Choose ---</option>
+                                            {allTeacherData.map(option => (
+                                                <option key={option.staffId} value={option.staffId}>
+                                                    {option.staffName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <span className='text-danger'>{TeacherError}</span>
+                                    </div> */}

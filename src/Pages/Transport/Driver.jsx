@@ -17,7 +17,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -139,25 +138,21 @@ const Driver = () => {
     const [DeleteWarning, setDeleteWarning] = useState(true);
     const [isChecked, setIsChecked] = useState(false);
 
-    const [refreshUpdate, setRefreshUpdate] = useState(false);
-    const [refreshPage, setRefreshPage] = useState(false);
-    const [refreshDelete, setRefreshDelete] = useState(false);
-
-    const [getDriverIdDataName, setgetDriverIdDataName] = useState('');
-    const [getDriverIdDataAddress, setgetDriverIdDataAddress] = useState('');
-    const [getDriverIdDataPhone, setgetDriverIdDataPhone] = useState('');
-    const [getDriverIdDataEmail, setgetDriverIdDataEmail] = useState('');
+    const [getByIdDriverName, setgetByIdDriverName] = useState('');
+    const [getByIdDriverAddress, setgetByIdDriverAddress] = useState('');
+    const [getByIdDriverPhone, setgetByIdDriverPhone] = useState('');
+    const [getByIdDriverEmail, setgetByIdDriverEmail] = useState('');
     const [OriginalDriverIdDataEmail, setOriginalDriverIdDataEmail] = useState('');
 
-    const [getDriverIdDataGender, setgetDriverIdDataGender] = useState('');
-    const [getDriverIdDataImage, setgetDriverIdDataImage] = useState('');
+    const [getByIdDriverGender, setgetByIdDriverGender] = useState('');
+    const [getByIdDriverImage, setgetByIdDriverImage] = useState('');
 
-    const [getDriverIdDataNameError, setgetDriverIdDataNameError] = useState('');
-    const [getDriverIdDataAddressError, setgetDriverIdDataAddressError] = useState('');
-    const [getDriverIdDataPhoneError, setgetDriverIdDataPhoneError] = useState('');
-    const [getDriverIdDataEmailError, setgetDriverIdDataEmailError] = useState('');
-    const [getDriverIdDataGenderError, setgetDriverIdDataGenderError] = useState('');
-    const [getDriverIdDataImageError, setgetDriverIdDataImageError] = useState('');
+    const [getByIdDriverNameError, setgetByIdDriverNameError] = useState('');
+    const [getByIdDriverAddressError, setgetByIdDriverAddressError] = useState('');
+    const [getByIdDriverPhoneError, setgetByIdDriverPhoneError] = useState('');
+    const [getByIdDriverEmailError, setgetByIdDriverEmailError] = useState('');
+    const [getByIdDriverGenderError, setgetByIdDriverGenderError] = useState('');
+    const [getByIdDriverImageError, setgetByIdDriverImageError] = useState('');
 
     const [driverIDD, setDriverIDD] = useState('')
     const [delDriverIDD, setDelDriverIDD] = useState('')
@@ -167,13 +162,18 @@ const Driver = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
 
     // Pagination
 
     useEffect(() => {
         getAllDriverData();
-    }, [token, currentPage, refreshDelete, refreshUpdate, pageNo])
+
+        if(getByIdDriverGender){
+            validateFields();
+        }
+
+    }, [token, pageNo, getByIdDriverGender])
 
     const getAllDriverData = async () => {
         try {
@@ -186,6 +186,8 @@ const Driver = () => {
                     setTotalPages(response?.data?.totalPages);
                     setCurrentPage(response?.data?.currentPage);
                     toast.success(response.data.message);
+                    setEditWarning(true);
+                    setDeleteWarning(true);
                 }
             }
             else {
@@ -218,11 +220,6 @@ const Driver = () => {
         setDelDriverIDD(id)
     }
 
-    const PageRefreshOnDelete = () => {
-        setDeleteWarning(!DeleteWarning);
-        setRefreshDelete(!refreshDelete);
-    }
-
     const DeleteDriverDataById = async (id) => {
         if (isChecked) {
             try {
@@ -245,19 +242,19 @@ const Driver = () => {
 
 
     const UpdateDriverDataById = async () => {
-        if (validateEditFields()) {
+        if (validateFields()) {
             try {
                 const formData = new FormData();
 
-                formData.append("driverName", getDriverIdDataName)
+                formData.append("driverName", getByIdDriverName)
 
-                if (getDriverIdDataEmail !== OriginalDriverIdDataEmail) {
-                    formData.append("driverEmail", getDriverIdDataEmail)
+                if (getByIdDriverEmail !== OriginalDriverIdDataEmail) {
+                    formData.append("driverEmail", getByIdDriverEmail)
                 }
 
-                formData.append("driverAddress", getDriverIdDataAddress)
-                formData.append("phoneNo", getDriverIdDataPhone)
-                formData.append("gender", getDriverIdDataGender)
+                formData.append("driverAddress", getByIdDriverAddress)
+                formData.append("phoneNo", getByIdDriverPhone)
+                formData.append("gender", getByIdDriverGender)
 
                 var response = await updateDriverDataApi(driverIDD, formData);
 
@@ -279,6 +276,9 @@ const Driver = () => {
                 console.error('Error during update:', error);
             }
         }
+        else{
+            toast.error('Please Validate All Fields Correctly')
+        }
     };
 
     const getDriverDataById = async (id) => {
@@ -287,13 +287,13 @@ const Driver = () => {
             var response = await getDriverDataByIdApi(id);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    setgetDriverIdDataName(response?.data?.driver?.driverName);
-                    setgetDriverIdDataAddress(response?.data?.driver?.driverAddress);
-                    setgetDriverIdDataPhone(response?.data?.driver?.phoneNumber);
-                    setgetDriverIdDataEmail(response?.data?.driver?.driverEmail);
+                    setgetByIdDriverName(response?.data?.driver?.driverName);
+                    setgetByIdDriverAddress(response?.data?.driver?.driverAddress);
+                    setgetByIdDriverPhone(response?.data?.driver?.phoneNumber);
+                    setgetByIdDriverEmail(response?.data?.driver?.driverEmail);
                     setOriginalDriverIdDataEmail(response?.data?.driver?.driverEmail);
-                    setgetDriverIdDataGender(response?.data?.driver?.gender);
-                    setgetDriverIdDataImage(response?.data?.driver?.driverImage);
+                    setgetByIdDriverGender(response?.data?.driver?.gender);
+                    setgetByIdDriverImage(response?.data?.driver?.driverImage);
                     toast.success(response?.data?.message)
                 }
             }
@@ -306,138 +306,153 @@ const Driver = () => {
         }
     }
 
-    const PageRefreshOnAdd = () => {
-        setEditWarning(!EditWarning);
-        setRefreshUpdate(!refreshUpdate);
-    }
-
-    const PageRefresh = () => {
-        setRefreshPage(!refreshPage);
-    }
-
-
-
-    // ***************************************     Edit Data Validation    *****************************************
-
-
-
-    const handleDriverNameChange = (val) => {
-        setgetDriverIdDataName(val);
-        setgetDriverIdDataNameError(validateName(val))
-    }
-
-    const handleDriverEmailChange = (val) => {
-        setgetDriverIdDataEmail(val);
-        setgetDriverIdDataEmailError(validateEmail(val))
-    }
-
-    const handleDriverAddressChange = (val) => {
-        setgetDriverIdDataAddress(val);
-        setgetDriverIdDataAddressError(validateTextFields(val))
-    }
-
-    const handleDriverPhoneChange = (val) => {
-        setgetDriverIdDataPhone(val);
-        setgetDriverIdDataPhoneError(validatePhoneNumber(val))
-    }
-
-    const handleDriverImageChange = (val) => {
-        setgetDriverIdDataImage(val[0]);
-        setgetDriverIdDataImageError('')
-    }
-
-    const handleDriverGenderChange = (val) => {
-        setgetDriverIdDataGender(val);
-        setgetDriverIdDataGenderError('')
-    }
-
-
-    const nameRegex = /^[A-Za-z\s]+$/;
-    const emailRegex = /^[A-Za-z0-9._]{3,}@[A-Za-z]{3,8}[.]{1}[A-Za-z.]{2,6}$/;
-    const PhoneRegex = /^[6-9]\d{9}$/;
-    const textAlphaRegex = /^[A-Za-z0-9\s]+$/;
-
-
-    const validateName = (value) => {
-        if (!value.trim()) {
-            return '*This Field is required';
-        } else if (!nameRegex.test(value)) {
-            return 'Invalid characters in name !!';
-        }
-        return '';
-    };
-
-    const validateEmail = (value) => {
-        if (!value.trim()) {
-            return '*This Field is required';
-        } else if (!emailRegex.test(value)) {
-            return 'Invalid characters in name !!';
-        }
-        return '';
-    };
-
-    const validatePhoneNumber = (value) => {
-        if (!value.trim()) {
-            return '*This Field is required';
-        } else if (!PhoneRegex.test(value)) {
-            return 'Invalid characters in name !!';
-        }
-        return '';
-    };
-
-    const validateTextFields = (value) => {
-        if (!value.trim()) {
-            return '*This Field is required';
-        } else if (!textAlphaRegex.test(value)) {
-            return 'Invalid characters in name !!';
-        }
-        return '';
-    };
-
-
-    const validateEditFields = () => {
+    const validateFields = () => {
         let isValid = true;
 
-        if (!getDriverIdDataName) {
-            setgetDriverIdDataNameError('* This Feild is required');
+        const getByIdDriverNameErrorNew = validateDriverName(getByIdDriverName)
+        if (getByIdDriverNameErrorNew) {
+            setgetByIdDriverNameError(getByIdDriverNameErrorNew);
             isValid = false;
         } else {
-            setgetDriverIdDataNameError('');
+            setgetByIdDriverNameError('');
         }
 
-        if (!getDriverIdDataAddress) {
-            setgetDriverIdDataAddressError('* This Feild is required');
+        const driverEmailErrorNew = validateDriverEmail(getByIdDriverEmail)
+        if (driverEmailErrorNew) {
+            setgetByIdDriverEmailError(driverEmailErrorNew);
             isValid = false;
         } else {
-            setgetDriverIdDataAddressError('');
+            setgetByIdDriverEmailError('');
         }
 
-        if (!getDriverIdDataEmail) {
-            setgetDriverIdDataEmailError('* This Feild is required');
+        const driverAddressErrorNew = validateDriverAddress(getByIdDriverAddress)
+        if (driverAddressErrorNew) {
+            setgetByIdDriverAddressError(driverAddressErrorNew);
             isValid = false;
         } else {
-            setgetDriverIdDataEmailError('');
+            setgetByIdDriverAddressError('');
         }
 
-        if (!getDriverIdDataImage) {
-            setgetDriverIdDataImageError('* This Feild is required');
+        const driverPhoneErrorNew = validateDriverPhone(getByIdDriverPhone)
+        if (driverPhoneErrorNew) {
+            setgetByIdDriverPhoneError(driverPhoneErrorNew);
             isValid = false;
         } else {
-            setgetDriverIdDataImageError('');
+            setgetByIdDriverPhoneError('');
         }
 
-        if (!getDriverIdDataGender) {
-            setgetDriverIdDataGenderError('* This Feild is required');
+        const driverGenderErrorNew = validateDriverGender(getByIdDriverGender)
+        if (driverGenderErrorNew) {
+            setgetByIdDriverGenderError(driverGenderErrorNew);
             isValid = false;
         } else {
-            setgetDriverIdDataGenderError('');
+            setgetByIdDriverGenderError('');
+        }
+
+        const driverImageErrorNew = validateDriverImage(getByIdDriverImage)
+        if (driverImageErrorNew) {
+            setgetByIdDriverImageError(driverImageErrorNew);
+            isValid = false;
+        } else {
+            setgetByIdDriverImageError('');
         }
 
         return isValid;
     };
 
 
-    // ***************************************     Edit Data Validation    *****************************************
+    const handleDriverNameChange = (value) => {
+        setgetByIdDriverName(value);
+        setgetByIdDriverNameError(validateDriverName(value))
+    }
+
+    const validateDriverName = (value) => {
+        if (value.trim() === '') {
+            return '* Driver Name is required';
+        }
+        const nameRegex = /^[a-zA-Z\s]+$/;
+        if (!nameRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
+
+    const handleDriverEmailChange = (value) => {
+        setgetByIdDriverEmail(value);
+        setgetByIdDriverEmailError(validateDriverEmail(value))
+    }
+
+    const validateDriverEmail = (value) => {
+        if (value.trim() === '') {
+            return '* Driver Email is required';
+        }
+        const emailRegex = /^[A-Za-z0-9._]{3,}@[A-Za-z]{3,8}[.]{1}[A-Za-z.]{2,6}$/;
+        if (!emailRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
+
+    const handleDriverAddressChange = (value) => {
+        setgetByIdDriverAddress(value);
+        setgetByIdDriverAddressError(validateDriverAddress(value))
+    }
+
+    const validateDriverAddress = (value) => {
+        if (value.trim() === '') {
+            return '* Driver Address is required';
+        }
+        const addressRegex = /^[A-Za-z0-9\s]+$/;
+        if (!addressRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
+
+    const handleDriverPhoneChange = (value) => {
+        setgetByIdDriverPhone(value);
+        setgetByIdDriverPhoneError(validateDriverPhone(value))
+    }
+
+    const validateDriverPhone = (value) => {
+        if (value.trim() === '') {
+            return '* Driver Phone is required';
+        }
+        const PhoneRegex = /^[6-9]\d{9}$/;
+        if (!PhoneRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
+
+    const handleDriverGenderChange = (value) => {
+        setgetByIdDriverGender(value);
+        setgetByIdDriverGenderError(validateDriverGender(value))
+    }
+
+    const validateDriverGender = (value) => {
+        if (!value || value == '') {
+            return '* Gender is required';
+        }
+        return '';
+    };
+
+    const handleDriverImageChange = (value) => {
+        setgetByIdDriverImage(value[0]);
+        setgetByIdDriverImageError(validateDriverImage(value[0]))
+    }
+
+    const validateDriverImage = (value) => {
+        if (!value) {
+            return '* Photo is required';
+        }
+        else if (value.size < 10240 || value.size > 204800) {
+            return '* File size must be between 10 KB to 200 KB';
+        }
+        return '';
+    };
+    
+
 
 
     return (
@@ -488,7 +503,7 @@ const Driver = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllDriverData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllDriverData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -567,7 +582,7 @@ const Driver = () => {
 
                 <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div className="offcanvas-header border-bottom border-2 p-2">
-                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                 <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                             </svg>
@@ -580,47 +595,47 @@ const Driver = () => {
                                 ?
                                 <>
                                     <div>
-                                        {/* <p className='modalLightBorder orangeText p-2'>{getDriverIdDataName}</p> */}
+                                        {/* <p className='modalLightBorder orangeText p-2'>{getByIdDriverName}</p> */}
                                         <div className="p-3">
                                             <form>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Name</label>
-                                                    <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataName} onChange={(e) => handleDriverNameChange(e.target.value)} />
-                                                    <span className='text-danger'>{getDriverIdDataNameError}</span>
+                                                    <input type="text" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDriverNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDriverName} onChange={(e) => handleDriverNameChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdDriverNameError}</span>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Email</label>
-                                                    <input type="mail" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataEmailError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataEmail} onChange={(e) => handleDriverEmailChange(e.target.value)} />
-                                                    <span className='text-danger'>{getDriverIdDataEmailError}</span>
+                                                    <input type="mail" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDriverEmailError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDriverEmail} onChange={(e) => handleDriverEmailChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdDriverEmailError}</span>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Address</label>
-                                                    <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataAddressError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataAddress} onChange={(e) => handleDriverAddressChange(e.target.value)} />
-                                                    <span className='text-danger'>{getDriverIdDataAddressError}</span>
+                                                    <input type="text" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDriverAddressError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDriverAddress} onChange={(e) => handleDriverAddressChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdDriverAddressError}</span>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Phone Number</label>
-                                                    <input type="tel" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataPhoneError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataPhone} onChange={(e) => handleDriverPhoneChange(e.target.value)} />
-                                                    <span className='text-danger'>{getDriverIdDataPhoneError}</span>
+                                                    <input type="tel" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDriverPhoneError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDriverPhone} onChange={(e) => handleDriverPhoneChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdDriverPhoneError}</span>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Gender</label>
-                                                    <select className={`form-select font14 ${getDriverIdDataGenderError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={getDriverIdDataGender} onChange={(e) => handleDriverGenderChange(e.target.value)}>
+                                                    <select className={`form-select borderRadius5 font14 ${getByIdDriverGenderError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" value={getByIdDriverGender} onChange={(e) => handleDriverGenderChange(e.target.value)}>
                                                         <option>----- Select Gender -----</option>
                                                         <option value='Male'>Male</option>
                                                         <option value='Female'>Female</option>
                                                     </select>
-                                                    <span className='text-danger'>{getDriverIdDataGenderError}</span>
+                                                    <span className='text-danger'>{getByIdDriverGenderError}</span>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Driver Image</label>
-                                                    <input type="text" className={`form-control p-2 formcontrolinput font14 ${getDriverIdDataImageError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getDriverIdDataImage.split('/').pop()} onChange={(e) => handleDriverImageChange(e.target.files)} />
-                                                    <span className='text-danger'>{getDriverIdDataImageError}</span>
+                                                    <input type="text" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdDriverImageError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdDriverImage.split('/').pop()} onChange={(e) => handleDriverImageChange(e.target.files)} />
+                                                    <span className='text-danger'>{getByIdDriverImageError}</span>
                                                 </div>
                                             </form>
                                             <p className='text-center p-3'>
                                                 <button className='btn addButtons text-white' onClick={UpdateDriverDataById}>Update Driver</button>
-                                                <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefresh}>Cancel</button>
+                                                <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>Cancel</button>
                                             </p>
                                         </div>
                                     </div>
@@ -635,7 +650,7 @@ const Driver = () => {
                                                 <p className='warningHeading'>Successful Updated</p>
                                                 <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                             </div>
-                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnAdd}>Continue</button>
+                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>Continue</button>
                                         </div>
                                     </div>
                                 </>
@@ -651,7 +666,7 @@ const Driver = () => {
 
                 <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Delete_staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div className="offcanvas-header ps-0 modalHighborder p-1">
-                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                 <path fill="#B50000" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                             </svg>
@@ -671,7 +686,7 @@ const Driver = () => {
                                         <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
                                         <p className='text-center p-3'>
                                             <button className='btn deleteButtons text-white' onClick={() => DeleteDriverDataById(delDriverIDD)}>Delete</button>
-                                            <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                            <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>Cancel</button>
                                         </p>
                                     </div>
                                 </>
@@ -685,7 +700,7 @@ const Driver = () => {
                                                 <p className='warningHeading'>Successful Deleted</p>
                                                 <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                                             </div>
-                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllDriverData}>Continue</button>
                                         </div>
                                     </div>
                                 </>

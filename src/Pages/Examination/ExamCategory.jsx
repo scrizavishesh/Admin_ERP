@@ -90,7 +90,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -116,39 +115,31 @@ const ExamCategory = () => {
     // Data States
     const [ExamCategoryData, setExamCategoryData] = useState([]);
     const [searchByKey, setSearchByKey] = useState('')
-
-    // Offcanvas State
     const [AddExamCategory, setAddExamCategory] = useState(true);
     const [EditExamCategory, setEditExamCategory] = useState(true);
     const [DeleteWarning, setDeleteWarning] = useState(true);
-
-    // State id's for delete and edit
     const [ExamCategoryById, setExamCategoryById] = useState('');
     const [deleteExamCategoryId, setDeleteExamCategoryId] = useState('');
-
-    // state for creating exam category
     const [ExamCategory, setExamCategory] = useState('');
     const [ExamCategoryError, setExamCategoryError] = useState('');
-
-    // state for updating exam category
     const [UpdateExamCategoryName, setUpdateExamCategoryName] = useState('');
     const [UpdateExamCategoryNameError, setUpdateExamCategoryNameError] = useState('');
-
-    // for verifying either delete is agreed or not
     const [isChecked, setIsChecked] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
 
-    // Use Effect Calls
     useEffect(() => {
         getAllExamCategoryData();
     }, [token, pageNo])
 
-    // Pagination handle function
+    useEffect(() => {
+        validationCheck();
+    }, [UpdateExamCategoryName])
+
     const handlePageClick = (event) => {
         setPageNo(event.selected + 1); // as event start from 0 index
     };
@@ -165,7 +156,8 @@ const ExamCategory = () => {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
                     setExamCategoryData(response?.data?.categories);
-                    setTotalItems(10)
+                    setCurrentPage(response?.data?.currentPage)
+                    setTotalPages(response?.data?.totalPages)
                     toast.success(response.data.msg);
                 }
             }
@@ -187,7 +179,6 @@ const ExamCategory = () => {
                     setloaderState(false);
                     setUpdateExamCategoryName(response?.data?.Category?.examCategoryName);
                     toast.success(response.data.msg);
-                    validationCheck();
                 }
             }
             else {
@@ -199,28 +190,38 @@ const ExamCategory = () => {
 
     // Add new Exam category data
     const AddNewExamCategory = async () => {
-        const ExamCategoryNameValidate = validateExamCategoryName(ExamCategory);
-        if (ExamCategoryNameValidate) {
-            setExamCategoryError(ExamCategoryNameValidate);
-            return;
-        }
-        setExamCategoryError('');
-
-        try {
-            setloaderState(true);
-            const formData = new FormData();
-            formData.append('examCategoryName', ExamCategory)
-            var response = await addNewExamCategoryApi(formData);
-            if (response?.status === 200) {
-                if (response?.data?.status === 'success') {
+        if (validateFields()) {
+            console.log('1')
+            try {
+                console.log('2')
+                setloaderState(true);
+                console.log('3')
+                const formData = new FormData();
+                formData.append('examCategoryName', ExamCategory)
+                var response = await addNewExamCategoryApi(formData);
+                console.log(response, '4')
+                if (response?.status === 200) {
+                    if (response?.data?.status === 'success') {
+                        setloaderState(false);
+                        console.log(response, 'res after success');
+                        setAddExamCategory(!AddExamCategory)
+                    }
+                    else {
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
+                    }
+                } else {
                     setloaderState(false);
-                    console.log(response, 'res after success');
-                    setAddExamCategory(!AddExamCategory)
+                    toast.error(response?.data?.message)
                 }
+            } catch (error) {
+                setloaderState(false);
+                console.error('Error during update:', error);
+                toast.error('Error during update:', error)
             }
         }
-        catch {
-
+        else {
+            toast.error('Please Validate All Fields Correctly')
         }
     }
 
@@ -249,13 +250,7 @@ const ExamCategory = () => {
 
     // Update Exam category data
     const updateExamCategoryById = async () => {
-        const UpdateExamCategoryNameValidate = validateUpdateExamCategoryName(UpdateExamCategoryName);
-        if (UpdateExamCategoryNameValidate) {
-            setUpdateExamCategoryNameError(UpdateExamCategoryNameValidate);
-            return;
-        }
-        setUpdateExamCategoryNameError('');
-
+        if(validationCheck()){
         try {
             setloaderState(true);
             const formData = new FormData();
@@ -274,6 +269,7 @@ const ExamCategory = () => {
         } catch (error) {
             console.error('Error during update:', error);
         }
+    }
     };
 
     const handleExamCategoryName = (value) => {
@@ -292,6 +288,19 @@ const ExamCategory = () => {
         return '';
     };
 
+    const validateFields = () => {
+        let isValid = true;
+        const ExamCategoryNameValidate = validateExamCategoryName(ExamCategory);
+        if (ExamCategoryNameValidate) {
+            setExamCategoryError(ExamCategoryNameValidate);
+            isValid = false;
+        }
+        else {
+            setExamCategoryError('');
+        }
+        return isValid;
+    }
+
     const handleUpdateExamCategoryName = (value) => {
         setUpdateExamCategoryName(value);
         setUpdateExamCategoryNameError(validateUpdateExamCategoryName(value))
@@ -308,15 +317,19 @@ const ExamCategory = () => {
         return '';
     };
 
-    // validate the data the is retrived by get By Id
     const validationCheck = () => {
-        const UpdateExamCategoryNameValidate = validateUpdateExamCategoryName(UpdateExamCategoryName);
-        if (UpdateExamCategoryNameValidate) {
-            setUpdateExamCategoryNameError(UpdateExamCategoryNameValidate);
-            return;
+        let isValid = true;
+        const ExamCategoryNameValidate = validateUpdateExamCategoryName(UpdateExamCategoryName);
+        if (ExamCategoryNameValidate) {
+            setUpdateExamCategoryNameError(ExamCategoryNameValidate);
+            isValid = false;
         }
-        setUpdateExamCategoryNameError('');
+        else {
+            setUpdateExamCategoryNameError('');
+        }
+        return isValid;
     }
+
 
     return (
         <>
@@ -367,7 +380,7 @@ const ExamCategory = () => {
                                         <div className="col-md-7 col-sm-12 col-7 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllExamCategoryData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllExamCategoryData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-5 col-sm-12 col-5 text-sm-end text-start">
@@ -458,7 +471,7 @@ const ExamCategory = () => {
                                 <form className='row'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Exam Category</label>
-                                        <input type="text" id="exampleInputEmail1" className={`form-control font14 ${ExamCategoryError ? 'border-1 border-danger' : ''}`} placeholder='Enter Exam Title' onChange={(e) => handleExamCategoryName(e.target.value)} />
+                                        <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 borderRadius5 font14 ${ExamCategoryError ? 'border-1 border-danger' : ''}`} placeholder='Enter Exam Title' onChange={(e) => handleExamCategoryName(e.target.value)} />
                                         <span className='text-danger'>{ExamCategoryError}</span>
                                     </div>
                                     <p className='text-center p-3'>
@@ -499,7 +512,7 @@ const ExamCategory = () => {
                                 <form className='p-3'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Name</label>
-                                        <input type="text" id="exampleInputEmail1" className={`form-control font14 ${UpdateExamCategoryNameError ? 'border-1 border-danger' : ''}`} value={UpdateExamCategoryName} onChange={(e) => handleUpdateExamCategoryName(e.target.value)} />
+                                        <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 borderRadius5 font14 ${UpdateExamCategoryNameError ? 'border-1 border-danger' : ''}`} value={UpdateExamCategoryName} onChange={(e) => handleUpdateExamCategoryName(e.target.value)} />
                                         <span className="text-danger">{UpdateExamCategoryNameError}</span>
                                     </div>
                                     <p className='text-center p-3'>

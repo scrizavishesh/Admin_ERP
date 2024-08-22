@@ -237,7 +237,7 @@ const Subscription = () => {
                                                     <td className='text-center'>
                                                         <Link className="btn addButtons text-white" to='/paymentSettings'>
                                                             {/* <span className='font20' onClick={()=>updateSubscriptionData(item.planId)}>Book Now</span> */}
-                                                            <span className='font20'>Book Now</span>
+                                                            <span className='font14'>Book Now</span>
                                                         </Link>
                                                     </td>
                                                 </tr>

@@ -625,7 +625,7 @@ const SessionManager = () => {
                             :
                             <>
                                 <div >
-                                    <p className='border-bottom p-3'>Driver</p>
+                                    <p className='border-bottom p-3'>Session</p>
                                     <div className="">
                                         <div className='deleteSVG border border-2 p-4 rounded-circle'><img src="./images/deleteicon.svg" alt="" /></div>
                                         <div className="deletetext border m-4 border-2 greydiv ms-5 rounded-3 text-center greyText p-5">

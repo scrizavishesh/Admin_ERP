@@ -89,7 +89,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -125,7 +124,6 @@ const Grades = () => {
     const [DeleteWarning, setDeleteWarning] = useState(true);
 
     const [deleteGradeId, setDeleteGradeId] = useState('');
-    console.log(deleteGradeId)
 
     const [GradeById, setGradeById] = useState(0);
     const [GradeByIdError, setGradeByIdError] = useState('');
@@ -142,11 +140,6 @@ const Grades = () => {
     const [MarkUpto, setMarkUpto] = useState('');
     const [MarkUptoError, setMarkUptoError] = useState('');
 
-    const [refreshAdd, setRefreshAdd] = useState(false);
-    const [refreshUpdate, setRefreshUpdate] = useState(false);
-    const [refreshPage, setRefreshPage] = useState(false);
-    const [refreshDelete, setRefreshDelete] = useState(false);
-
     const [isChecked, setIsChecked] = useState(false);
 
 
@@ -155,17 +148,13 @@ const Grades = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     // Pagination
 
     useEffect(() => {
         getAllGradeData();
-    }, [token, refreshDelete, refreshUpdate, refreshAdd, pageNo])
-
-    useEffect(() => {
-        getGradeDataById();
-    }, [GradeById])
+    }, [token, pageNo])
 
 
     const handlePageClick = (event) => {
@@ -177,7 +166,6 @@ const Grades = () => {
         try {
             setloaderState(true);
             var response = await getGradeDataApi(searchByKey, pageNo, pageSize);
-            console.log(response, 'data')
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
@@ -199,25 +187,33 @@ const Grades = () => {
             try {
                 console.log('first')
                 var response = await deleteGradeApi(deleteGradeId);
-                console.log(response, 'respon')
                 if (response?.status === 200) {
                     if (response.data.status === 'success') {
                         setDeleteWarning(!DeleteWarning)
                         toast.success(response?.data?.message)
                     }
+                    else {
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
+                    }
+                } else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message)
                 }
-                else {
-                    toast.error(response?.error);
-                }
+            } catch (error) {
+                setloaderState(false);
+                console.error('Error during update:', error);
+                toast.error('Error during update:', error)
             }
-            catch (error) {
-                console.error('Error during login:', error);
-            }
+        }
+        else {
+            toast.error('Please Agree to Delete Grade')
         }
     }
 
     const AddNewGrades = async () => {
         if (validateAddFields()) {
+            setloaderState(true);
             try {
                 const formData = new FormData();
                 formData.append('grade', Grade)
@@ -226,75 +222,90 @@ const Grades = () => {
                 formData.append('marksUpTo', MarkUpto)
 
                 var response = await addNewGradeApi(formData);
-                console.log(response)
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        console.log(response, 'res after success');
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
                         setAddGradeCategory(!AddGradeCategory)
                     }
+                    else {
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
+                    }
+                } else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message)
                 }
+            } catch (error) {
+                setloaderState(false);
+                console.error('Error during update:', error);
+                toast.error('Error during update:', error)
             }
-            catch {
-
-            }
+        }
+        else {
+            toast.error('Please Validate All Fields Correctly')
         }
     }
 
-    const getGradeDataById = async () => {
+    const getGradeDataById = async (id) => {
         try {
             setloaderState(true);
-
-            var response = await getGradeDataByIdApi(parseInt(GradeById));
-            console.log(response, 'data by id')
+            setGradeById(id)
+            const idd = parseInt(id)
+            var response = await getGradeDataByIdApi(idd);
+            console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false);
-                    setEditGradeNameById()
+                    setGradeById(response?.data?.grade?.grade)
                 }
+                else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message)
+                }
+            } else {
+                setloaderState(false);
+                toast.error(response?.data?.message)
             }
-            else {
-                toast.error(response?.data?.message);
-            }
+        } catch (error) {
+            setloaderState(false);
+            console.error('Error during update:', error);
+            toast.error('Error during update:', error)
         }
-        catch { }
     }
 
     const EditGrades = async () => {
         if (validateEditFields()) {
             try {
+                setloaderState(true)
                 const formData = new FormData();
                 formData.append('grade', GradeById)
-
-                var response = await updateGradeByIdApi(formData);
-                console.log(response, update)
+                var response = await updateGradeByIdApi(GradeById, formData);
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
-                        console.log(response, 'res after success');
-                        setEditGradeCategory(!EditGradeCategory)
+                        setEditGradeCategory(false);
+                        setloaderState(false);
+                        toast.success(response?.data?.message)
                     }
+                    else {
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
+                    }
+                } else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message)
                 }
+            } catch (error) {
+                setloaderState(false);
+                console.error('Error during update:', error);
+                toast.error('Error during update:', error)
             }
-            catch {
-
-            }
+        }
+        else {
+            toast.error('Please Validate All Fields Correctly')
         }
     }
 
-
-    const PageRefreshOnAdd = () => {
-        setAddGradeCategory(!AddGradeCategory);
-        setRefreshAdd(!refreshAdd);
-    }
-
-    const PageRefreshOnUpdate = () => {
-        setEditGradeCategory(!EditGradeCategory);
-        setRefreshUpdate(!refreshUpdate);
-    }
-
-    const PageRefreshOnDelete = () => {
-        setDeleteWarning(!DeleteWarning);
-        setRefreshDelete(!refreshDelete);
-    }
 
     const handleGradeUpdateById = (val) => {
         setGradeById(val);
@@ -465,7 +476,7 @@ const Grades = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllGradeData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllGradeData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -506,7 +517,7 @@ const Grades = () => {
                                                     </button>
                                                     <ul className="dropdown-menu">
                                                         <li>
-                                                            <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Edit_staticBackdrop" aria-controls="Edit_staticBackdrop" onClick={() => setGradeById(item.grade)}>
+                                                            <button className="dropdown-item greyText" type="button" data-bs-toggle="offcanvas" data-bs-target="#Edit_staticBackdrop" aria-controls="Edit_staticBackdrop" onClick={() => getGradeDataById(item.id)}>
                                                                 Edit
                                                             </button>
                                                         </li>
@@ -547,7 +558,7 @@ const Grades = () => {
 
                     <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="addCategory_staticBackdrop" aria-labelledby="staticBackdropLabel">
                         <div className="offcanvas-header ps-0 modalHighborder p-2">
-                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                     <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                 </svg>
@@ -561,22 +572,22 @@ const Grades = () => {
                                     <form className='row'>
                                         <div className="mb-3">
                                             <label htmlFor="exampleInputEmail1" className="form-label font14">Grade</label>
-                                            <input type="text" id="exampleInputEmail1" className={`form-control font14 ${GradeError ? 'border-1 border-danger' : ''}`} placeholder='Enter Grade' onChange={(e) => handleGradeChange(e.target.value)} />
+                                            <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 font14 ${GradeError ? 'border-1 border-danger' : ''}`} placeholder='Enter Grade' onChange={(e) => handleGradeChange(e.target.value)} />
                                             <span className='text-danger'>{GradeError}</span>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="exampleInputEmail1" className="form-label font14">Grade point</label>
-                                            <input type="text" id="exampleInputEmail1" className={`form-control font14 ${GradePointError ? 'border-1 border-danger' : ''}`} placeholder='Enter Grade Point' onChange={(e) => handleGradePointChange(e.target.value)} />
+                                            <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 font14 ${GradePointError ? 'border-1 border-danger' : ''}`} placeholder='Enter Grade Point' onChange={(e) => handleGradePointChange(e.target.value)} />
                                             <span className='text-danger'>{GradePointError}</span>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="exampleInputEmail1" className="form-label font14">Mark From</label>
-                                            <input type="text" id="exampleInputEmail1" className={`form-control font14 ${MarkFromError ? 'border-1 border-danger' : ''}`} placeholder='Enter Mark From' onChange={(e) => handleMarkFromChange(e.target.value)} />
+                                            <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 font14 ${MarkFromError ? 'border-1 border-danger' : ''}`} placeholder='Enter Mark From' onChange={(e) => handleMarkFromChange(e.target.value)} />
                                             <span className='text-danger'>{MarkFromError}</span>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="exampleInputEmail1" className="form-label font14">Mark Upto</label>
-                                            <input type="text" id="exampleInputEmail1" className={`form-control font14 ${MarkUptoError ? 'border-1 border-danger' : ''}`} placeholder='Enter Mark Upto' onChange={(e) => handleMarkUpToChange(e.target.value)} />
+                                            <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 font14 ${MarkUptoError ? 'border-1 border-danger' : ''}`} placeholder='Enter Mark Upto' onChange={(e) => handleMarkUpToChange(e.target.value)} />
                                             <span className='text-danger'>{MarkUptoError}</span>
                                         </div>
                                         <p className='text-center p-3'>
@@ -595,7 +606,7 @@ const Grades = () => {
                                             <p className='warningHeading'>Successful Updated</p>
                                             <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnAdd}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>Continue</button>
                                     </div>
                                 </>
                             }
@@ -610,7 +621,7 @@ const Grades = () => {
 
                     <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
                         <div className="offcanvas-header modalHighborder p-2">
-                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                     <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                 </svg>
@@ -624,11 +635,12 @@ const Grades = () => {
                                     <form className='p-3'>
                                         <div className="mb-3">
                                             <label htmlFor="exampleInputEmail1" className="form-label font14">Name</label>
-                                            <input type="text" id="exampleInputEmail1" className={`form-control font14`} value={GradeById} onChange={(e) => handleGradeUpdateById(e.target.value)} />
+                                            <input type="text" id="exampleInputEmail1" className={`form-control borderRadius5 font14 ${GradeByIdError ? 'border-1 border-danger' : ''}`} value={GradeById} onChange={(e) => handleGradeUpdateById(e.target.value)} />
+                                            <span className='text-danger'>{GradeByIdError}</span>
                                         </div>
                                         <p className='text-center p-3'>
-                                            <button className='btn updateButtons text-white' onClick={EditGrades}>Update</button>
-                                            <button className='btn cancelButtons ms-3' type='button' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                            <button className='btn updateButtons text-white' type='button' onClick={EditGrades}>Update</button>
+                                            <button className='btn cancelButtons ms-3' type='button' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>Cancel</button>
                                         </p>
                                     </form>
                                 </>
@@ -642,7 +654,7 @@ const Grades = () => {
                                             <p className='warningHeading'>Successful Updated</p>
                                             <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnUpdate}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>Continue</button>
                                     </div>
                                 </>
                             }
@@ -656,7 +668,7 @@ const Grades = () => {
 
                     <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Delete_staticBackdrop" aria-labelledby="staticBackdropLabel">
                         <div className="offcanvas-header modalHighborder p-2">
-                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                     <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
 
@@ -675,8 +687,8 @@ const Grades = () => {
                                         <p className='text-center greyText warningText pt-2'>This Action will be permanently delete<br />the Profile Data</p>
                                         <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
                                         <p className='text-center p-3'>
-                                            <button className='btn deleteButtons text-white' onClick={DeleteGrade}>Delete</button>
-                                            <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                            <button className='btn deleteButtons text-white' type='button' onClick={DeleteGrade}>Delete</button>
+                                            <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>Cancel</button>
                                         </p>
                                     </div>
                                 </>
@@ -690,7 +702,7 @@ const Grades = () => {
                                                 <p className='warningHeading'>Successful Deleted</p>
                                                 <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                                             </div>
-                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                            <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllGradeData}>Continue</button>
                                         </div>
                                     </div>
                                 </>

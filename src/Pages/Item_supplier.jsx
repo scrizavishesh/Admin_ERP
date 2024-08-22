@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { IncomePostApi } from '../Utils/Apis'
 import HashLoader from './HashLoaderCom';
-import { IncomeCategorygetAllApi } from '../Utils/Apis'
-import { IncomeAllApi } from '../Utils/Apis'
-import { IncomeDeleteApi } from '../Utils/Apis'
-import { IncomeGetByIdApi } from '../Utils/Apis'
-import { incomePutApi } from '../Utils/Apis'
-import Flatpickr from "react-flatpickr";
+import { ItemSupplierPostApi } from '../Utils/Apis'
+import { ItemSupplierGetAllApi } from '../Utils/Apis'
+import { ItemSupplierDeleteApi } from '../Utils/Apis'
+import { ItemSupplierGetByIdApi } from '../Utils/Apis'
+import { ItemSupplierUpdateApi } from '../Utils/Apis'
+
 import "flatpickr/dist/themes/light.css";
+
 
 // ## style css area start ####  
 
@@ -466,7 +466,8 @@ font-size: 12px;
 `;
 // ## style css area end ####  
 
-const Income = () => {
+const Item_supplier = () => {
+
 
   const [loader, setLoader] = useState(false)
   const [forDelete, setForDelete] = useState(false)
@@ -476,9 +477,16 @@ const Income = () => {
   const [show, setShow] = useState(true)
   const [income, setIncome] = useState('income')
 
-  const [amount, setAmount] = useState()
-  const [categoryId, setCategoryId] = useState()
-  const [date, setDate] = useState()
+  const [name, setName] = useState()
+  const [Phone, setPhone] = useState()
+  const [Email, setEmail] = useState()
+  const [address, setAddress] = useState()
+  const [ personName, setPersonName] = useState()
+  const [personPhone, setPersonPhone] = useState()
+  const [personEmail, setPersonEmail] = useState()
+  const [description, setDescription] = useState()
+
+  const [active, setActive] = useState(false)
 
   const [showdelete, setShowdelete] = useState(true)
   const [hidedelete, setHidedelete] = useState(false)
@@ -487,96 +495,86 @@ const Income = () => {
   const [IdForUpdate, setIdForUpdate] = useState()
   const [showadd, setShowadd] = useState(true)
   const [hideedit, setHideedit] = useState(false)
-  const [incomeCategoryData, setIncomeCategoryData] = useState([])
+
+  const [supplierrrData, setSupplierrrData] = useState([])
   const [myIncomeCategoryData, setMyIncomeCategoryData] = useState([])
-  console.log('income category data', incomeCategoryData)
+  console.log(' Supplier id update data', IdForUpdate)
 
-  useEffect(() => {
-    MyIncomeGetAllApi()
-    MyIncome2GetAllApi()
-    MyIncomeGetById()
-  }, [])
+  useEffect(()=>{
+    MySupplierrrGetAllApi()
+  },[])
+    // Income category Post Api 
+    const MyItemSupplierPostApi = async () => {
 
-  // Get All api  for category id from income category page
-  const MyIncomeGetAllApi = async () => {
-    setLoader(true)
-    try {
-      const response = await IncomeCategorygetAllApi(income);
-      console.log('my income category in come page data', response);
-      if (response?.status === 200) {
-        toast.success(response?.data?.msg)
-        setIncomeCategoryData(response?.data?.accountCategory)
-        setLoader(false)
-      } else {
-        toast.error(response?.data?.classes?.message);
+      const formData = {
+        "supplierId": 0,
+        "schoolId": "string",
+        "supplierName": name,
+        "supplierAddress": address,
+        "supplierPhone": Phone,
+        "supplierEmail": Email,
+        "contactPersonName": personName,
+        "contactPersonPhone": personPhone,
+        "contactPersonEmail": personEmail,
+        "supplierDescription": description
       }
-    } catch (error) {
-      console.log(error)
-    }
+      setLoader(true)
+      try {
+          const response = await ItemSupplierPostApi(formData);
+          console.log('Supplierrrrr response', response)
+          if (response?.status === 200) {
+              if (response?.data?.status === "success") {
+                  toast.success(response?.data?.message);
+                  setHidedelete(true)
+                  MySupplierrrGetAllApi()
+                  if (response?.data?.status === "success") {
+                      setActive(true)
+                  }
+                  setLoader(false)
+                  setShow(false)
+                  setHide(true)
+              } else {
+                  toast.error(response?.data?.message);
+                  // setShow(true)
+              }
+          } else {
+              toast.error(response?.data?.msg);
+          }
+      } catch (error) {
+          console.log(error)
+      }
   }
 
-  // ----------------------------- 
-
-  // Income category Post Api 
-  const MyIncomePostApi = async () => {
-    const formData = new FormData()
-    formData.append('amount', amount);
-    formData.append('categoryId', categoryId);
-    formData.append('type', income);
-    formData.append('date', date);
-
-    setLoader(true)
-    try {
-      const response = await IncomePostApi(formData);
-      if (response?.status === 200) {
-        if (response?.data?.status === "success") {
-          toast.success(response?.data?.msg);
-          setHidedelete(true)
-          MyIncomeGetAllApi()
+     // Get All api  
+     const MySupplierrrGetAllApi = async () => {
+      setLoader(true)
+      
+      try {
+        const response = await ItemSupplierGetAllApi();
+        console.log('my Supplierrrrrr all dataaaaa', response);
+        if (response?.status === 200) {
+          toast.success(response?.data?.message)
+          setSupplierrrData(response?.data?.itemSupplier)
           setLoader(false)
-          setShow(false)
-          MyIncome2GetAllApi()
-          setHide(true)
         } else {
-          toast.error(response?.data?.msg);
-          // setShow(true)
+          toast.error(response?.data?.classes?.message);
         }
-      } else {
-        toast.error(response?.data?.msg);
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
     }
-  }
 
-  // Get All api  
-  const MyIncome2GetAllApi = async () => {
-    setLoader(true)
-    try {
-      const response = await IncomeAllApi(income,startDate,endDate,categoryId);
-      console.log('my income all  data1234', response);
-      if (response?.status === 200) {
-        toast.success(response?.data?.message)
-        setMyIncomeCategoryData(response?.data?.transaction)
-        setLoader(false)
-      } else {
-        toast.error(response?.data?.classes?.message);
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  // Delete api
-  const MyIncomeDelApi = async (id) => {
+     // Delete api
+   const MySupplierDelApi = async (id) => {
     setLoader(true)
 
     try {
-      const response = await IncomeDeleteApi(id);
-      console.log('my-sdelete-api-response', response)
+      const response = await ItemSupplierDeleteApi(id);
+      console.log('my-supplier-delete-response', response)
 
       if (response?.status === 200) {
         toast.success(response?.data?.message);
-        MyIncome2GetAllApi()
+        MySupplierrrGetAllApi()
         setShowdelete(false)
         setHidedelete(true)
         setLoader(false)
@@ -590,53 +588,66 @@ const Income = () => {
     }
   }
 
-  //  Get by id 
-  const MyIncomeGetById = async (id) => {
-    setIdForUpdate(id)
-    setLoader(true)
-    try {
-      const response = await IncomeGetByIdApi(id);
-      console.log('Income Get By Idddddd', response)
+    //  Get by id 
+    const MySupplierGetById = async (id) => {
+      setIdForUpdate(id)
+      setLoader(true)
+      try {
+        const response = await ItemSupplierGetByIdApi(id);
+        console.log('Suppplierrrr Get By Idddddd', response)
+  
+        if (response?.status === 200) {
+          toast.success(response?.data?.message)
 
-      if (response?.status === 200) {
-        toast.success(response?.data?.msg)
-
-        setAmount(response?.data?.transaction?.amount)
-        setCategoryId(response?.data?.transaction?.categoryId)
-        setDate(response?.data?.transaction?.date)
-        setLoader(false)
-
-      } else {
-        toast.error(response?.data?.msg);
+          setName(response?.data?.itemSupplier?.supplierName)
+          setPhone(response?.data?.itemSupplier?.supplierPhone)
+          setEmail(response?.data?.itemSupplier?.supplierEmail)
+          setAddress(response?.data?.itemSupplier?.supplierAddress)
+          setPersonName(response?.data?.itemSupplier?.contactPersonName)
+          setPersonPhone(response?.data?.itemSupplier?.contactPersonPhone)
+          setPersonEmail(response?.data?.itemSupplier?.contactPersonEmail)
+          setDescription(response?.data?.itemSupplier?.supplierDescription)
+          
+          (response?.data)
+          setLoader(false)
+  
+        } else {
+          toast.error(response?.data?.message);
+        }
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
     }
-  }
 
-  // Put api 
-  const MyIncomeCategoryPutApi = async () => {
+       // Put api 
+   const MySupplierPutApi = async () => {
     setLoader(true)
     try {
-      const formData = new FormData()
-      // formData.append('id', IdForUpdate)
-      formData.append('amount', amount)
-      formData.append('categoryId', categoryId)
-      formData.append('type', income)
-      formData.append('date', date)
-
-      const response = await incomePutApi(IdForUpdate, formData);
-      console.log('MY_put_response', response)
+      const formData = {
+        "supplierId": 0,
+        "schoolId": "string",
+        "supplierName": name,
+        "supplierAddress": address,
+        "supplierPhone": Phone,
+        "supplierEmail": Email,
+        "contactPersonName": personName,
+        "contactPersonPhone": personPhone,
+        "contactPersonEmail": personEmail,
+        "supplierDescription": description
+      }
+      const response = await ItemSupplierUpdateApi(IdForUpdate, formData);
+      console.log('MY_put-a=item-response_response', response)
 
       if (response?.status === 200) {
-        toast.success(response?.data?.msg);
+        toast.success(response?.data?.message);
+        MySupplierrrGetAllApi()
         setShowadd(false)
         setHideedit(true)
-        MyIncome2GetAllApi()
+        MyItemCategoryGetAllApi()
         setLoader(false)
 
       } else {
-        toast.error(response?.data?.msg);
+        toast.error(response?.data?.message);
         setShowadd(true)
       }
 
@@ -644,30 +655,6 @@ const Income = () => {
       console.log(error)
     }
   }
-
-  // Double Date --------------------------
-
-  //  Date range 
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  console.log('my both date1 =', startDate, typeof(startDate))
-  console.log('my both date2 =', endDate, typeof(endDate))
-
-  const handleDateChange = (dates) => {
-    setStartDate(formatDate(dates[0]));
-    setEndDate(formatDate(dates[1]));
-  };
-  const formatDate = (date) => {
-    if (!date) return null;
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}-0${month}-0${day}`;
-    // return "${year}-${month}-${day}";
-  };
-
-  // Double Date --------------------------
   return (
     <Container>
       {
@@ -682,108 +669,157 @@ const Income = () => {
             <nav style={{ '--bs-breadcrumb-divider': "'>'" }} aria-label="breadcrumb">
               <ol className="breadcrumb ms-2">
                 <li className="breadcrumb-item active heading-14 font-color" aria-current="page">Home</li>
-                <li className="breadcrumb-item active heading-14 font-color" aria-current="page">Accounting</li>
-                <li className="breadcrumb-item breadcrum-li heading-14" ><Link href="#">Income</Link></li>
+                <li className="breadcrumb-item active heading-14 font-color" aria-current="page">Inventory</li>
+                <li className="breadcrumb-item breadcrum-li heading-14" ><Link href="#">Item Supplier</Link></li>
               </ol>
             </nav>
           </div>
-          <div className='d-flex g-1 for-media-query'>
-            <div className='me-2 search-responsive'>
-              <div className="input-group mb-3 ">
-                <input type="text" className="form-control form-focus font-color" style={{ height: '34px' }} placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2" />
-                <span className="input-group-text button-bg-color button-color heading-14 font-color " style={{ cursor: 'pointer', height: "34px" }} id="basic-addon2">Search</span>
-              </div>
-            </div>
-            <Link type="button" className="btn btn-success heading-16 my-own-button me-3 " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" to={''}>+ Add Income</Link>
-          </div>
         </div>
-        <h5 className='ms-3 mb-2 margin-minus22 heading-16' style={{ marginTop: '-22px' }}>Income Details</h5>
+        <h5 className='ms-3 mb-2 margin-minus22 heading-16' style={{ marginTop: '-12px' }}>Item Supplier</h5>
 
         <div className="main-content-conatainer pt-1 ">
           {/* ###### copy content till here for all component ######  */}
-          <div className="row p-3">
 
-            <div className="col-lg-6 col-md-6 col-sm-12  ">
-              {/* <div iv className="mb-3" >
-                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Date Range</label>
-                <input type="date" className="form-control form-focus form-control-sm   heading-14" style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
-              </div> */}
-               <div class="dropdown" style={{marginTop:"-4px"}}>
-               <label for="exampleFormControlInput1" className="form-label label-color heading-14">Date Range</label>
-
-                <input type="text" class="form-control  form-control-sm form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" />
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <Flatpickr
-                    class="dropdown-item"
-                    placeholder="Date Range"
-                    value={[startDate, endDate]}
-                    options={{
-                      mode: 'range',
-                      dateFormat: 'Y-n-j',
-                    }}
-                    onChange={handleDateChange}
-                  />
-                </div>
+          <div className="row p-3 py-1 mt-2 ">
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14"> Name *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : name}  onChange={(e) => setName(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
               </div>
-            
+
+              {/* <input type="text" class="form-control  form-control-sm form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" /> */}
+
             </div>
-            <div className="col-lg-6 col-md-6 col-sm-12  ">
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label mb-1 label-color focus heading-14">Expenses Category</label>
-                <select class="form-select  form-select-sm form-focus label-color" onChange={(e) => setCategoryId(e.target.value)} aria-label="Default select example" >
-                      <option selected>Select Income Category</option>
-                      {
-                        incomeCategoryData?.map(item =>
-                          <option value={item.id}>{item.name}</option>
-                        )
-                      }
-                    </select>
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Phone * </label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : Phone}  onChange={(e) => setPhone(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+            </div>
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Email*</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : Email}  onChange={(e) => setEmail(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
               </div>
             </div>
 
           </div>
+          <div className="row p-3 py-1 ">
+
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Address *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : address}  onChange={(e) => setAddress(e.target.value)}  style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+
+              {/* <input type="text" class="form-control  form-control-sm form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" /> */}
+
+            </div>
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Contact Person Name *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : personName}  onChange={(e) => setPersonName(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+            </div>
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Contact Person Phone *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : personPhone}  onChange={(e) => setPersonPhone(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+            </div>
+
+          </div>
+          <div className="row p-3 py-1 ">
+
+            <div className="col-lg-4 col-md-6 col-sm-12  ">
+              <div className="mb-1" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Contact Person Email *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : personEmail}  onChange={(e) => setPersonEmail(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+
+              {/* <input type="text" class="form-control  form-control-sm form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" /> */}
+
+            </div>
+        
+            <div className="col-lg-8 col-md-6 col-sm-12  ">
+              <div className="mb-3" >
+                <label for="exampleFormControlInput1" className="form-label label-color heading-14">Description *</label>
+                <input type="text" className="form-control form-focus form-control-sm   heading-14"  value={active === true ? '' : description}  onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '-4px' }} id="exampleFormControlInput1" placeholder="Enter Notice Heading " />
+              </div>
+            </div>
+
+          </div>
+
           {/* ####### buttons ######  */}
-          <div className="row mb-3 buttons-topss">
+          <div className="row mb-3  pt-2 buttons-topss">
             <div className='my-button11 heading-16'>
-              <button type="button" class="btn btn-outline-success my-green" onClick={MyIncome2GetAllApi}>Search</button>
+              <button type="button" class="btn btn-outline-success my-green" onClick={MyItemSupplierPostApi}>Add Item Supplier</button>
               <button type="button" class="btn btn-outline-success">Cancel</button>
             </div>
           </div>
-
+          <div>
+            <p className='p-2 ps-4 heading-18'>Item Supplier List</p>
+          </div>
           <div className="table-container px-3 table-responsive">
             <table className="table table-sm table-striped">
               <thead className=''>
                 <tr className='heading-16 text-color-000' style={{ fontWeight: '500' }}>
-                  <th className='' style={{ width: '100px' }}>#</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th> Income category</th>
-                  <th>Action</th>
+                  <th className='' style={{ width: '10%' }}>#</th>
+                  <th style={{ width: '30%' }}>Item Supplier</th>
+                  <th style={{ width: '20%' }}>Contact Person</th>
+                  <th style={{ width: '30%' }}>Address</th>
+                  <th style={{ width: '0' }}>Action</th>
                 </tr>
               </thead>
               <tbody className='heading-14 align-middle greyTextColor'>
                 {
-                  myIncomeCategoryData?.map((item, index) => (
+                  supplierrrData?.map((item, index) => (
                     <tr className='heading-14' >
-                      <td className=' greyText'>{index + 1}</td>
-                      <td className=' greyText' >{item.date}</td>
-                      <td className=' greyText' >{item.amount}</td>
-                      <td className=' greyText' >{item.categoryName}</td>
-                      <td className=' greyText' >
-                        <div className="dropdown my-button-show">
-                          <button className="btn btn-secondary dropdown-togg my-button-drop tableActionButtonBgColor text-color-000 heading-14" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Action  &nbsp;
-                            <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="">
-                              <path d="M10.3331 0L11 0.754688L5.5 7L0 0.754688L0.663438 0L5.5 5.48698L10.3331 0Z" fill="black" />
-                            </svg>
-                          </button>
-                          <ul className="dropdown-menu anchor-color heading-14">
-                            <li><Link className="dropdown-item" to={''} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight1234" aria-controls="offcanvasRight1234" onClick={(e) => MyIncomeGetById(item.id)} >Edit</Link></li>
-                            <li><Link className="dropdown-item" to={''} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight22" aria-controls="offcanvasRight" onClick={(e) => setIdForDelete(item.id)}>Delete</Link></li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
+                    <td className=' greyText'>{index + 1}</td>
+                    <td className=' greyText' >{item.supplierName}</td>
+                    <td className=' greyText' >{item.contactPersonPhone}</td>
+                    <td className=' greyText' >{item.supplierAddress}</td>
+                    <td className=' greyText' >
+                      <div className='d-flex '>
+                        <Link className="dropdown-item " to={''} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight1234" aria-controls="offcanvasRight1234" onClick={(e) => MySupplierGetById(item.supplierId)} >
+                          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.2813 8.92188L10.0781 4.71875L0.15625 14.6406V18.8438H4.35938L14.2813 8.92188ZM1.40625 17.5938V15.1563L10.0781 6.48438L12.5156 8.92188L3.84375 17.5938H1.40625Z" fill="#8F8F8F" />
+                            <path d="M15.4688 17.5938H8.59375V18.8438H15.4688V17.5938Z" fill="#8F8F8F" />
+                            <path d="M18.2812 17.5938H17.0312V18.8438H18.2812V17.5938Z" fill="#8F8F8F" />
+                            <path d="M11.1875 3.625L15.3906 7.82812L18.25 4.9375L14.0625 0.75L11.1875 3.625ZM15.375 6.04687L12.9531 3.625L14.0625 2.51562L16.4844 4.9375L15.375 6.04687Z" fill="#8F8F8F" />
+                          </svg>
+  
+                        </Link>
+  
+                        <Link className="dropdown-item " to={''} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight22" aria-controls="offcanvasRight" onClick={(e) => setIdForDelete(item.supplierId)}>
+                          <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.4043 4.96289L3.36906 20.0337" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M3.36914 20.0332C3.36914 20.5666 3.80192 21 4.33396 21" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M4.33398 21H15.5491" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15.5488 21C16.0809 21 16.513 20.5666 16.513 20.0332" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M16.5131 20.0337L17.4792 4.96289H2.4043" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.2267 4.03125C19.2267 4.54226 18.813 4.95659 18.3027 4.95659" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M18.302 4.95508H1.5791" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M1.57925 4.95659C1.07032 4.95659 0.655273 4.54226 0.655273 4.03125" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M0.655273 4.03139C0.655273 3.52242 1.07032 3.10742 1.57925 3.10742" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M1.5791 3.10742H18.302" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M18.3027 3.10742C18.813 3.10742 19.2267 3.52247 19.2267 4.03139" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.8555 3.09247V1.64453" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.855 1.64445C12.855 1.11236 12.423 0.679688 11.8916 0.679688" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M11.8913 0.679688H7.99121" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7.9915 0.679688C7.45875 0.679688 7.02734 1.11241 7.02734 1.64445" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7.02734 1.64453V3.09247H12.855" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M5.69043 6.89258V18.769" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8.52344 6.89258V18.769" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M11.3594 6.89258V18.769" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M14.1914 6.89258V18.769" stroke="#8F8F8F" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                        </Link>
+  
+                      </div>
+  
+                    </td>
+                  </tr>
                   ))}
               </tbody>
               <Toaster />
@@ -830,6 +866,7 @@ const Income = () => {
             </div>
 
           </div>
+
         </div>
         {/* ################## Off Canvas Area ####################  */}
 
@@ -859,15 +896,15 @@ const Income = () => {
                     <label for="exampleFormControlInput1" className="form-label   heading-16">Income Category</label>
                     <select class="form-select  form-select-sm form-focus label-color" onChange={(e) => setCategoryId(e.target.value)} aria-label="Default select example" >
                       <option selected>Select Income Category</option>
-                      {
+                      {/* {
                         incomeCategoryData?.map(item =>
                           <option value={item.id}>{item.name}</option>
                         )
-                      }
+                      } */}
                     </select>
                   </div>
                   <div className='my-button11 '>
-                    <button type="button" className="btn btn-outline-success heading-16 btn-bgAndColor" onClick={MyIncomePostApi} >Add Income</button>
+                    <button type="button" className="btn btn-outline-success heading-16 btn-bgAndColor" onClick={''} >Add Income</button>
                     <button type="button" className="btn btn-outline-success heading-16">Cancel</button>
                   </div>
                 </div>
@@ -915,39 +952,51 @@ const Income = () => {
               <>
                 <div className="offcanvas-header">
                   <Link data-bs-dismiss="offcanvas" ><img src="./images/Vector (13).svg" alt="" /></Link>
-                  <h5 className="offcanvas-title heading-16" id="offcanvasRightLabel">Edit Income</h5>
+                  <h5 className="offcanvas-title heading-16" id="offcanvasRightLabel">Edit Item Supplier</h5>
                 </div>
                 <hr className='' style={{ marginTop: '-3px' }} />
                 <div className="offcanvas-body pt-0">
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label heading-16">Date</label>
-                    <input type="date" class="form-control form-control-sm" id="exampleFormControlInput1" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Select Title" />
+                  <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Name *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={name}  onChange={(e) => setName(e.target.value)} placeholder="Select Title" />
                   </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label heading-16">Amount</label>
-                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter Amount" />
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Phone *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={Phone} onChange={(e) => setPhone(e.target.value)} placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Email *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={Email} onChange={(e) => setEmail(e.target.value)} placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Address *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={address} onChange={(e) => setAddress(e.target.value)}  placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Contact Person Name *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={personName} onChange={(e) => setPersonName(e.target.value)} placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Contact Person Phone *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={personPhone} onChange={(e) => setPersonPhone(e.target.value)} placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Contact Person Email *</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1" value={personEmail}  onChange={(e) => setPersonEmail(e.target.value)} placeholder="Select Title" />
+                  </div>
+                  <div class="mb-2  ">
+                    <label for="exampleFormControlInput1" class="form-label heading-16">Description</label>
+                    <textarea class="form-control" placeholder="Leave a comment here" value={description} onChange={(e) => setDescription(e.target.value)} id="floatingTextarea"></textarea>
                   </div>
 
-                  <div className="mb-1  ">
-                    <label for="exampleFormControlInput1" className="form-label heading-16">Income Category</label>
-                    <select class="form-select  form-select-sm form-focus label-color" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} aria-label="Default select example" >
-                      <option selected>Select Income Category</option>
-                      {
-                        incomeCategoryData?.map(item =>
-                          <option value={item.id}>{item.name}</option>
-                        )
-                      }
-                    </select>
-                  </div>
+
                   <div className='my-button11 '>
-                    <button type="button" className="btn btn-outline-success heading-16 btn-bgAndColor" onClick={MyIncomeCategoryPutApi} >Update Income</button>
+                    <button type="button" className="btn btn-outline-success heading-16 btn-bgAndColor" onClick={MySupplierPutApi} >Update</button>
                     <button type="button" className="btn btn-outline-success heading-16">Cancel</button>
                   </div>
                 </div>
 
               </>
-
-
             )
           }
           {/* ################# After click ###############  */}
@@ -1017,7 +1066,7 @@ const Income = () => {
                       </div>
 
                       <div className="mt-4">
-                        <button type="button" className="btn my-btn  button00 my-button112233RedDelete" disabled={forDelete ? false : true} onClick={(e) => MyIncomeDelApi(IdForDelete)} >Delete</button>
+                        <button type="button" className="btn my-btn  button00 my-button112233RedDelete" disabled={forDelete ? false : true} onClick={(e) => MySupplierDelApi(IdForDelete)} >Delete</button>
                         <button type="button" className="btn cancel-btn ms-2" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
                       </div>
 
@@ -1067,4 +1116,4 @@ const Income = () => {
   )
 }
 
-export default Income
+export default Item_supplier

@@ -68,7 +68,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -95,9 +94,8 @@ const AssignStudent = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(5);
 
-    console.log(assignStudentTableData, 'data')
     // UseEffect Call
 
     useEffect(() => {
@@ -209,7 +207,7 @@ const AssignStudent = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllAssignStudentData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllAssignStudentData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">

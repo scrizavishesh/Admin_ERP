@@ -92,6 +92,7 @@ const Container = styled.div`
   .greydiv{
     background-color: #FBFBFB;
   }
+  
   .formdltcheck:checked{
     background-color: #B50000;
     border-color: #B50000;
@@ -282,7 +283,7 @@ const AllStudents = () => {
               <div className="col-md-4 col-sm-4 col-12">
                 <form className="d-flex" role="search">
                   <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                  <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllStudentData}>Search</span></button>
+                  <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllStudentData}>Search</span></button>
                 </form>
               </div>
             </div>
@@ -377,7 +378,7 @@ const AllStudents = () => {
           <h2 className="offcanvas-title" id="staticBackdropLabel">Student Edit</h2>
         </div>
         <div className="offcanvas-body p-0">
-          <EditStudentDetails studentGetId={studentGetId} onReload={RelaodData}/>
+          <EditStudentDetails studentGetId={studentGetId} onReload={RelaodData} />
         </div>
       </div>
 
@@ -398,7 +399,7 @@ const AllStudents = () => {
           <h2 className="offcanvas-title" id="staticBackdropLabel">View Profile</h2>
         </div>
         <div className="offcanvas-body p-0 modalLightBorder">
-          <ViewStudentDetails studentGetId={studentGetId}/>
+          <ViewStudentDetails studentGetId={studentGetId} />
         </div>
       </div>
 

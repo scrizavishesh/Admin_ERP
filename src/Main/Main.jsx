@@ -106,6 +106,21 @@ import MainUserForm from '../Pages/MainUserForm';
 import User_Contact from '../Pages/User_Contact';
 import User_Per_info from '../Pages/User_Per_info';
 
+
+
+
+
+import AddItemStock from '../Pages/AddItemStock'
+import AddItem from '../Pages/AddItem'
+import IssueItem from '../Pages/IssueItem'
+import AddIssueItem from '../Pages/AddIssueItem'
+import Item_store from '../Pages/ItemStore'
+import Item_supplier from '../Pages/ItemSupplier'
+import Item_category from '../Pages/ItemCategory'
+
+
+
+
 const Container = styled.div`
   background-color: #F2F3F6;
 `;
@@ -158,7 +173,13 @@ const Main = () => {
           <Route path='/feesDiscount' element={<FeesDiscount/>}/>
           <Route path='/feesCarryForword' element={<FeesCarryForward/>}/>
           <Route path='/feesReminder' element={<FeesReminder/>}/>
-          {/* <Route path='/issueItem' element={<IssueItem/>}/> */}
+          <Route path='/issueItem' element={<IssueItem/>}/>
+          <Route path='/addIssueItem' element={<AddIssueItem/>}/>
+          <Route path='/addItemStock' element={<AddItemStock/>}/>
+          <Route path='/addItem' element={<AddItem/>}/>
+          <Route path='/itemCategory' element={<Item_category/>}/>
+          <Route path='/itemStore' element={<Item_store/>}/>
+          <Route path='/itemSupplier' element={<Item_supplier/>}/>
           
 
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { addNewOfflineExamApi, getAllClassApi, getAllSubjectByClassApi, getExamCategoryDataApi, getOfflineExamDataByIdApi, getRoomDataApi, updateOfflineExamApi } from '../../Utils/Apis';
+import { getAllClassApi, getExamCategoryDataApi, getOfflineExamDataByIdApi, getRoomDataApi, updateOfflineExamApi } from '../../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
+import DataLoader from '../../Layouts/Loader';
 
 const Container = styled.div`
     .form-select, .form-control::placeholder, .form-control{
@@ -43,6 +44,8 @@ const Container = styled.div`
 const EditExam = ({ EditId }) => {
 
     const token = localStorage.getItem('token');
+    //loader State
+    const [loaderState, setloaderState] = useState(false);
     const [EditExam, setEditExam] = useState(true);
 
     const [allRoomData, setAllRoomData] = useState([]);
@@ -94,14 +97,14 @@ const EditExam = ({ EditId }) => {
             if (response?.status === 200) {
                 console.log(response, 'ressssssssssssssssss get by id data')
                 if (response?.data?.status === 'success') {
-                    setCategories(response?.data?.Details?.examCategoryId);
-                    setClasss(response?.data?.Details?.classId);
-                    setSubject(response?.data?.Details?.subjectId);
-                    setRoomNo(response?.data?.Details?.roomNumber);
-                    setDaate(response?.data?.Details?.date);
-                    setStartingTime(response?.data?.Details?.startingTime);
-                    setEndingTime(response?.data?.Details?.endingTime);
-                    setTotalMarks(response?.data?.Details?.totalMarks);
+                    setCategories(response?.data?.examDetails?.examCategoryId);
+                    setClasss(response?.data?.examDetails?.classId);
+                    setSubject(response?.data?.examDetails?.subjectId);
+                    setRoomNo(response?.data?.examDetails?.roomNumber);
+                    setDaate(response?.data?.examDetails?.date);
+                    setStartingTime(response?.data?.examDetails?.startingTime);
+                    setEndingTime(response?.data?.examDetails?.endingTime);
+                    setTotalMarks(response?.data?.examDetails?.totalMarks);
                     toast.success(response?.data?.message)
                 }
             }
@@ -132,11 +135,13 @@ const EditExam = ({ EditId }) => {
     }
 
     const getAllClassData = async () => {
+        setloaderState(true);
         try {
             var response = await getAllClassApi();
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setAllClassData(response?.data?.classes);
+                    setloaderState(false);
                 }
             }
             else {
@@ -151,7 +156,9 @@ const EditExam = ({ EditId }) => {
     const getAllRoomData = async () => {
         try {
             const searchKey = '';
-            var response = await getRoomDataApi(searchKey);
+            const page = '';
+            const size = '';
+            var response = await getRoomDataApi(searchKey, page,size);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setAllRoomData(response?.data?.rooms);
@@ -277,15 +284,18 @@ const EditExam = ({ EditId }) => {
     }
 
     const handleClassChange = (val) => {
+        setloaderState(true)
         const classNoVal = parseInt(val);
         setClasss(classNoVal);
         const selectedClass = allClassData.find(c => c.classId === classNoVal);
 
         if (selectedClass) {
             setAllSubjectData(selectedClass.subjects || []);
+            setloaderState(false)
 
         } else {
             setAllSubjectData([]);
+            setloaderState(false)
         }
         // setSubject('')
     };
@@ -294,6 +304,11 @@ const EditExam = ({ EditId }) => {
     return (
         <>
             <Container>
+                {
+                    loaderState && (
+                        <DataLoader />
+                    )
+                }
                 <div className="container-fluid ">
                     <div className="row">
                         {EditExam
@@ -302,7 +317,7 @@ const EditExam = ({ EditId }) => {
                                 <form className='p-3'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Exam Name</label>
-                                        <select className={`form-select font14 ${CategoriesError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Categories} onChange={(e) => { setCategories(e.target.value), setCategoriesError('') }}>
+                                        <select className={`form-select font14 ${CategoriesError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Categories} onChange={(e) => setCategories(e.target.value)}>
                                             <option >--- Choose ---</option>
                                             {ExamCategoryData?.map(option => (
                                                 <option key={option.categoryId} value={option?.categoryId}>
@@ -330,7 +345,7 @@ const EditExam = ({ EditId }) => {
                                             <option >--- Choose ---</option>
                                             {allSubjectData?.map((option) => (
                                                 <option key={option.subjectId} value={option.subjectId}>
-                                                    {option.subjectName},{option.subjectId}
+                                                    {option.subjectName}
                                                 </option>
                                             ))}
                                         </select>
@@ -341,7 +356,7 @@ const EditExam = ({ EditId }) => {
                                         <select className={`form-select font14 ${RoomNoError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={RoomNo} onChange={(e) => { setRoomNo(e.target.value), setRoomNoError('') }}>
                                             <option >--- Choose ---</option>
                                             {allRoomData?.map(option => (
-                                                <option key={option.roomId} value={option?.rooms}>
+                                                <option key={option.roomId} value={option?.roomNo}>
                                                     {option.roomNo}
                                                 </option>
                                             ))}
@@ -398,3 +413,419 @@ const EditExam = ({ EditId }) => {
 }
 
 export default EditExam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react'
+// import styled from 'styled-components'
+// import { getAllClassApi, getExamCategoryDataApi, getOfflineExamDataByIdApi, getRoomDataApi, updateOfflineExamApi } from '../../Utils/Apis';
+// import toast, { Toaster } from 'react-hot-toast';
+// import DataLoader from '../../Layouts/Loader';
+// import { useFormik } from 'formik';
+// import { editExamSchema } from '../../Schema/validationSchema'
+
+// const Container = styled.div`
+//     .form-select, .form-control::placeholder, .form-control{
+//         color: var(--greyState);
+//         box-shadow: none;
+//         border-color: var(--greyState);
+//     }
+
+//     .table-striped>tbody>tr:nth-of-type(odd)>* {
+//         --bs-table-bg-type: var(--tableGreyBackgroundColor);
+//     }
+//     .correvtSVG{
+//         position: relative;
+//         width: fit-content ;
+//         margin-left: 43% !important;
+//         margin-bottom: -16% !important;
+//         background-color: #2BB673;
+//         width: 73px;
+//         height: 73px;
+//         align-items: center;
+//     }
+
+//     .contbtn{
+//         margin-left: 41% !important;
+//         margin-top: -20% !important;
+//     }
+
+//     .greydiv{
+//         background-color: #FBFBFB;
+//     }
+
+//     .scrollBarHide::-webkit-scrollbar {
+//         display: none;
+//     }
+
+
+// `;
+
+// const EditExam = ({ EditId, Reload }) => {
+
+//     const [initialValues, setInitialValues] = useState({
+//         examCategory: '',
+//         classId: '',
+//         subjectId: '',
+//         roomNo: '',
+//         examDate: '',
+//         StartingTime: '',
+//         EndingTime: '',
+//         TotalMarks: ''
+//     })
+
+//     // const initialValues = {
+//     //     examCategory: '',
+//     //     classId: '',
+//     //     subjectId: '',
+//     //     roomNo: '',
+//     //     examDate: '',
+//     //     StartingTime: '',
+//     //     EndingTime: '',
+//     //     TotalMarks: ''
+//     // }
+
+//     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+//         initialValues: initialValues,
+//         validationSchema: editExamSchema,
+//         onSubmit: (values) => {
+//             console.log(values)
+//             UpdateOfflineExam();
+//         }
+//     })
+
+
+//     const token = localStorage.getItem('token');
+//     //loader State
+//     const [loaderState, setloaderState] = useState(false);
+//     const [EditExam, setEditExam] = useState(true);
+
+//     const [allRoomData, setAllRoomData] = useState([]);
+//     const [allClassData, setAllClassData] = useState([]);
+//     const [allSubjectData, setAllSubjectData] = useState([]);
+//     const [ExamCategoryData, setExamCategoryData] = useState([]);
+
+//     useEffect(() => {
+//         getAllRoomData();
+//         getAllClassData();
+//         getAllExamCategoryData();
+//         getOfflineExamDataById();
+//     }, [token, EditId])
+
+//     useEffect(() => {
+//         handleClassChange(values.classId);
+//     }, [values.classId]);
+
+//     const getOfflineExamDataById = async () => {
+//         setloaderState(true);
+//         try {
+//             var response = await getOfflineExamDataByIdApi(EditId);
+//             if (response?.status === 200) {
+//                 console.log(response, 'ressssssssssssssssss get by id data')
+//                 if (response?.data?.status === 'success') {
+//                     values.examCategory = response?.data?.examDetails?.examCategoryId ;
+//                     values.classId = response?.data?.examDetails?.classId ;
+//                     values.subjectId = response?.data?.examDetails?.subjectId ;
+//                     values.roomNo = response?.data?.examDetails?.roomNumber ;
+//                     values.examDate = response?.data?.examDetails?.date ;
+//                     values.StartingTime = response?.data?.examDetails?.startingTime ;
+//                     values.EndingTime = response?.data?.examDetails?.endingTime ;
+//                     values.TotalMarks = response?.data?.examDetails?.totalMarks ;
+//                     toast.success(response?.data?.message);
+//                 }
+                
+//             }
+//             else {
+//                 console.log(response?.data?.message);
+//             }
+//         }
+//         catch (error) {
+//             console.log(error)
+//         }
+//     }
+
+//     const getAllExamCategoryData = async () => {
+//         try {
+//             const searchKey = '';
+//             var response = await getExamCategoryDataApi(searchKey);
+//             if (response?.status === 200) {
+//                 if (response?.data?.status === 'success') {
+//                     setExamCategoryData(response?.data?.categories);
+//                     toast.success(response.data.message);
+//                 }
+//             }
+//             else {
+//                 console.log(response?.data?.message);
+//             }
+//         }
+//         catch { }
+//     }
+
+//     const getAllClassData = async () => {
+//         setloaderState(true);
+//         try {
+//             var response = await getAllClassApi();
+//             if (response?.status === 200) {
+//                 if (response?.data?.status === 'success') {
+//                     setAllClassData(response?.data?.classes);
+//                     setloaderState(false);
+//                 }
+//             }
+//             else {
+//                 console.log(response?.data?.message);
+//             }
+//         }
+//         catch {
+
+//         }
+//     }
+
+//     const getAllRoomData = async () => {
+//         try {
+//             const searchKey = '';
+//             const page = '';
+//             const size = '';
+//             var response = await getRoomDataApi(searchKey, page, size);
+//             if (response?.status === 200) {
+//                 if (response?.data?.status === 'success') {
+//                     setAllRoomData(response?.data?.rooms);
+//                 }
+//             }
+//             else {
+//                 console.log(response?.data?.message);
+//             }
+//         }
+//         catch {
+
+//         }
+//     }
+
+
+//     const UpdateOfflineExam = async () => {
+//         if (validateFields()) {
+//             try {
+//                 const formData = new FormData();
+//                 formData.append('categoryId', values.examCategory)
+//                 formData.append('classId', values.classId)
+//                 formData.append('subjectId', values.subjectId)
+//                 formData.append('roomId', values.roomNo)
+//                 formData.append('date', values.examDate)
+//                 formData.append('startingTime', values.StartingTime)
+//                 formData.append('endingTime', values.EndingTime)
+//                 formData.append('totalMarks', values.TotalMarks)
+
+//                 var response = await updateOfflineExamApi(EditId, formData);
+//                 console.log(response, 'offline exam')
+//                 if (response?.status === 200) {
+//                     if (response?.data?.status === 'success') {
+//                         toast.success(response?.data?.message)
+//                         console.log(response, 'res after success');
+//                         setEditExam(!EditExam)
+//                     }
+//                 }
+//             }
+//             catch {
+
+//             }
+//         }
+//     }
+
+//     const handleClassChange = (val) => {
+//         setloaderState(true)
+//         const classNoVal = parseInt(val);
+//         values.classId = classNoVal ;
+//         const selectedClass = allClassData.find(c => c.classId === classNoVal);
+
+//         if (selectedClass) {
+//             setAllSubjectData(selectedClass.subjects || []);
+//             setloaderState(false)
+
+//         } else {
+//             setAllSubjectData([]);
+//             setloaderState(false)
+//         }
+//         setloaderState(false)
+//     };
+
+
+//     return (
+//         <>
+//             <Container>
+//                 {
+//                     loaderState && (
+//                         <DataLoader />
+//                     )
+//                 }
+//                 <div className="container-fluid ">
+//                     <div className="row">
+//                         {EditExam
+//                             ?
+//                             <>
+//                                 <form className='p-3' onSubmit={handleSubmit}>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="examCategory" className="form-label font14">Exam Name</label>
+//                                         <select className={`form-select font14 ${errors.examCategory && touched.examCategory ? 'border-1 border-danger' : ''}`} aria-label="Default select example" name='examCategory' id='examCategory' value={values.examCategory} onChange={(e)=> handleChange(e)} onBlur={handleBlur}>
+//                                             <option >--- Choose ---</option>
+//                                             {ExamCategoryData?.map(option => (
+//                                                 <option key={option.categoryId} value={option?.categoryId}>
+//                                                     {option.examCategoryName}
+//                                                 </option>
+//                                             ))}
+//                                         </select>
+//                                         {errors.examCategory && touched.examCategory
+//                                             ?
+//                                             (
+//                                                 <p>{errors.examCategory}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="classId" className="form-label font14">Class</label>
+//                                         <select className={`form-select font14 ${errors.classId && touched.classId ? 'border-1 border-danger' : ''}`} aria-label="Default select example" name='classId' id='classId' value={values.classId} onChange={handleClassChange} onBlur={handleBlur}>
+//                                             <option >--- Choose ---</option>
+//                                             {allClassData?.map((option, index) => (
+//                                                 <option key={option.classId} value={option?.classId}>
+//                                                     {option?.classNo}
+//                                                 </option>
+//                                             ))}
+//                                         </select>
+//                                         {errors.classId && touched.classId
+//                                             ?
+//                                             (
+//                                                 <p>{errors.classId}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="subjectId" className="form-label font14">Subject</label>
+//                                         <select className={`form-select font14 ${errors.subjectId && touched.subjectId ? 'border-1 border-danger' : ''}`} aria-label="Default select example" name='subjectId' id='subjectId' value={values.subjectId} onChange={(e)=> handleChange(e)} onBlur={handleBlur}>
+//                                             <option >--- Choose ---</option>
+//                                             {allSubjectData?.map((option) => (
+//                                                 <option key={option.subjectId} value={option.subjectId}>
+//                                                     {option.subjectName}
+//                                                 </option>
+//                                             ))}
+//                                         </select>
+//                                         {errors.subjectId && touched.subjectId
+//                                             ?
+//                                             (
+//                                                 <p>{errors.subjectId}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="roomNo" className="form-label font14">Class Room</label>
+//                                         <select className={`form-select font14 ${errors.roomNo && touched.roomNo ? 'border-1 border-danger' : ''}`} aria-label="Default select example" name='roomNo' id='roomNo' value={values.roomNo} onChange={(e)=> handleChange(e)} onBlur={handleBlur}>
+//                                             <option >--- Choose ---</option>
+//                                             {allRoomData?.map(option => (
+//                                                 <option key={option.roomId} value={option?.roomNo}>
+//                                                     {option.roomNo}
+//                                                 </option>
+//                                             ))}
+//                                         </select>
+//                                         {errors.roomNo && touched.roomNo
+//                                             ?
+//                                             (
+//                                                 <p>{errors.roomNo}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="examDate" className="form-label font14">Date</label>
+//                                         <input type="date" className={`form-control font14 ${errors.examDate && touched.examDate ? 'border-1 border-danger' : ''}`} name='examDate' id='examDate' value={values.examDate} onChange={(e)=> handleChange(e)} onBlur={handleBlur} />
+//                                         {errors.examDate && touched.examDate
+//                                             ?
+//                                             (
+//                                                 <p>{errors.examDate}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="StartingTime" className="form-label font14">Starting Time</label>
+//                                         <input type="time" className={`form-control font14 ${errors.StartingTime && touched.StartingTime ? 'border-1 border-danger' : ''}`} name='StartingTime' id='StartingTime' value={values.StartingTime} onChange={(e)=> handleChange(e)} onBlur={handleBlur} />
+//                                         {errors.StartingTime && touched.StartingTime
+//                                             ?
+//                                             (
+//                                                 <p>{errors.StartingTime}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="EndingTime" className="form-label font14">Ending Time</label>
+//                                         <input type="time" className={`form-control font14 ${errors.EndingTime && touched.EndingTime ? 'border-1 border-danger' : ''}`} name='EndingTime' id='EndingTime' value={values.EndingTime} onChange={(e)=> handleChange(e)} onBlur={handleBlur} />
+//                                         {errors.EndingTime && touched.EndingTime
+//                                             ?
+//                                             (
+//                                                 <p>{errors.EndingTime}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <div className="mb-3">
+//                                         <label htmlFor="TotalMarks" className="form-label font14">Total Marks</label>
+//                                         <input type="text" className={`form-control font14 ${errors.TotalMarks && touched.TotalMarks ? 'border-1 border-danger' : ''}`} name='TotalMarks' id='TotalMarks' placeholder='Enter Total Marks' value={values.TotalMarks} onChange={(e)=> handleChange(e)} onBlur={handleBlur} />
+//                                         {errors.TotalMarks && touched.TotalMarks
+//                                             ?
+//                                             (
+//                                                 <p>{errors.TotalMarks}</p>
+//                                             )
+//                                             : null
+//                                         }
+//                                     </div>
+//                                     <p className='text-center p-3'>
+//                                         <button className='btn addButtons2 text-white' type='button' onClick={UpdateOfflineExam}>Update Exam</button>
+//                                         <button className='btn cancelButtons ms-3' type='button' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+//                                     </p>
+//                                 </form>
+//                             </>
+//                             :
+//                             <>
+//                                 <div className="mt-3">
+//                                     <div className='correvtSVG p-3 pt-4 rounded-circle'>
+//                                         <img src="./images/Correct.svg" alt="" />
+//                                     </div>
+//                                     <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
+//                                         <p className='warningHeading'>Successful Updated</p>
+//                                         <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
+//                                     </div>
+//                                     <button className='btn contbtn continueButtons text-white' type='button' data-bs-dismiss="offcanvas" aria-label="Close" onClick={Reload}>Continue</button>
+//                                 </div>
+//                             </>
+//                         }
+
+//                     </div>
+//                     <Toaster />
+//                 </div>
+//             </Container>
+//         </>
+//     )
+// }
+
+// export default EditExam

@@ -116,7 +116,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -142,7 +141,7 @@ const Vehicle = () => {
     // Pagination
 
     // Warnings
-    const [editWarning, setEditWarning] = useState(true);
+    const [EditWarning, setEditWarning] = useState(true);
     const [DeleteWarning, setDeleteWarning] = useState(true);
     const [isChecked, setIsChecked] = useState(false);
 
@@ -178,7 +177,10 @@ const Vehicle = () => {
         getAllVehicleData();
         getAllDriverData();
         getAllRouteData();
-    }, [token, currentPage, refreshDelete, refreshUpdate, refreshPage, pageNo]);
+        if(vehicleIdRoute){
+            validateEditFields();
+        }
+    }, [token, pageNo, vehicleIdRoute]);
 
 
     const handlePageClick = (event) => {
@@ -193,8 +195,11 @@ const Vehicle = () => {
             if (response?.status === 200 && response?.data?.status === 'success') {
                 setloaderState(false);
                 setVehicleData(response?.data?.vehicles);
-                // setTotalItems(10);
+                setTotalPages(response?.data?.totalPages);
+                setCurrentPage(response?.data?.currentPage);
                 toast.success(response.data.message);
+                setEditWarning(true);
+                setDeleteWarning(true);
             } else {
                 console.log(response?.data?.message);
             }
@@ -206,7 +211,10 @@ const Vehicle = () => {
     const getAllRouteData = async () => {
         try {
             setloaderState(true);
-            const response = await getAllRouteApi();
+            const searchKey='';
+            const pageNo='';
+            const size='';
+            const response = await getAllRouteApi(searchKey, pageNo, size);
             if (response?.status === 200 && response?.data?.status === 'success') {
                 setloaderState(false);
                 setAllRouteData(response?.data?.routes);
@@ -246,17 +254,12 @@ const Vehicle = () => {
         setDelVehicleId(id);
     };
 
-    const PageRefreshOnDelete = () => {
-        setDeleteWarning(!deleteWarning);
-        setRefreshDelete(!refreshDelete);
-    };
-
     const DeleteVehicleDataById = async (id) => {
         if (isChecked) {
             try {
                 const response = await deleteVehicleApi(id);
                 if (response?.status === 200 && response.data.status === 'success') {
-                    setDeleteWarning(!deleteWarning);
+                    setDeleteWarning(!DeleteWarning);
                     toast.success(response?.data?.message);
                 } else {
                     toast.error(response?.error);
@@ -304,7 +307,7 @@ const Vehicle = () => {
 
                 const response = await updateVehicleDataApi(vehicleId, formData);
                 if (response?.status === 200 && response.data.status === 'success') {
-                    setEditWarning(!editWarning);
+                    setEditWarning(!EditWarning);
                     toast.success(response?.data?.message);
                 } else {
                     toast.error(response?.data?.message);
@@ -313,23 +316,18 @@ const Vehicle = () => {
                 console.error('Error during update:', error);
             }
         }
-    };
-
-    const pageRefreshOnAdd = () => {
-        setEditWarning(!editWarning);
-        setRefreshUpdate(!refreshUpdate);
-    };
-
-    const pageRefresh = () => {
-        setRefreshPage(!refreshPage);
+        else{
+            toast.error('Please Validate All Fields Correctly')
+        }
     };
 
     // Validation
 
     const vehicleModelRegex = /^[A-Za-z0-9 .\-_/]+$/;
-    const vehicleNumRegex = /^[A-Z0-9- ]{1,10}$/;
+    const vehicleNumRegex = /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/; //MP 09 AB 9875
     const seatRegex = /^(100|[1-9][0-9])$/;
     const chassisNumRegex = /^[A-HJ-NPR-Z0-9]{17}$/;
+
 
     const validateModel = (value) => {
         if (!value.trim()) {
@@ -465,7 +463,7 @@ const Vehicle = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllVehicleData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllVehicleData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -493,7 +491,7 @@ const Vehicle = () => {
                                 </thead>
                                 <tbody>
                                     {vehicleData.map((item, index) => (
-                                        <tr key={item.id} className='my-bg-color align-middle'>
+                                        <tr key={item.vehicleId} className='my-bg-color align-middle'>
                                             <th className='greyText'><h3>{index + 1}</h3></th>
                                             <td className='greyText'><h3>{item.vehicleModel}</h3></td>
                                             <td className='greyText'><h3>{item.vehicleNumber}</h3></td>
@@ -548,7 +546,7 @@ const Vehicle = () => {
 
                     <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
                         <div className="offcanvas-header border-bottom border-2 p-1">
-                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                     <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                 </svg>
@@ -557,14 +555,14 @@ const Vehicle = () => {
                         </div>
                         <div className="offcanvas-body p-0">
                             <div>
-                                {editWarning ? (
+                                {EditWarning ? (
                                     <div className="p-3">
                                         <form>
                                             <div className="mb-3">
                                                 <label htmlFor="vehicleNumber" className="form-label greyText font14">Vehicle Number</label>
                                                 <input
                                                     type="text"
-                                                    className={`form-control p-2 formcontrolinput font14 ${vehicleIdNumberError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-control borderRadius5 p-2 formcontrolinput font14 ${vehicleIdNumberError ? 'border-1 border-danger' : ''}`}
                                                     id="vehicleNumber"
                                                     value={vehicleIdNumber}
                                                     onChange={(e) => {
@@ -578,7 +576,7 @@ const Vehicle = () => {
                                                 <label htmlFor="vehicleModel" className="form-label greyText font14">Vehicle Model</label>
                                                 <input
                                                     type="text"
-                                                    className={`form-control p-2 formcontrolinput font14 ${vehicleIdModelError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-control borderRadius5 p-2 formcontrolinput font14 ${vehicleIdModelError ? 'border-1 border-danger' : ''}`}
                                                     id="vehicleModel"
                                                     value={vehicleIdModel}
                                                     onChange={(e) => {
@@ -592,7 +590,7 @@ const Vehicle = () => {
                                                 <label htmlFor="chassisNumber" className="form-label greyText font14">Chassis Number</label>
                                                 <input
                                                     type="text"
-                                                    className={`form-control p-2 formcontrolinput font14 ${vehicleIdChassisNumberError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-control borderRadius5 p-2 formcontrolinput font14 ${vehicleIdChassisNumberError ? 'border-1 border-danger' : ''}`}
                                                     id="chassisNumber"
                                                     value={vehicleIdChassisNumber}
                                                     onChange={(e) => {
@@ -605,7 +603,7 @@ const Vehicle = () => {
                                             <div className="mb-3">
                                                 <label htmlFor="driverId" className="form-label greyText font14">Driver Id</label>
                                                 <select
-                                                    className={`form-select font14 ${vehicleIdDriverError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-select borderRadius5 font14 ${vehicleIdDriverError ? 'border-1 border-danger' : ''}`}
                                                     id="driverId"
                                                     value={vehicleIdDriver}
                                                     onChange={(e) => setVehicleIdDriver(e.target.value)}
@@ -623,7 +621,7 @@ const Vehicle = () => {
                                                 <label htmlFor="seatCapacity" className="form-label greyText font14">Total Seat</label>
                                                 <input
                                                     type="text"
-                                                    className={`form-control p-2 formcontrolinput font14 ${vehicleIdSeatCapacityError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-control borderRadius5 p-2 formcontrolinput font14 ${vehicleIdSeatCapacityError ? 'border-1 border-danger' : ''}`}
                                                     id="seatCapacity"
                                                     value={vehicleIdSeatCapacity}
                                                     onChange={(e) => setVehicleIdSeatCapacity(e.target.value)}
@@ -633,7 +631,7 @@ const Vehicle = () => {
                                             <div className="mb-3">
                                                 <label htmlFor="route" className="form-label greyText font14">Route</label>
                                                 <select
-                                                    className={`form-select font14 ${vehicleIdRouteError ? 'border-1 border-danger' : ''}`}
+                                                    className={`form-select borderRadius5 font14 ${vehicleIdRouteError ? 'border-1 border-danger' : ''}`}
                                                     id="route"
                                                     value={vehicleIdRoute}
                                                     onChange={(e) => setVehicleIdRoute(e.target.value)}
@@ -650,19 +648,19 @@ const Vehicle = () => {
                                         </form>
                                         <p className="text-center p-3">
                                             <button className="btn addButtons2 text-white" onClick={updateVehicleDataById}>Update Vehicle</button>
-                                            <button className="btn cancelButtons ms-3" data-bs-dismiss="offcanvas" aria-label="Close" onClick={pageRefresh}>Cancel</button>
+                                            <button className="btn cancelButtons ms-3" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>Cancel</button>
                                         </p>
                                     </div>
                                 ) : (
                                     <div>
-                                        <p className="modalLightBorder p-2 mb-0">Vehicle List</p>
+                                        <p className="modalLightBorder p-2 mb-0">Vehicle Edit</p>
                                         <div className="mt-3">
                                             <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
                                             <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
                                                 <p className='warningHeading'>Successful Updated</p>
                                                 <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
                                             </div>
-                                            <button className="btn contbtn continueButtons text-white" data-bs-dismiss="offcanvas" aria-label="Close" onClick={pageRefreshOnAdd}>Continue</button>
+                                            <button className="btn contbtn continueButtons text-white" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>Continue</button>
                                         </div>
                                     </div>
                                 )}
@@ -680,12 +678,12 @@ const Vehicle = () => {
 
                     <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Delete_staticBackdrop" aria-labelledby="staticBackdropLabel">
                         <div className="offcanvas-header ps-0 modalHighborder p-1">
-                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                     <path fill="#B50000" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                 </svg>
                             </Link>
-                            <span className="offcanvas-title" id="staticBackdropLabel">Packages</span>
+                            <span className="offcanvas-title" id="staticBackdropLabel">Vehicle</span>
                         </div>
                         <div className="offcanvas-body p-0">
                             <div>
@@ -699,8 +697,8 @@ const Vehicle = () => {
                                             <p className='text-center greyText warningText pt-2'>This Action will be permanently delete<br />the Profile Data</p>
                                             <p className='text-center warningText p-2'><input className="form-check-input formdltcheck me-2" type="checkbox" value="" id="flexCheckChecked" onChange={(e) => setIsChecked(e.target.checked)} />I Agree to delete the Profile Data</p>
                                             <p className='text-center p-3'>
-                                                <button className='btn deleteButtons text-white' onClick={() => DeleteVehicleDataById(delVehicleIDD)}>Delete</button>
-                                                <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                                <button className='btn deleteButtons text-white' onClick={() => DeleteVehicleDataById(delVehicleId)}>Delete</button>
+                                                <button className='btn dltcancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>Cancel</button>
                                             </p>
                                         </div>
                                     </>
@@ -714,7 +712,7 @@ const Vehicle = () => {
                                                     <p className='warningHeading'>Successful Deleted</p>
                                                     <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                                                 </div>
-                                                <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                                <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllVehicleData}>Continue</button>
                                             </div>
                                         </div>
                                     </>

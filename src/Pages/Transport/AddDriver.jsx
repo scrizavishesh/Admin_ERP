@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { addNewDriverApi } from '../../Utils/Apis';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import DataLoader from '../../Layouts/Loader';
 
 const Container = styled.div`
@@ -69,60 +69,6 @@ const AddDriver = () => {
     const [genderError, setGenderError] = useState('')
     const [driverImageError, setDriverImageError] = useState('')
 
-    const AddNewDriver = async () => {
-        const driverNameValidate = validateDriverName(driverName);
-        const driverEmailValidate = validateDriverEmail(driverEmail);
-        const driverAddressValidate = validateDriverAddress(driverAddress);
-        const driverPhoneValidate = validateDriverPhone(driverPhone);
-        const driverGenderValidate = validateDriverGender(gender);
-        const driverImageValidate = validateDriverImage(driverImage);
-    
-        if (driverNameValidate || driverEmailValidate || driverAddressValidate || driverPhoneValidate || driverGenderValidate || driverImageValidate) {
-            setDriverNameError(driverNameValidate);
-            setDriverEmailError(driverEmailValidate);
-            setDriverAddressError(driverAddressValidate);
-            setDriverPhoneError(driverPhoneValidate);
-            setGenderError(driverGenderValidate);
-            setDriverImageError(driverImageValidate);
-            return;
-        }
-    
-        setDriverNameError('');
-        setDriverEmailError('');
-        setDriverAddressError('');
-        setDriverPhoneError('');
-        setGenderError('');
-        setDriverImageError('');
-
-        try {
-            const formData = new FormData();
-            formData.append("driverName", driverName);
-            formData.append("driverEmail", driverEmail);
-            formData.append("gender", gender);
-            formData.append("driverAddress", driverAddress);
-            formData.append("phoneNo", driverPhone);
-            formData.append("driverImage", driverImage);
-
-            var response = await addNewDriverApi(formData);
-
-            if (response?.status === 200) {
-                if (response?.data?.status === 'success') {
-                    setloaderState(false)
-                    toast.success(response?.data?.message)
-                    setTimeout(() => {
-                        navigate('/driver');
-                    }, 1500);
-                }
-            }
-            else {
-                toast.error(response?.data?.message);
-            }
-        }
-        catch (error) {
-            toast.error('Error facing while adding new driver : ', error)
-        }
-    }
-
     const handleNameChange = (value) => {
         setDriverName(value);
         setDriverNameError(validateDriverName(value))
@@ -170,7 +116,7 @@ const AddDriver = () => {
         }
         return '';
     };
-    
+
     const handlePhoneChange = (value) => {
         setDriverPhone(value);
         setDriverPhoneError(validateDriverPhone(value))
@@ -186,31 +132,126 @@ const AddDriver = () => {
         }
         return '';
     };
-    
+
     const handleGenderChange = (value) => {
         setGender(value);
         setGenderError(validateDriverGender(value))
     }
 
     const validateDriverGender = (value) => {
-        if (value === '' || value === 'choose') {
+        if (!value || value == '') {
             return '* Gender is required';
         }
+        return '';
     };
-    
+
     const handleImageChange = (value) => {
         setDriverImage(value[0]);
-        setDriverImageError('')
+        setDriverImageError(validateDriverImage(value[0]))
     }
 
     const validateDriverImage = (value) => {
-        if (value === '') {
+        if (!value) {
             return '* Photo is required';
         }
+        else if (value.size < 10240 || value.size > 204800) { // 1 KB = 1024 bytes
+            return '* File size must be between 10 KB to 200 KB';
+        }
+        return '';
     };
     
+
     const handleCancleButton = () => {
         navigate('/driver')
+    }
+
+    const validateFields = () => {
+        let isValid = true;
+
+        const driverNameErrorNew = validateDriverName(driverName)
+        if (driverNameErrorNew) {
+            setDriverNameError(driverNameErrorNew);
+            isValid = false;
+        } else {
+            setDriverNameError('');
+        }
+
+        const driverEmailErrorNew = validateDriverEmail(driverEmail)
+        if (driverEmailErrorNew) {
+            setDriverEmailError(driverEmailErrorNew);
+            isValid = false;
+        } else {
+            setDriverEmailError('');
+        }
+
+        const driverAddressErrorNew = validateDriverAddress(driverAddress)
+        if (driverAddressErrorNew) {
+            setDriverAddressError(driverAddressErrorNew);
+            isValid = false;
+        } else {
+            setDriverAddressError('');
+        }
+
+        const driverPhoneErrorNew = validateDriverPhone(driverPhone)
+        if (driverPhoneErrorNew) {
+            setDriverPhoneError(driverPhoneErrorNew);
+            isValid = false;
+        } else {
+            setDriverPhoneError('');
+        }
+
+        const driverGenderErrorNew = validateDriverGender(gender)
+        if (driverGenderErrorNew) {
+            setGenderError(driverGenderErrorNew);
+            isValid = false;
+        } else {
+            setGenderError('');
+        }
+
+        const driverImageErrorNew = validateDriverImage(driverImage)
+        if (driverImageErrorNew) {
+            setDriverImageError(driverImageErrorNew);
+            isValid = false;
+        } else {
+            setDriverImageError('');
+        }
+
+        return isValid;
+    };
+
+    const AddNewDriver = async () => {
+        if (validateFields()) {
+            try {
+                const formData = new FormData();
+                formData.append("driverName", driverName);
+                formData.append("driverEmail", driverEmail);
+                formData.append("gender", gender);
+                formData.append("driverAddress", driverAddress);
+                formData.append("phoneNo", driverPhone);
+                formData.append("driverImage", driverImage);
+
+                var response = await addNewDriverApi(formData);
+
+                if (response?.status === 200) {
+                    if (response?.data?.status === 'success') {
+                        setloaderState(false)
+                        toast.success(response?.data?.message)
+                        setTimeout(() => {
+                            navigate('/driver');
+                        }, 1500);
+                    }
+                }
+                else {
+                    toast.error(response?.data?.message);
+                }
+            }
+            catch (error) {
+                toast.error('Error facing while adding new driver : ', error)
+            }
+        }
+        else{
+            toast.error('Please Validate All Fields Correctly')
+        }
     }
 
 
@@ -268,7 +309,7 @@ const AddDriver = () => {
                                     </div>
                                     <div className="col-md-6 col-sm-12 col-12">
                                         <label htmlFor="validationDefault02" className="form-label font14">Photo*</label>
-                                        <input type="file" className={`form-control font14  ${driverImageError ? 'border-1 border-danger' : ''} `} onChange={(e) => { handleImageChange(e.target.files), console.log(e.target.files) }} />
+                                        <input type="file" className={`form-control font14  ${driverImageError ? 'border-1 border-danger' : ''} `} onChange={(e) => { handleImageChange(e.target.files), console.log(e.target.files) }} accept='.jpg, .png, .jpeg'/>
                                         <span className='text-danger'>{driverImageError}</span>
                                     </div>
                                 </form>
@@ -283,6 +324,7 @@ const AddDriver = () => {
                             </div>
                         </div>
                     </div>
+                    <Toaster/>
                 </div>
             </Container>
         </>

@@ -5,7 +5,7 @@ import LineChart from '../../Charts/LineChart';
 import BarChart from '../../Charts/BarChart';
 import DataLoader from '../../Layouts/Loader';
 import { Icon } from '@iconify/react';
-import { getAllEventsApi, getAllNoticeApi } from '../../Utils/Apis';
+import { getAllEventsApi, getAllNoticeApi, getDashDataApi } from '../../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
 // import { RequestGetApi, getAllPlanApi, getDashDataApi, getSchoolDataApi } from '../../Utils/Apis';
 
@@ -66,6 +66,7 @@ const AdminDashboard = () => {
 
   //loader State
   const [loaderState, setloaderState] = useState(false);
+  const [DashData, setDashData] = useState();
   const [EventData, setEventData] = useState([]);
   const [NoticeData, setNoticeData] = useState([]);
   const [searchByKey, setSearchByKey] = useState('');
@@ -73,7 +74,30 @@ const AdminDashboard = () => {
   useEffect(() => {
     getAllNoticeData();
     getAllEventData();
+    getDashboardData()
   }, [token])
+
+  const getDashboardData = async () => {
+    try {
+      setloaderState(true);
+      var response = await getDashDataApi();
+      console.log(response)
+      if (response?.status === 200) {
+        if (response?.data?.status === 'success') {
+          setloaderState(false);
+          setDashData(response?.data?.totalData)
+          // toast.success(response.data.message);
+        }
+      }
+      else {
+        // toast.error(response.data.message);
+      }
+    }
+    catch(error) {
+      setloaderState(false);
+      console.log(error)
+    }
+  }
 
   const getAllNoticeData = async () => {
     try {
@@ -84,11 +108,11 @@ const AdminDashboard = () => {
         if (response?.data?.status === 'success') {
           setloaderState(false);
           setNoticeData(response?.data?.notices);
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
         }
       }
       else {
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     }
     catch(error) {
@@ -96,6 +120,7 @@ const AdminDashboard = () => {
       console.log(error)
     }
   }
+
   const getAllEventData = async () => {
     try {
       setloaderState(true);
@@ -104,11 +129,11 @@ const AdminDashboard = () => {
         if (response?.data?.status === 'success') {
           setloaderState(false);
           setEventData(response?.data?.events);
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
         }
       }
       else {
-        toast.error(response.data.message);
+        // // toast.error(response.data.message);
       }
     }
     catch(error) {
@@ -139,7 +164,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="row pe-0 pt-2">
                   <div className="d-flex pe-0">
-                    <div className="w-100"><h1 className='orangeText'>785</h1></div>
+                    <div className="w-100"><h1 className='orangeText'>{DashData?.totalStudent}</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
                     <div className="flex-shrink-1 p-1"><Link to='/allStudent'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
@@ -156,7 +181,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="row pe-0 pt-2">
                   <div className="d-flex pe-0">
-                    <div className="w-100"><h1 className='orangeText'>56</h1></div>
+                    <div className="w-100"><h1 className='orangeText'>{DashData?.totalteacher}</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
                     <div className="flex-shrink-1 p-1"><Link to='/teacher'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
@@ -173,7 +198,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="row pe-0 pt-2">
                   <div className="d-flex pe-0">
-                    <div className="w-100"><h1 className='orangeText'>785</h1></div>
+                    <div className="w-100"><h1 className='orangeText'>{DashData?.totalParents}</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
                     <div className="flex-shrink-1 p-1"><Link to='/allStudent'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>
@@ -190,7 +215,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="row pe-0 pt-2">
                   <div className="d-flex pe-0">
-                    <div className="w-100"><h1 className='orangeText'>30</h1></div>
+                    <div className="w-100"><h1 className='orangeText'>{DashData?.totalStaff}</h1></div>
                     {/* <div className="w-100"><h1 className='orangeText'>{DashData.totalSchool}</h1></div> */}
                     <div className="flex-shrink-1 p-1"><Link to='/other_staff'><img src="./images/Vector.svg" alt="" height={20} /></Link></div>
                   </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { getOTPByMailApi } from '../../Utils/Apis';
-
+import toast from 'react-hot-toast';
 
 const Container= styled.div`
     height: 100vh;
@@ -97,10 +97,17 @@ const ForgotPassword = () => {
                 if(response?.status===200){
                     console.log('first 20000')
                   if(response?.data?.status==='success'){
+                    toast.success(response?.data?.message)
                     console.log(response?.data?.token, 'Forget Token')
                     localStorage.setItem('forgteToken', response?.data?.token)
                     navigate('/verifyOtp');
                   }
+                  else{
+                    toast.error(response?.data?.message)
+                }
+                }
+                else{
+                    toast.error(response?.data?.message)
                 }
             }
             catch{

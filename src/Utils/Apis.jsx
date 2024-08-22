@@ -76,7 +76,7 @@ export const setPassApi = async(newpass) => {
 
 export const getDashDataApi = async() => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.get(`${Domain}/sch/getDashData`);
+    var res = await axios.get(`${Domain}/admin/getDashboardData`);
 
     if (res) {
         return res;
@@ -337,9 +337,9 @@ export const deleteDriverApi = async (id) => {
                                     // Route  //
 // ******************************************************************************************************
 
-export const getAllRouteApi = async() => {
+export const getAllRouteApi = async(search, page, size) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.get(`${Domain}/route/getAllRoutByScId`);
+    var res = await axios.get(`${Domain}/route/getAllRoutByScId?searchKey=${search}&page=${page}&size=${size}`);
     
     if (res) {
         return res;
@@ -771,9 +771,24 @@ export const deleteExamCategoryApi = async (id) => {
                                     // Marksheet  //
 // ******************************************************************************************************
 
-export const getAllMarksheetDataAPI = async(sectionId, classId, categoryName) => {
+export const getAllMarksheetDataAPI = async(sectionId, classId, categoryName, searchKey, pageNo , pageSize) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.get(`${Domain}/markSheet/search?sectionId=${sectionId}&classId=${classId}&categoryName=${categoryName}`);
+    var res = await axios.get(`${Domain}/markSheet/search?sectionId=${sectionId}&classId=${classId}&categoryName=${categoryName}&searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+// ******************************************************************************************************
+                                    // Promotion  //
+// ******************************************************************************************************
+
+export const getAllPromotedStudentsDataAPI = async(nextSession, prevSectionId, nextSectionId) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/promotion/promoteAll?nextSession=${nextSession}&prevSectionId=${prevSectionId}&nextSectionId=${nextSectionId}`);
     if (res) {
         return res;
     }else{
@@ -799,9 +814,9 @@ export const getSearhSamplePaperDataApi = async(id1, id2, id3, searchKey, pageNo
     }
 }
 
-export const getDownloadSamplePaperDataApi = async(id) => {
+export const getDownloadSamplePaperDataApi = async(id, BlobData) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.get(`${Domain}/samplePaper/download-sample/${id}`);
+    var res = await axios.get(`${Domain}/samplePaper/download-sample/${id}`, BlobData);
     if (res) {
         return res;
     }else{
@@ -911,9 +926,9 @@ export const getAllSubmissionsByAssignmentIdApi = async(id) => {
 }
 
 
-export const getDownloadAssignmentDataApi = async(id) => {
+export const getDownloadAssignmentDataApi = async(id, BlobData) => {
     axios.defaults.headers.common["Authorization"] = token;
-    var res = await axios.get(`${Domain}/assignment/download-Assignment/${id}`);
+    var res = await axios.get(`${Domain}/assignment/download-Assignment/${id}`, BlobData);
     if (res) {
         return res;
     }else{
@@ -1458,13 +1473,304 @@ export const getCollectedStudentFeeByIdApi = async(studentId, size, page) => {
 
 
 
+// ******************************************************************************************************
+                                    // Issue Item Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllIssueItemApi = async(page,size) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemIssue/getAll?page=${page}&size=${size}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewIssueItemApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/itemIssue/issue`, data );
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
+
+export const returnItemApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/itemIssue/oneClickReturn/${id}`);
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
+
+export const getIssueItemByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemIssue/getOne/${id}`);
+    if (res) {
+        return res;
+    }else{
+       return [];
+    }
+}
+
+export const updateIssueItemByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/group/updateFeeGroup/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteIssueItemByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/itemIssue/delete/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // Item Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllItemApi = async(page, size) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/item/getAll?page=${page}&size=${size}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewItemApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/group/addGroup`, data );
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
+
+export const getItemByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/item/getOne/${id}`);
+    if (res) {
+        return res;
+    }else{
+       return [];
+    }
+}
+
+export const updateItemByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/item/modify/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteItemByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/item/delete/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+
+// ******************************************************************************************************
+                                    // Item Stock Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllItemStockApi = async(page, size) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemStock/getAll?page=${page}&size=${size}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+export const addNewItemStockApi = async (data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.post(`${Domain}/itemStock/add`, data );
+    if (res) {
+        return res;
+    FeeType
+        return [];
+    }
+}
+
+export const getItemStockByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemStock/getOne/${id}`);
+    if (res) {
+        return res;
+    }else{
+       return [];
+    }
+}
+
+export const updateItemStockByIdApi = async (id, data) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.put(`${Domain}/itemStock/update/${id}`, data );
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+export const deleteItemStockByIdApi = async (id) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.delete(`${Domain}/itemStock/delete/${id}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
 
 
 
 
 
 
-//saqib code
+// ******************************************************************************************************
+                                    // Item Category Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllItemCategoryApi = async() => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemCategory/getAll`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // Item Supplier Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllItemSupplierApi = async() => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemSupplier/getAll`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // Item Store Inventory  //
+// ******************************************************************************************************
+
+
+export const getAllItemStoreApi = async() => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/itemStore/getAll`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // All Roles  //
+// ******************************************************************************************************
+
+
+export const getAllRolesApi = async() => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/role/getRoleBySch`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+// ******************************************************************************************************
+                                    // All Data By Role Id  //
+// ******************************************************************************************************
+
+
+export const getDataByRoleIdApi = async(id, searchKey, pageNo, pageSize) => {
+    axios.defaults.headers.common["Authorization"] = token;
+    var res = await axios.get(`${Domain}/otherStaff/getStaffByRoleType/${id}?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
+    if (res) {
+        return res;
+    }else{
+        return [];
+    }
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -3484,3 +3790,205 @@ export const PayrollGetAllApi = async(month, year) =>{
     return []
    }
  } 
+
+
+
+
+
+
+ // ########################## Item category APIs start ########################### 
+
+
+
+//  post Api 
+
+export const ItemCategoryPostApi = async(formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/itemCategory/add`,formData)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ export const ItemCategoryGetAllApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemCategory/getAll`)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ export const ItemCategoryDeleteApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.delete(`${Domain}/itemCategory/delete/${id}`)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ // get by id 
+ export const ItemCategoryGetByIdApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemCategory/getOne/${id}`)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ 
+ 
+ // put api 
+ export const ItemCategoryUpdateApi = async(IdForUpdate, formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.put(`${Domain}/itemCategory/modify/${IdForUpdate}`,formData)
+ // console.log('my-response', res)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }
+ }
+ 
+ // ########################## Item category APIs end ########################### 
+ 
+ 
+ 
+ // ########################## Item store APIs start ########################### 
+ 
+ 
+ //  post Api 
+ 
+ export const ItemStorePostApi = async(formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/itemStore/add`,formData)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // get all 
+ 
+ export const ItemStoreGetAllApi = async() =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemStore/getAll`,)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // delete api 
+ export const ItemStoreDeleetApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.delete(`${Domain}/itemStore/delete/${id}`,)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // get by id api 
+ export const ItemStoreGetByIdApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemStore/getOne/${id}`,)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // put id api 
+ export const ItemUpdatedApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.put(`${Domain}/itemStore/modify${id}`,)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ 
+ // ########################## Item store APIs end ########################### 
+ 
+ 
+ 
+ 
+ // ########################## Item Supplier APIs start ########################### 
+ 
+ //  post Api 
+ export const ItemSupplierPostApi = async(formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.post(`${Domain}/itemSupplier/add`,formData)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // get all api 
+ export const ItemSupplierGetAllApi = async() =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemSupplier/getAll`)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ 
+ // delete api 
+ export const ItemSupplierDeleteApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.delete(`${Domain}/itemSupplier/delete/${id}`)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // get by api 
+ export const ItemSupplierGetByIdApi = async(id) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.get(`${Domain}/itemSupplier/getOne/${id}`)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ // update api 
+ export const ItemSupplierUpdateApi = async(id,formData) =>{
+    axios.defaults.headers.common["Authorization"] = token;
+   const res= await axios.put(`${Domain}/itemSupplier/modify/${id}`,formData)
+   if(res) {
+    return res;
+   }
+   else{
+    return []
+   }  
+ }
+ 
+ // ########################## Item Supplier APIs end ###########################
+ 

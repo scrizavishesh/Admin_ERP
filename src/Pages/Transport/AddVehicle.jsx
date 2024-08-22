@@ -82,7 +82,10 @@ const AddVehicle = () => {
     const getAllRouteData = async () => {
         setloaderState(true)
         try {
-            var response = await getAllRouteApi();
+            const searchKey = '';
+            const pageNo = '';
+            const pageSize = '';
+            var response = await getAllRouteApi(searchKey, pageNo, pageSize);
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setloaderState(false)
@@ -144,10 +147,9 @@ const AddVehicle = () => {
     }
 
     const vehicleModelRegex = /^[A-Za-z0-9 .\-_/]+$/;
-    const vehicleNumRegex = /^[A-Z0-9-]{1,10}$/;
+    const vehicleNumRegex = /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/; //MP 09 AB 9875
     const seatRegex = /^(100|[1-9][0-9])$/;
     const chassisNumRegex = /^[A-HJ-NPR-Z0-9]{17}$/;
-
 
 
     const validateModel = (value) => {
@@ -239,7 +241,7 @@ const AddVehicle = () => {
                     formData.append('routeId', route)
 
                 var response = await AddNewVehicleApi(formData);
-
+                console.log(response, 'add vehicle');
                 if (response?.status === 200) {
                     if (response?.data?.status === 'success') {
                         setloaderState(false)
@@ -248,14 +250,19 @@ const AddVehicle = () => {
                             navigate('/vehicle');
                         }, 1000);
                     }
+                    else{
+                        toast.error(response?.data?.message, 'else 1');
+                        setloaderState(false)
+                    }
                 }
                 else{
-                    toast.error(response?.data?.message);
+                    toast.error(response?.data?.message, 'else 2');
                     setloaderState(false)
                 }
             }
             catch(error) { 
                 toast.error(error);
+                console.log(eror, 'catch error')
                 setloaderState(false)
             }
         }

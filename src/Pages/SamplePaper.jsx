@@ -2,14 +2,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-// import { getAllClassApi, getDownloadSamplePaperDataApi, getSearhSamplePaperDataApi } from '../Utils/Apis';
 import AddSamplePaper from '../Modals/SamplePapers/AddSamplePaper';
 import EditSamplePaper from '../Modals/SamplePapers/EditSamplePaper';
 import { deleteSamplePaperApi, getAllClassApi, getDownloadSamplePaperDataApi, getSearhSamplePaperDataApi } from '../Utils/Apis';
 import DataLoader from '../Layouts/Loader';
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from 'react-paginate';
-import generatePDF from 'react-to-pdf';
 
 const Container = styled.div`
     height: 92vh;
@@ -47,7 +45,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -123,10 +120,7 @@ const SamplePaper = () => {
     const [sectionId, setSectionId] = useState(0);
     const [subjectId, setSubjectId] = useState(0);
     const [allClassData, setAllClassData] = useState([]);
-    const [SamplePaperStatus, setSamplePaperStatus] = useState([]);
-
     const [allSamplePaperData, setAllSamplePaperData] = useState([]);
-
     const [refreshDelete, setRefreshDelete] = useState(false);
 
 
@@ -189,32 +183,41 @@ const SamplePaper = () => {
         }
     }
 
-    const dowloadSamplePaperById = async (sampleId) => {
+    const downloadFileFunction = (blob, filename) => {
+        const url = window.URL.createObjectURL(blob); 
+        //creates a temporary URL that points to the Blob object. This URL can be used as a link to access the file data.
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        //releases the memory used by the temporary URL. This is important to prevent memory leaks, 
+        //as the URL was only needed for the duration of the file download process.
+    };
+
+    const downloadSamplePaper = async (id) => {
         try {
-            setloaderState(true)
-            generatePDF(targetRef, { filename: 'Sample Paper.pdf' })
-            console.log(sampleId)
-            var response = await getDownloadSamplePaperDataApi(sampleId);
-            console.log(response)
+            setloaderState(true);
+            const data = {
+                "responseType": "blob"
+            };
+            const response = await getDownloadSamplePaperDataApi(id, data);
             if (response?.status === 200) {
-                if (response?.data?.status === 'success') {
-                    setloaderState(false)
-                    console.log(response, 'after success')
-                    toast.success(response.data.message)
-                }
+                const pdfData = response?.data;
+                downloadFileFunction(pdfData, 'SamplPaper.pdf');
+                toast.success('SamplPaper Downloaded Successfully');
+                setloaderState(false);
+            } else {
+                setloaderState(false);
+                toast.error('Failed to download the SamplPaper.');
             }
-            else {
-                setloaderState(false)
-                console.log(response?.data?.message);
-            }
+        } catch (error) {
+            setloaderState(false);
+            toast.error('An error occurred while downloading the SamplPaper-', error);
         }
-        catch (e) {
-            setloaderState(false)
-            console.log('Error during downloading :',e);
-
-        }
-    }
-
+    };
 
     const getAllClassData = async () => {
         try {
@@ -309,7 +312,7 @@ const SamplePaper = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllSamplePaper}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllSamplePaper}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start p-0">
@@ -325,7 +328,7 @@ const SamplePaper = () => {
                             <form className="row g-3">
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Class</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={handleChange}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={handleChange}>
                                         <option >--- Choose ---</option>
                                         {allClassData?.map((option, index) => (
                                             <option key={option.classId} value={`${index}, ${option?.classId}`}>
@@ -336,7 +339,7 @@ const SamplePaper = () => {
                                 </div>
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Section</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSectionId(e.target.value)}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={(e) => setSectionId(e.target.value)}>
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.section?.map(option => (
                                             <option key={option.classSecId} value={option.classSecId}>
@@ -347,7 +350,7 @@ const SamplePaper = () => {
                                 </div>
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Subject</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.subjects?.map(option => (
                                             <option key={option.subjectId} value={option.subjectId}>
@@ -407,7 +410,7 @@ const SamplePaper = () => {
                                                                     <td className='greyText'>
                                                                         <p className='font14 align-self-start m-0'>
                                                                             <Icon icon="bxs:file-pdf" width="1.3em" height="1.3em" style={{ color: 'red' }} />
-                                                                            <Link className='ms-2' to='' onClick={() => dowloadSamplePaperById(item.sampleId)}>Download</Link>
+                                                                            <Link className='ms-2' to='' onClick={() => downloadSamplePaper(item.sampleId)}>Download</Link>
                                                                         </p>
                                                                     </td>
                                                                     <td className='text-center'>

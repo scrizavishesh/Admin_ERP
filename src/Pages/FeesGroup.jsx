@@ -449,11 +449,11 @@ const FeesGroup = () => {
             <>
               <form className='row' action="">
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Name</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" placeholder="Enter Name" onChange={(e) => setFeeGroupName(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
+                  <label htmlFor="exampleFormControlTextarea1" className="form-label font14">Description</label>
                   <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" placeholder='Text Description......' onChange={(e) => setFeeGroupDescription(e.target.value)}></textarea>
                 </div>
               </form>
@@ -496,11 +496,11 @@ const FeesGroup = () => {
             <>
               <form className='row' action="">
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Name</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" value={EditFeeGroupName} onChange={(e)=> setEditFeeGroupName(e.target.value)}/>
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
+                  <label htmlFor="exampleFormControlTextarea1" className="form-label font14">Description</label>
                   <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" value={EditFeeGroupDescription} onChange={(e)=> setEditFeeGroupDescription(e.target.value)}></textarea>
                 </div>
               </form>

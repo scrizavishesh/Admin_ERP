@@ -133,19 +133,26 @@ const AllRoute = () => {
     const [RouteData, setRouteData] = useState([]);
     const [searchByKey, setSearchByKey] = useState('')
     const [EditWarning, setEditWarning] = useState(true);
-    const [getRouteIdDataName, setgetRouteIdDataName] = useState('');
-    const [getRouteIdDataNameError, setgetRouteIdDataNameError] = useState('');
+    const [getByIdRouteName, setgetByIdRouteName] = useState('');
+    const [getByIdRouteNameError, setgetByIdRouteNameError] = useState('');
     const [RouteIDD, setRouteIDD] = useState('')
     const [delRouteIDD, setDelRouteIDD] = useState('')
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
 
     useEffect(() => {
         getAllRouteData();
-    }, [token, currentPage, pageNo])
+
+    }, [token, pageNo])
+
+    useEffect(() => {
+        if (getByIdRouteName) {
+            validateFields()
+        }
+    }, [getByIdRouteName])
 
     const handlePageClick = (event) => {
         setPageNo(event.selected + 1); // as event start from 0 index
@@ -161,7 +168,7 @@ const AllRoute = () => {
                     setRouteData(response?.data?.routes);
                     setCurrentPage(response?.data?.currentPage)
                     setTotalPages(response?.data?.totalPages)
-                    toast.success(response.data.msg);
+                    toast.success(response.data.message);
                 }
             }
             else {
@@ -176,7 +183,7 @@ const AllRoute = () => {
             var response = await getRouteCSVDataApi();
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    toast.success(response.data.msg);
+                    toast.success(response.data.message);
                 }
             }
             else {
@@ -186,24 +193,6 @@ const AllRoute = () => {
         catch { }
     }
 
-    const handleRouteNameChange = (val) => {
-        setgetRouteIdDataName(val);
-        setgetRouteIdDataNameError(validateRouteName(val))
-    }
-
-    const validateRouteName = (name) => {
-        if (name.trim() === '') {
-            return '* Route Name is required !!';
-        }
-
-        const nameRegex = /^[a-zA-Z0-9\s-]+$/;
-        if (!nameRegex.test(name)) {
-            return '* Invalid Route Name !!';
-        }
-
-        return '';
-    }
-
     const getRouteDataById = async (id) => {
         try {
             setRouteIDD(id);
@@ -211,7 +200,8 @@ const AllRoute = () => {
             console.log(response, 'route data')
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
-                    setgetRouteIdDataName(response?.data?.route?.routeName);
+                    setgetByIdRouteName(response?.data?.route?.routeName);
+                    toast.success(response?.data?.route?.routeName);
                     toast.success(response?.data?.message)
                 }
             }
@@ -225,44 +215,69 @@ const AllRoute = () => {
     }
 
     const UpdateRouteDataById = async () => {
-        const error = validateRouteName(getRouteIdDataName);
-        if (error) {
-            setgetRouteIdDataNameError(error);
-            return;
-        }
-
-        setgetRouteIdDataNameError('');
-
-        try {
-            console.log('try')
-            console.log(getRouteIdDataName)
-            const formData = new FormData();
-            formData.append("routeName", getRouteIdDataName)
-
-            var response = await updateRouteDataApi(RouteIDD, formData);
-
-            if (response?.status === 200) {
-                console.log('200')
-                console.log(response)
-                if (response.data.status === 'success') {
-                    console.log('success')
-                    setEditWarning(!EditWarning);
-                    toast.success(response?.data?.message)
+        if (validateFields()) {
+            try {
+                const formData = new FormData();
+                formData.append("routeName", getByIdRouteName)
+                var response = await updateRouteDataApi(RouteIDD, formData);
+                if (response?.status === 200) {
+                    if (response.data.status === 'success') {
+                        console.log('success')
+                        setEditWarning(!EditWarning);
+                        toast.success(response?.data?.message)
+                    }
+                    else {
+                        setloaderState(false);
+                        toast.error(response?.data?.message)
+                    }
+                } else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message)
                 }
-                else {
-                    console.log('fail')
-                }
-            } else {
-                toast.error(response?.error);
+            } catch (error) {
+                setloaderState(false);
+                console.error('Error during update:', error);
+                toast.error('Error during update:', error)
             }
-        } catch (error) {
-            console.error('Error during update:', error);
+        }
+        else {
+            toast.error('Please Validate All Fields Correctly')
         }
     };
 
     const DeleteBtnClicked = (id) => {
         setDelRouteIDD(id)
     }
+
+    const validateFields = () => {
+        let isValid = true;
+
+        const RouteNameErrorNew = validateRouteName(getByIdRouteName)
+        if (RouteNameErrorNew) {
+            setgetByIdRouteNameError(RouteNameErrorNew);
+            isValid = false;
+        } else {
+            setgetByIdRouteNameError('');
+        }
+
+        return isValid;
+    };
+
+    const handleRouteNameChange = (val) => {
+        setgetByIdRouteName(val);
+        setgetByIdRouteNameError(validateRouteName(val))
+    }
+
+    const validateRouteName = (value) => {
+        if (value.trim() === '') {
+            return '* Route Name is required';
+        }
+        const nameRegex = /^[A-Za-z0-9 .\-_/]+$/;
+        if (!nameRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
 
 
 
@@ -314,7 +329,7 @@ const AllRoute = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllRouteData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllRouteData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -338,7 +353,7 @@ const AllRoute = () => {
                                 <tbody>
                                     {RouteData ?
                                         RouteData.map((item, index) => (
-                                            <tr key={item.id} className='my-bg-color align-middle'>
+                                            <tr key={item.routeId} className='my-bg-color align-middle'>
                                                 <th className='greyText'><h3>{index + 1}</h3></th>
                                                 <td className='greyText'><h3>{item.routeName}</h3></td>
                                                 <td className='text-end'>
@@ -392,7 +407,7 @@ const AllRoute = () => {
 
                 <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Edit_staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div className="offcanvas-header border-bottom border-2 p-1">
-                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllRouteData}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                 <path fill="#008479" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                             </svg>
@@ -405,13 +420,13 @@ const AllRoute = () => {
                                 ?
                                 <>
                                     <div>
-                                        {/* <p className='modalLightBorder orangeText p-2'>{getRouteIdDataName}</p> */}
+                                        {/* <p className='modalLightBorder orangeText p-2'>{getByIdRouteName}</p> */}
                                         <div className="p-3">
                                             <form>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleInputAdd1" className='form-label greyText font14'>Route Name</label>
-                                                    <input type="text" className={`form-control p-2 formcontrolinput font14 ${getRouteIdDataNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getRouteIdDataName} onChange={(e) => handleRouteNameChange(e.target.value)} />
-                                                    <span className='text-danger'>{getRouteIdDataNameError}</span>
+                                                    <input type="text" className={`form-control borderRadius5 p-2 formcontrolinput font14 ${getByIdRouteNameError ? 'border-1 border-danger' : ''}`} id="exampleInputEmail1" aria-describedby="AddHelp" value={getByIdRouteName} onChange={(e) => handleRouteNameChange(e.target.value)} />
+                                                    <span className='text-danger'>{getByIdRouteNameError}</span>
                                                 </div>
                                             </form>
                                             <p className='text-center p-3'>
@@ -447,7 +462,7 @@ const AllRoute = () => {
 
                 <div className="offcanvas offcanvas-end p-2" data-bs-backdrop="static" tabIndex="-1" id="Delete_staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div className="offcanvas-header ps-0 modalHighborder p-1">
-                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <Link type="button" data-bs-dismiss="offcanvas" aria-label="Close" onClick={getAllRouteData}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16">
                                 <path fill="#B50000" fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                             </svg>

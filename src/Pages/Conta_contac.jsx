@@ -481,7 +481,7 @@ const Conta_contac = ({ data }) => {
             <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14 label-color">Leave Categories </label>
 
             <form class="form-floating">
-              <input type="email" class="form-control" id="floatingInputValue" value={status === "success" ? '' : LeaveCate}  onChange={(e) => setLeaveCate(e)} placeholder="" />
+              <input type="email" class="form-control" id="floatingInputValue"  onChange={(e) => setLeaveCate(e)} placeholder="" />
             </form>
 
             <p className='label-color heading-14'>If All is selected, then all leave categories will show to employee which are

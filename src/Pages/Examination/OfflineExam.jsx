@@ -149,13 +149,14 @@ const OfflineExam = () => {
 
 
     const [EditId, setEditId] = useState('');
+    const [reload, setReload] = useState(false);
 
     // Pagination
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(10);
 
     // Pagination
 
@@ -177,7 +178,7 @@ const OfflineExam = () => {
         getAllRoomData();
         getAllClassData();
         getAllOfflineExamData();
-    }, [token, dataRefresh, refreshDelete, pageNo])
+    }, [token, dataRefresh, pageNo, reload])
 
 
     const handlePageClick = (event) => {
@@ -319,9 +320,8 @@ const OfflineExam = () => {
     }
 
 
-    const PageRefreshOnDelete = () => {
-        setDeleteWarning(!DeleteWarning);
-        setRefreshDelete(!refreshDelete);
+    const handleReload = () => {
+        setReload(true);
     }
 
 
@@ -373,7 +373,7 @@ const OfflineExam = () => {
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
                                                 <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14' onClick={getAllOfflineExamData}>Search</span></button>
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14' onClick={getAllOfflineExamData}>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start">
@@ -391,7 +391,7 @@ const OfflineExam = () => {
                             <form className="row g-3">
                                 <div className="col-md-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Class</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => { setClassId(e.target.value), getAllSubjectData(e.target.value) }}>
+                                    <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={(e) => { setClassId(e.target.value), getAllSubjectData(e.target.value) }}>
                                         <option >--- Choose ---</option>
                                         {allClassData?.map(option => (
                                             <option key={option.classId} value={option?.classId}>
@@ -402,7 +402,7 @@ const OfflineExam = () => {
                                 </div>
                                 <div className="col-md-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Subject</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
+                                    <select className="form-select borderRadius5 font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
                                         <option >--- Choose ---</option>
                                         {allSubjectData?.map(option => (
                                             <option key={option.subjectId} value={option.subjectId}>
@@ -519,7 +519,7 @@ const OfflineExam = () => {
                         <span className="offcanvas-title font14" id="staticBackdropLabel">Edit Offline Exam</span>
                     </div>
                     <div className="offcanvas-body p-0 scrollBarHide">
-                        <EditExam EditId={EditId} />
+                        <EditExam EditId={EditId} Reload={handleReload}/>
                     </div>
                 </div>
 
@@ -565,7 +565,7 @@ const OfflineExam = () => {
                                             <p className='warningHeading'>Successful Deleted</p>
                                             <p className='greyText warningText pt-2'>Your data has been<br />Successfully Delete</p>
                                         </div>
-                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={PageRefreshOnDelete}>Continue</button>
+                                        <button className='btn contbtn continueButtons text-white' data-bs-dismiss="offcanvas" aria-label="Close" onClick={handleReload}>Continue</button>
                                     </div>
                                 </div>
                             </>

@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { useSidebarContext } from '../Dashboard/DashboardLayout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { logoutApi } from '../Utils/Apis';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     background-color: var(--sidebarBackground);
@@ -142,6 +142,27 @@ const Container = styled.div`
             }
         `}
     }
+    
+    .correvtSVG{
+        position: relative;
+        width: fit-content ;
+        margin-left: 43% !important;
+        margin-bottom: -16% !important;
+        background-color: #2BB673;
+        width: 73px;
+        height: 73px;
+        align-items: center;
+    }
+
+    .contbtn{
+        margin-left: 41% !important;
+        margin-top: -20% !important;
+    }
+
+    .greydiv{
+        background-color: #FBFBFB;
+    }
+
 
     .collapse-menu {
         padding-left: 1.5rem;
@@ -182,6 +203,7 @@ const StickyHeader = styled.div`
 const Sidebar = () => {
 
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
     const { sidebaropen, toggleSidebar } = useSidebarContext();
 
     const [UserDropOpen, setUserDropOpen] = useState(false);
@@ -195,6 +217,8 @@ const Sidebar = () => {
     const [InventoryDropOpen, setInventoryDropOpen] = useState(false);
     const [LibraryDropOpen, setLibraryDropOpen] = useState(false);
     const [SettingsDropOpen, setSettingsDropOpen] = useState(false);
+
+    const [LogoutSuccess, setLogoutSuccess] = useState(true);
 
     const location = useLocation();
 
@@ -222,8 +246,7 @@ const Sidebar = () => {
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     localStorage.removeItem('token')
-                    navigate('/')
-                    window.location.reload();
+                    setLogoutSuccess(false);
                 }
             }
             else {
@@ -233,6 +256,12 @@ const Sidebar = () => {
         catch {
 
         }
+    }
+
+    const handleContinue = () => {
+        window.location.reload();
+        window.location.reload();
+        navigate('/')
     }
 
     const handleActiveWithOutDrop = (val) => {
@@ -255,6 +284,7 @@ const Sidebar = () => {
 
         if (val === 'admin') {
             setUserDropOpen(!UserDropOpen)
+            navigate('/admin');
             setAccountingDropOpen(false);
             setAdmissionDropOpen(false)
             setTransportDropOpen(false)
@@ -268,6 +298,7 @@ const Sidebar = () => {
         }
         else if (val === 'admissionForm') {
             setAdmissionDropOpen(!AdmissionDropOpen)
+            navigate('/admissionForm');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setTransportDropOpen(false)
@@ -280,10 +311,11 @@ const Sidebar = () => {
             setSettingsDropOpen(false)
         }
         else if (val === 'driver') {
+            setTransportDropOpen(!TransportDropOpen)
+            navigate('/driver');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
-            setTransportDropOpen(!TransportDropOpen)
             setExaminationDropOpen(false)
             setAcademicDropOpen(false)
             setHrDropOpen(false)
@@ -293,11 +325,12 @@ const Sidebar = () => {
             setSettingsDropOpen(false)
         }
         else if (val === 'examCategory') {
+            setExaminationDropOpen(!ExaminationDropOpen)
+            navigate('/examCategory');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
             setTransportDropOpen(false)
-            setExaminationDropOpen(!ExaminationDropOpen)
             setAcademicDropOpen(false)
             setHrDropOpen(false)
             setFeeCollectionDropOpen(false)
@@ -306,12 +339,13 @@ const Sidebar = () => {
             setSettingsDropOpen(false)
         }
         else if (val === 'dailyattendance') {
+            setAcademicDropOpen(!AcademicDropOpen)
+            navigate('/dailyattendance');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
             setTransportDropOpen(false)
             setExaminationDropOpen(false)
-            setAcademicDropOpen(!AcademicDropOpen)
             setHrDropOpen(false)
             setFeeCollectionDropOpen(false)
             setInventoryDropOpen(false)
@@ -320,6 +354,7 @@ const Sidebar = () => {
         }
         else if (val === 'discount') {
             setAccountingDropOpen(!AccountingDropOpen);
+            navigate('/discount');
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
             setTransportDropOpen(false)
@@ -332,19 +367,22 @@ const Sidebar = () => {
             setSettingsDropOpen(false)
         }
         else if (val === 'userrole') {
+            setHrDropOpen(!HrDropOpen)
+            navigate('/admin');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
             setTransportDropOpen(false)
             setExaminationDropOpen(false)
             setAcademicDropOpen(false)
-            setHrDropOpen(!HrDropOpen)
             setFeeCollectionDropOpen(false)
             setInventoryDropOpen(false)
             setLibraryDropOpen(false)
             setSettingsDropOpen(false)
         }
         else if (val === 'booklistmanager') {
+            setLibraryDropOpen(!LibraryDropOpen)
+            navigate('/booklistmanager');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
@@ -354,10 +392,11 @@ const Sidebar = () => {
             setHrDropOpen(false)
             setFeeCollectionDropOpen(false)
             setInventoryDropOpen(false)
-            setLibraryDropOpen(!LibraryDropOpen)
             setSettingsDropOpen(false)
         }
         else if (val === 'collectFees') {
+            setFeeCollectionDropOpen(!FeeCollectionDropOpen)
+            navigate('/collectFees');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
@@ -365,12 +404,13 @@ const Sidebar = () => {
             setExaminationDropOpen(false)
             setAcademicDropOpen(false)
             setHrDropOpen(false)
-            setFeeCollectionDropOpen(!FeeCollectionDropOpen)
             setInventoryDropOpen(false)
             setLibraryDropOpen(false)
             setSettingsDropOpen(false)
         }
         else if (val === 'schoolSetting') {
+            setSettingsDropOpen(!SettingsDropOpen)
+            navigate('/schoolSetting');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
@@ -381,9 +421,10 @@ const Sidebar = () => {
             setFeeCollectionDropOpen(false)
             setInventoryDropOpen(false)
             setLibraryDropOpen(false)
-            setSettingsDropOpen(!SettingsDropOpen)
         }
         else if (val === 'issueItem') {
+            setInventoryDropOpen(!InventoryDropOpen)
+            navigate('/issueItem');
             setAccountingDropOpen(false);
             setUserDropOpen(false)
             setAdmissionDropOpen(false)
@@ -392,7 +433,6 @@ const Sidebar = () => {
             setAcademicDropOpen(false)
             setHrDropOpen(false)
             setFeeCollectionDropOpen(false)
-            setInventoryDropOpen(!InventoryDropOpen)
             setLibraryDropOpen(false)
             setSettingsDropOpen(false)
         }
@@ -503,7 +543,7 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' || activeLink === 'vehicle' || activeLink === 'route' || activeLink === 'dropPoint' || activeLink === 'assignStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseTransport" onClick={() => handleActiveDropAndLink('driver')} >
+                            <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' || activeLink === 'addDriver' || activeLink === 'addVehicle' || activeLink === 'vehicle' || activeLink === 'route' || activeLink === 'dropPoint' || activeLink === 'assignStudent' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseTransport" onClick={() => handleActiveDropAndLink('driver')} >
                                 <div className="flex-grow-1">
                                     <Icon icon="fluent-mdl2:bus" width="1.5em" height="1.5em" />
                                     <h3 className="menu-text">Transport</h3>
@@ -515,13 +555,13 @@ const Sidebar = () => {
                             <div id="collapseTransport" className={`collapse collapse-menu ${TransportDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
-                                        <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' ? 'active' : ''}`} onClick={() => handleActiveLink('driver')} >
+                                        <Link to="/driver" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'driver' || activeLink === 'addDriver' ? 'active' : ''}`} onClick={() => handleActiveLink('driver')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Driver</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/vehicle" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'vehicle' ? 'active' : ''}`} onClick={() => handleActiveLink('vehicle')} >
+                                        <Link to="/vehicle" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'vehicle' || activeLink === 'addVehicle' ? 'active' : ''}`} onClick={() => handleActiveLink('vehicle')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Vehicle</h3>
                                         </Link>
@@ -801,57 +841,6 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseLibrary" onClick={() => handleActiveDropAndLink('booklistmanager')} >
-                                <div className="flex-grow-1">
-                                    <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
-                                    <h3 className="menu-text">Library</h3>
-                                </div>
-                                <div className="">
-                                    {LibraryDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
-                                </div>
-                            </Link>
-                            <div id="collapseLibrary" className={`collapse collapse-menu ${LibraryDropOpen ? 'show' : 'hide'}`}>
-                                <ul className='dashed'>
-                                    <li>
-                                        <Link to="/booklistmanager" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' ? 'active' : ''}`} onClick={() => handleActiveLink('booklistmanager')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Book List Manager</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Book Issue Report</h3>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <Link to="/holiday" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'holiday' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('holiday')} >
-                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Holiday</h3>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/notice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'notice' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('notice')} >
-                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Notice</h3>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/event" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'event' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('event')} >
-                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Event</h3>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/onlinecourse" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'onlinecourse' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('onlinecourse')} >
-                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Online Course</h3>
-                            </Link>
-                        </li>
-                        <li>
                             <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'collectFees' || activeLink === 'searchFeePayment' || activeLink === 'searchDueFees' || activeLink === 'feesMaster' || activeLink === 'feesGroup' || activeLink === 'feesType' || activeLink === 'feesDiscount' || activeLink === 'feesCarryForword' || activeLink === 'feesReminder' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapsefeeCollection" onClick={() => handleActiveDropAndLink('collectFees')} >
                                 <div className="flex-grow-1">
                                     <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
@@ -905,23 +894,11 @@ const Sidebar = () => {
                                             <h3 className="menu-text">Fees Discount</h3>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link to="/feesCarryForword" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'feesCarryForword' ? 'active' : ''}`} onClick={() => handleActiveLink('feesCarryForword')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Fees Carry Forword</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/feesReminder" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'feesReminder' ? 'active' : ''}`} onClick={() => handleActiveLink('feesReminder')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Fees Reminder</h3>
-                                        </Link>
-                                    </li>
                                 </ul>
                             </div>
                         </li>
-                        {/* <li>
-                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveDropAndLink('issueItem')} >
+                        <li>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' || activeLink === 'addIssueItem' || activeLink === 'addItemStock' || activeLink === 'addItem' || activeLink === 'itemCategory' || activeLink === 'itemStore' || activeLink === 'itemSupplier' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveDropAndLink('issueItem')} >
                                 <div className="flex-grow-1">
                                     <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
                                     <h3 className="menu-text">Inventory</h3>
@@ -933,33 +910,84 @@ const Sidebar = () => {
                             <div id="collapseInventory" className={`collapse collapse-menu ${InventoryDropOpen ? 'show' : 'hide'}`}>
                                 <ul className='dashed'>
                                     <li>
-                                        <Link to="/issueItem" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' ? 'active' : ''}`} onClick={() => handleActiveLink('issueItem')} >
+                                        <Link to='/issueItem' className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'issueItem' || activeLink === 'addIssueItem' ? 'active' : ''}`} onClick={() => handleActiveLink('issueItem')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Issue Item</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                        <Link to="/addItemStock" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'addItemStock' ? 'active' : ''}`} onClick={() => handleActiveLink('addItemStock')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
                                             <h3 className="menu-text">Add Item Stock</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                        <Link to="/addItem" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'addItem' ? 'active' : ''}`} onClick={() => handleActiveLink('addItem')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Book Issue Report</h3>
+                                            <h3 className="menu-text">Add Item</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                        <Link to="/itemCategory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'itemCategory' ? 'active' : ''}`} onClick={() => handleActiveLink('itemCategory')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Book Issue Report</h3>
+                                            <h3 className="menu-text">Item Category</h3>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/bookissuereport" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'bookissuereport' ? 'active' : ''}`} onClick={() => handleActiveLink('bookissuereport')} >
+                                        <Link to="/itemStore" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'itemStore' ? 'active' : ''}`} onClick={() => handleActiveLink('itemStore')} >
                                             <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Book Issue Report</h3>
+                                            <h3 className="menu-text">Item Store</h3>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/itemSupplier" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'itemSupplier' ? 'active' : ''}`} onClick={() => handleActiveLink('itemSupplier')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Item Supplier</h3>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <Link to="/holiday" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'holiday' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('holiday')} >
+                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Holiday</h3>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/notice" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'notice' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('notice')} >
+                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Notice</h3>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/event" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'event' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('event')} >
+                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Event</h3>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/onlinecourse" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'onlinecourse' ? 'active' : ''}`} onClick={() => handleActiveWithOutDrop('onlinecourse')} >
+                                <Icon icon="clarity:dashboard-line" width="1.5em" height="1.5em" />
+                                <h3 className="menu-text">Online Course</h3>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' || activeLink === 'bookissuereport' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseLibrary" onClick={() => handleActiveDropAndLink('booklistmanager')} >
+                                <div className="flex-grow-1">
+                                    <Icon icon="mdi:message-reply-text-outline" width="1.5em" height="1.5em" />
+                                    <h3 className="menu-text">Library</h3>
+                                </div>
+                                <div className="">
+                                    {LibraryDropOpen ? <Icon icon="ri:arrow-up-s-fill" width="1.5em" height="1.5em" /> : <Icon icon="ri:arrow-down-s-fill" width="1.5em" height="1.5em" />}
+                                </div>
+                            </Link>
+                            <div id="collapseLibrary" className={`collapse collapse-menu ${LibraryDropOpen ? 'show' : 'hide'}`}>
+                                <ul className='dashed'>
+                                    <li>
+                                        <Link to="/booklistmanager" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'booklistmanager' ? 'active' : ''}`} onClick={() => handleActiveLink('booklistmanager')} >
+                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
+                                            <h3 className="menu-text">Book List Manager</h3>
                                         </Link>
                                     </li>
                                     <li>
@@ -970,7 +998,7 @@ const Sidebar = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </li> */}
+                        </li>
                         <li></li>
                         <li></li>
                         <li className='borderBottom' ></li>
@@ -1050,20 +1078,37 @@ const Sidebar = () => {
                     <h2 className="offcanvas-title fontWeight900" id="staticBackdropLabel">Logout Message</h2>
                 </div>
                 <div className="offcanvas-body p-0">
-                    <div>
-                        <div>
-                            <p className='border-bottom p-2'>Logout</p>
-                            <div className="text-center p-5">
-                                <p className='mb-2'><img src="./images/logout.svg" alt="" /></p>
-                                <h1 className='mb-2'>Are you Sure?</h1>
-                                <h3 className='greyText'>Are you Sure you want to logout?</h3>
-                                <p className='text-center p-3'>
-                                    <button className='btn deleteButtons text-white' onClick={handleLogout}>Logout</button>
-                                    <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
-                                </p>
+                    {LogoutSuccess
+                        ?
+                        <>
+                            <div>
+                                <p className='border-bottom p-2'>Logout</p>
+                                <div className="text-center p-5">
+                                    <p className='mb-2'><img src="./images/logout.svg" alt="" /></p>
+                                    <h1 className='mb-2'>Are you Sure?</h1>
+                                    <h3 className='greyText'>Are you Sure you want to logout?</h3>
+                                    <p className='text-center p-3'>
+                                        <button className='btn deleteButtons text-white' onClick={handleLogout}>Logout</button>
+                                        <button className='btn cancelButtons ms-3' data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </>
+                        :
+                        <>
+                            <div>
+                                <p className='modalLightBorder p-2 mb-0'>Logout</p>
+                                <div className="mt-3">
+                                    <div className='correvtSVG p-3 pt-4 rounded-circle'><img src="./images/Correct.svg" alt="" /></div>
+                                    <div className="updatetext border m-4 border-2  ms-5 greydiv rounded-3 text-center greyText p-5">
+                                        <p className='warningHeading'>Successful Updated</p>
+                                        <p className='greyText warningText pt-2'>Your Changes has been<br />Successfully Saved</p>
+                                    </div>
+                                    <button className='btn contbtn continueButtons text-white' type='button' data-bs-dismiss="offcanvas" aria-label="Close" onClick={handleContinue}>Continue</button>
+                                </div>
+                            </div>
+                        </>
+                    }
                 </div>
             </div>
 
@@ -1072,67 +1117,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-
-{/* <li>
-                            <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseInventory" onClick={() => handleActiveLink('Inventory')} >
-                                <Icon icon="mingcute:profile-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Inventory</h3>
-                            </Link>
-                            <div id="collapseInventory" className="collapse collapse-menu">
-                                <ul className='dashed'>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Issue Item</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Add Item Stock</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Add Item</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Category</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Store</h3>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/Inventory" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Inventory' ? 'active' : ''}`} onClick={() => handleActiveLink('Inventory')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Item Supplier</h3>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> */}
-{/* <li>
-                            <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} data-bs-toggle="collapse" data-bs-target="#collapseAlumni" onClick={() => handleActiveLink('Alumni')} >
-                                <Icon icon="ri:id-card-line" width="1.5em" height="1.5em" />
-                                <h3 className="menu-text">Alumni</h3>
-                            </Link>
-                            <div id="collapseAlumni" className="collapse collapse-menu">
-                                <ul className='dashed'>
-                                    <li>
-                                        <Link to="/Alumni" className={`menus p-2 d-flex borderBottom ${sidebaropen === '' ? 'justify-content-center' : ''} ${activeLink === 'Alumni' ? 'active' : ''}`} onClick={() => handleActiveLink('Alumni')} >
-                                            <Icon icon="radix-icons:dash" width="1.5em" height="1.5em" />
-                                            <h3 className="menu-text">Alumni</h3>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> */}

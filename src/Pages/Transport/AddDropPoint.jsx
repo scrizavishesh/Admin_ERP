@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { addNewDropPointApi, getAllRouteApi } from '../../Utils/Apis';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +45,6 @@ const Container = styled.div`
     
 `;
 
-
 const AddDropPoint = () => {
 
   const navigate = useNavigate();
@@ -65,7 +63,10 @@ const AddDropPoint = () => {
 
   const getAllRouteData = async () => {
     try {
-      var response = await getAllRouteApi();
+      const searchKey = '';
+      const pageNo = '';
+      const pageSize = '';
+      var response = await getAllRouteApi(searchKey, pageNo, pageSize);
       if (response?.status === 200) {
         if (response?.data?.status === 'success') {
           setAllRouteData(response?.data?.routes);
@@ -82,39 +83,32 @@ const AddDropPoint = () => {
   }
 
   const AddNewDropPoint = async () => {
-    const RouteValidate = validateRoute(route);
-    const dropPointNameValidate = validateDropPointName(dropPointName);
+    if (validateFields()) {
+      try {
+        const formData = new FormData();
+        formData.append("routeId", route);
+        formData.append("dropName", dropPointName);
 
-    if (RouteValidate || dropPointNameValidate) {
-      setRouteError(RouteValidate);
-      setDropPointNameError(dropPointNameValidate);
-      return;
-    }
+        var response = await addNewDropPointApi(formData);
 
-    setRouteError('');
-    setDropPointNameError('');
-
-    try {
-      const formData = new FormData();
-      formData.append("routeId", route);
-      formData.append("dropName", dropPointName);
-
-      var response = await addNewDropPointApi(formData);
-
-      if (response?.status === 200) {
-        if (response?.data?.status === 'success') {
-          toast.success(response?.data?.message)
-          setTimeout(() => {
-            navigate('/dropPoint');
-          }, 1000);
+        if (response?.status === 200) {
+          if (response?.data?.status === 'success') {
+            toast.success(response?.data?.message)
+            setTimeout(() => {
+              navigate('/dropPoint');
+            }, 1000);
+          }
+        }
+        else {
+          console.log(response?.data?.message);
         }
       }
-      else {
-        console.log(response?.data?.message);
+      catch (error) {
+        console.log(error, 'error')
       }
     }
-    catch (error) {
-      console.log(error, 'error')
+    else {
+      toast.error('Please Validate All Fields Correctly')
     }
   }
 
@@ -124,9 +118,10 @@ const AddDropPoint = () => {
   }
 
   const validateRoute = (value) => {
-    if (value === '') {
+    if (!value || value == '') {
       return '* Route is required';
     }
+    return '';
   };
 
   const handleDropPointName = (value) => {
@@ -143,6 +138,28 @@ const AddDropPoint = () => {
       return '* Invalid characters !!';
     }
     return '';
+  };
+
+  const validateFields = () => {
+    let isValid = true;
+
+    const dropPointErrorNew = validateDropPointName(dropPointName)
+    if (dropPointErrorNew) {
+      setDropPointNameError(dropPointErrorNew);
+      isValid = false;
+    } else {
+      setDropPointNameError('');
+    }
+
+    const routeErrorNew = validateRoute(route)
+    if (routeErrorNew) {
+      setRouteError(routeErrorNew);
+      isValid = false;
+    } else {
+      setRouteError('');
+    }
+
+    return isValid;
   };
 
   const CancelButton = () => {

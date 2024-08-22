@@ -22,6 +22,8 @@
     --viewTextHeading: #9297A8;
     --viewBtn: #D9D9D9;
     --yellowtableBg: #FFFAF6;
+    --returned: #41AD49;
+    --clickToReturn:#B50000;
 
     --modalHeadingBg: #F2F3F6;
     --greyInputborderColor: #E4E7EB;
@@ -86,6 +88,8 @@
     --tableTopHeadingBg: #FFF9F6;
     --tableTopHeadText: #8F8F8F;
 
+    --borderRadius5: 5px;
+    --borderRadius14: 14.5px;
 
     /* ******************************************** */
 }
@@ -150,6 +154,10 @@ tr {
 
 .font14 {
     font-size: var(--font-size-14) !important;
+}
+
+.borderRadius5 {
+    border-radius: var(--borderRadius5) !important;
 }
 
 /* *********************          Text Font Size     ********************* */
@@ -245,13 +253,7 @@ tr {
 
 /* ***********************          Button Colors     *********************** */
 
-.searchButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 0px 5px 5px 0px;
-}
-
-.searchButtons:hover,
+.searchButtons,.searchButtons:hover,
 .searchButtons:active,
 .searchButtons:focus {
     background-color: var(--greenColorBtn) !important;
@@ -284,15 +286,7 @@ tr {
 }
 
 
-.CorrectSignButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 51px;
-    height: 38px;
-}
-
-.CorrectSignButtons:hover,
+.CorrectSignButtons ,.CorrectSignButtons:hover,
 .CorrectSignButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -301,15 +295,7 @@ tr {
     height: 38px;
 }
 
-.printButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 105px;
-    height: 36px;
-}
-
-.printButtons:hover,
+.printButtons,.printButtons:hover,
 .printButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -318,15 +304,7 @@ tr {
     height: 36px;
 }
 
-.editButton {
-    background-color: var(--darkgreyColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 54px;
-    height: 29px;
-}
-
-.editButton:hover,
+.editButton,.editButton:hover,
 .editButton:focus {
     background-color: var(--darkgreyColorBtn) !important;
     border: none !important ;
@@ -335,15 +313,7 @@ tr {
     height: 29px;
 }
 
-.addButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 135px;
-    height: 38px;
-}
-
-.addButtons:hover,
+.addButtons ,.addButtons:hover,
 .addButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -352,15 +322,7 @@ tr {
     height: 38px;
 }
 
-.addButtons2 {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 150px;
-    height: 38px;
-}
-
-.addButtons2:hover,
+.addButtons2 ,.addButtons2:hover,
 .addButtons2:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -369,15 +331,7 @@ tr {
     height: 38px;
 }
 
-.addButtons3 {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 170px;
-    height: 38px;
-}
-
-.addButtons3:hover,
+.addButtons3,.addButtons3:hover,
 .addButtons3:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -386,15 +340,7 @@ tr {
     height: 38px;
 }
 
-.addCategoryButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 155px;
-    height: 38px;
-}
-
-.addCategoryButtons:hover,
+.addCategoryButtons,.addCategoryButtons:hover,
 .addCategoryButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -403,15 +349,16 @@ tr {
     height: 38px;
 }
 
-.continueButtons {
+.addCategoryButtons2,.addCategoryButtons2:hover,
+.addCategoryButtons2:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
-    border-radius: 0px;
-    width: 92px;
+    border-radius: 5px;
+    width: 170px;
     height: 38px;
 }
 
-.continueButtons:hover,
+.continueButtons,.continueButtons:hover,
 .continueButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -420,15 +367,7 @@ tr {
     height: 38px;
 }
 
-.deleteButtons {
-    background-color: var(--redColorBtn) !important;
-    border: none !important ;
-    border-radius: 0px;
-    width: 75px;
-    height: 38px;
-}
-
-.deleteButtons:hover,
+.deleteButtons,.deleteButtons:hover,
 .deleteButtons:focus {
     background-color: var(--redColorBtn) !important;
     border: none !important ;
@@ -437,34 +376,16 @@ tr {
     height: 38px;
 }
 
-.actionButtons {
-    background-color: var(--darkgreyColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 87px;
-    height: 24px;
-    line-height: 12px;
-}
-
-.actionButtons:hover,
+.actionButtons,.actionButtons:hover,
 .actionButtons:focus {
     background-color: var(--darkgreyColorBtn) !important;
     border: none !important ;
     border-radius: 5px;
     width: 87px;
-    height: 24px;
+    height: 28px;
 }
 
-.collectFeesButtons {
-    background-color: var(--darkgreyColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 100px;
-    height: 24px;
-    line-height: 12px;
-}
-
-.collectFeesButtons:hover,
+.collectFeesButtons,.collectFeesButtons:hover,
 .collectFeesButtons:focus {
     background-color: var(--darkgreyColorBtn) !important;
     border: none !important ;
@@ -473,15 +394,7 @@ tr {
     height: 24px;
 }
 
-.updateButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 80px;
-    height: 38px;
-}
-
-.updateButtons:hover,
+.updateButtons,.updateButtons:hover,
 .updateButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -490,15 +403,7 @@ tr {
     height: 38px;
 }
 
-.updateCreateButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 120px;
-    height: 38px;
-}
-
-.updateCreateButtons:hover,
+.updateCreateButtons,.updateCreateButtons:hover,
 .updateCreateButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -507,15 +412,7 @@ tr {
     height: 38px;
 }
 
-.updateCategoryButtons {
-    background-color: var(--greenColorBtn) !important;
-    border: none !important ;
-    border-radius: 5px;
-    width: 150px;
-    height: 38px;
-}
-
-.updateCategoryButtons:hover,
+.updateCategoryButtons,.updateCategoryButtons:hover,
 .updateCategoryButtons:focus {
     background-color: var(--greenColorBtn) !important;
     border: none !important ;
@@ -524,14 +421,7 @@ tr {
     height: 38px;
 }
 
-.dltcancelButtons {
-    border: 1px solid var(--cancelBtn) !important ;
-    border-radius: 0px;
-    width: 71px;
-    height: 38px;
-}
-
-.dltcancelButtons:hover,
+.dltcancelButtons,.dltcancelButtons:hover,
 .dltcancelButtons:active {
     border: 1px solid var(--cancelBtn) !important;
     border-radius: 0px;
@@ -549,20 +439,7 @@ tr {
     height: 36px;
 }
 
-.cancelButtons:active,
-.cancelButtons:focus {
-    border-color: var(--cancelBtn) !important;
-}
-
-
-.confirmButtons {
-    background-color: var(--greenColorBtn);
-    border-radius: 5px;
-    width: 422px;
-    height: 45px;
-}
-
-.confirmButtons:hover,
+.confirmButtons,.confirmButtons:hover,
 .confirmButtons:focus {
     background-color: var(--greenColorBtn);
     border-radius: 5px;
@@ -577,14 +454,7 @@ tr {
 /* ***********************          Active Sidebar     *********************** */
 
 
-.actionOptions {
-    background-color: var(--greenColorBtn);
-    border-right: 5px solid var(--activeOrangeBorder);
-    color: #fff !important;
-    position: relative;
-}
-
-.actionOptions {
+.actionOptions ,.actionOptions {
     background-color: var(--greenColorBtn);
     border-right: 5px solid var(--activeOrangeBorder);
     color: #fff !important;
@@ -853,15 +723,15 @@ tr {
 
 .formcontrolsearch {
     border-radius: 5px 0px 0px 5px !important;
-    border: 1.5px solid var(--fontControlBorder);
+    border: 1.5px solid var(--fontControlBorder) !important;
 }
 
 .searchhhButtons {
     border-radius: 0px 5px 5px 0px !important;
     background-color: var(--greenTextColor) !important;
     border: none !important ;
-    width: 90px;
-    height: 38px;
+    width: 90px !important;
+    height: 38px !important;
 }
 
 /* ************************************************************************************************************************************** */
@@ -1009,3 +879,5 @@ tr {
     box-shadow: none !important;
     cursor: pointer;
 }
+
+

@@ -142,7 +142,7 @@ const MyAccount = () => {
                     console.log(response?.data?.admin?.adminDesignation, 'data')
                     console.log(response?.data?.admin?.adminDOB, 'data')
                     console.log(response?.data?.admin?.adminPhoto, 'data')
-                    validationCheck();
+                    // validationCheck();
                     toast.success(response?.data?.message)
                     setloaderState(false);
                 }
@@ -335,36 +335,36 @@ const MyAccount = () => {
     };
 
     // validate the data the is retrived by get By Id
-    const validationCheck = () => {
-        const adminNameValidate = validateAdminName(adminName);
-        const adminEmailValidate = validateAdminEmail(adminEmail);
-        const adminPhoneValidate = validateAdminPhone(adminPhone);
-        const adminGenderValidate = validateAdminGender(adminGender);
-        const adminAddressValidate = validateAdminAddress(adminAddress);
-        const adminDesignationValidate = validateAdminDesignation(adminDesignation);
-        const adminBirthDateValidate = validateAdminBirthDate(adminBirthDate);
-        const adminPhotoValidate = validateAdminPhoto(adminPhoto);
+    // const validationCheck = () => {
+    //     const adminNameValidate = validateAdminName(adminName);
+    //     const adminEmailValidate = validateAdminEmail(adminEmail);
+    //     const adminPhoneValidate = validateAdminPhone(adminPhone);
+    //     const adminGenderValidate = validateAdminGender(adminGender);
+    //     const adminAddressValidate = validateAdminAddress(adminAddress);
+    //     const adminDesignationValidate = validateAdminDesignation(adminDesignation);
+    //     const adminBirthDateValidate = validateAdminBirthDate(adminBirthDate);
+    //     const adminPhotoValidate = validateAdminPhoto(adminPhoto);
 
-        if (adminNameValidate || adminEmailValidate || adminPhoneValidate || adminGenderValidate || adminAddressValidate || adminDesignationValidate || adminBirthDateValidate || adminPhotoValidate) {
-            setAdminNameError(adminNameValidate);
-            setAdminEmailError(adminEmailValidate);
-            setAdminPhoneError(adminPhoneValidate);
-            setAdminGenderError(adminGenderValidate);
-            setAdminAddressError(adminAddressValidate);
-            setAdminDesignationError(adminDesignationValidate);
-            setAdminBirthDateError(adminBirthDateValidate);
-            setAdminPhotoError(adminPhotoValidate);
-            return;
-        }
-        setAdminNameError('');
-        setAdminEmailError('');
-        setAdminPhoneError('');
-        setAdminGenderError('');
-        setAdminAddressError('');
-        setAdminDesignationError('');
-        setAdminBirthDateError('');
-        setAdminPhotoError('');
-    }
+    //     if (adminNameValidate || adminEmailValidate || adminPhoneValidate || adminGenderValidate || adminAddressValidate || adminDesignationValidate || adminBirthDateValidate || adminPhotoValidate) {
+    //         setAdminNameError(adminNameValidate);
+    //         setAdminEmailError(adminEmailValidate);
+    //         setAdminPhoneError(adminPhoneValidate);
+    //         setAdminGenderError(adminGenderValidate);
+    //         setAdminAddressError(adminAddressValidate);
+    //         setAdminDesignationError(adminDesignationValidate);
+    //         setAdminBirthDateError(adminBirthDateValidate);
+    //         setAdminPhotoError(adminPhotoValidate);
+    //         return;
+    //     }
+    //     setAdminNameError('');
+    //     setAdminEmailError('');
+    //     setAdminPhoneError('');
+    //     setAdminGenderError('');
+    //     setAdminAddressError('');
+    //     setAdminDesignationError('');
+    //     setAdminBirthDateError('');
+    //     setAdminPhotoError('');
+    // }
 
 
     return (

@@ -760,7 +760,7 @@ const Event = () => {
               </thead>
               <tbody className='heading-14 align-middle greyTextColor'>
                 {
-                  eventAllData.map((item, index) => (
+                  eventAllData?.map((item, index) => (
                     <tr className='heading-14' >
                       <td className=' greyText pe-0'>{index + 1}</td>
                       <td className=' greyText pe-0'>{item.eventName}</td>

@@ -47,7 +47,6 @@ const Container = styled.div`
     }
 
     .form-control, .form-select{
-        border-radius: 5px !important;
         box-shadow: none !important;
         border: 1px solid var(--fontControlBorder);
     }
@@ -135,7 +134,7 @@ const Assignment = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(5);
 
     // Pagination
 
@@ -170,9 +169,9 @@ const Assignment = () => {
 
 
     const getAllAssignment = async () => {
+        setloaderState(true);
         try {
             var response = await getSearhAssignmentDataApi(classId, sectionId, subjectId, pageNo, pageSize);
-            console.log(response)
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setSearchBtn(true)
@@ -180,14 +179,17 @@ const Assignment = () => {
                     setTotalPages(response.data.totalPages)
                     setCurrentPage(response.data.currentPage)
                     toast.success(response?.data?.message)
+                    setloaderState(false)
                 }
             }
             else {
+                setloaderState(false)
                 toast.error(response?.data?.message)
             }
         }
-        catch (e) {
-            console.log(e);
+        catch (error) {
+            setloaderState(false)
+            console.log(error);
 
         }
     }
@@ -282,8 +284,8 @@ const Assignment = () => {
                                     <div className="row gap-md-0 gap-sm-3">
                                         <div className="col-md-8 col-sm-12 col-8 text-sm-end text-start ps-0">
                                             <form className="d-flex" role="search">
-                                                <input className="form-control formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
-                                                <button className="btn searchButtons text-white " type="button"><span className='font14'>Search</span></button>
+                                                <input className="form-control borderRadius5 formcontrolsearch font14" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setSearchByKey(e.target.value)} />
+                                                <button className="btn searchhhButtons text-white " type="button"><span className='font14'>Search</span></button>
                                             </form>
                                         </div>
                                         <div className="col-md-4 col-sm-12 col-4 text-sm-end text-start p-0">
@@ -299,7 +301,7 @@ const Assignment = () => {
                             <form className="row g-3">
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Class</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={handleChange}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={handleChange}>
                                         <option >--- Choose ---</option>
                                         {allClassData?.map((option, index) => (
                                             <option key={option.classId} value={`${index}, ${option?.classId}`}>
@@ -310,7 +312,7 @@ const Assignment = () => {
                                 </div>
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Section</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSectionId(e.target.value)}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={(e) => setSectionId(e.target.value)}>
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.section?.map(option => (
                                             <option key={option.classSecId} value={option.classSecId}>
@@ -321,7 +323,7 @@ const Assignment = () => {
                                 </div>
                                 <div className="col-md-4 col-sm-6 col-12">
                                     <label htmlFor="inputEmail4" className="form-label font14">Subject</label>
-                                    <select className="form-select font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
+                                    <select className="form-select bordeRadius5 font14" aria-label="Default select example" onChange={(e) => setSubjectId(e.target.value)}>
                                         <option >--- Choose ---</option>
                                         {allClassData[classNo]?.subjects?.map(option => (
                                             <option key={option.subjectId} value={option.subjectId}>

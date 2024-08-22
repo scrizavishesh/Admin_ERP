@@ -13,6 +13,7 @@ const Container = styled.div`
     .table-striped>tbody>tr:nth-of-type(odd)>* {
         --bs-table-bg-type: var(--tableGreyBackgroundColor);
     }
+    
     .correvtSVG{
         position: relative;
         width: fit-content ;

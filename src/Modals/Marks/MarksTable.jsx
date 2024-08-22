@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { AddUpdateMarksApi } from '../../Utils/Apis';
 import toast, { Toaster } from 'react-hot-toast';
-import ReactPaginate from 'react-paginate';
 
 const Container = styled.div`
     
@@ -53,39 +52,20 @@ const MarksTable = ({ marksData, className, sectionName, subjectName, sessionSel
     const [StudentId, setStudentId] = useState('');
     const [SessionName, setSessionName] = useState('');
 
-
-    // Pagination
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
-
-    // Pagination     , pageNo, pageSize
-
     useEffect(() => {
         setMarksUpdateData(marksData)
-    }, [marksData, pageNo])
+    }, [marksData])
 
     const [MarksUpdateData, setMarksUpdateData] = useState([{
         gainMarks: '',
         comments: ''
     }])
 
-
-
-    const handlePageClick = (event) => {
-        setPageNo(event.selected + 1); // as event start from 0 index
-    };
-
-
-
     const handleCheckboxChange = async (i, e) => {
         const value = [...MarksUpdateData];
         value[i][e.target.name] = e.target.value;
         setMarksUpdateData(value);
     };
-
 
     const SaveOrUpdateMarksData = async (markId, examCategory, classId, sectionId, subjectId, studentId, sessionName) => {
         setExamCategory(examCategory);
@@ -195,23 +175,7 @@ const MarksTable = ({ marksData, className, sectionName, subjectName, sessionSel
                                 ))}
                             </tbody>
                         </table>
-
-                        <div className="d-flex">
-                            <p className='font14'>Showing {currentPage} of {totalPages} Pages</p>
-                            <div className="ms-auto">
-                                <ReactPaginate
-                                    previousLabel={<Icon icon="tabler:chevrons-left" width="1.4em" height="1.4em" />}
-                                    nextLabel={<Icon icon="tabler:chevrons-right" width="1.4em" height="1.4em" />}
-                                    breakLabel={'...'} breakClassName={'break-me'} pageCount={totalPages} marginPagesDisplayed={2} pageRangeDisplayed={10}
-                                    onPageChange={handlePageClick} containerClassName={'pagination'} subContainerClassName={'pages pagination'} activeClassName={'active'}
-                                />
-                            </div>
-                        </div>
-
                     </div>
-                    {/* <div className="heightOfTable">
-                        
-                    </div> */}
                     <Toaster />
                 </div>
             </Container>

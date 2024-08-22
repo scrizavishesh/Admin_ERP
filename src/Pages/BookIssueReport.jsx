@@ -15,6 +15,7 @@ import { IssueBookPutApi } from '../Utils/Apis'
 import HashLoader from './HashLoaderCom';
 
 import Flatpickr from "react-flatpickr";
+import Icon from "react-flatpickr";
 import "flatpickr/dist/themes/light.css";
 // ## style css area start ####  
 
@@ -796,8 +797,8 @@ const BookIssueReport = () => {
   const formatDate = (date) => {
     if (!date) return null;
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
+    const month = date.getMonth() + 0;
+    const day = date.getDate() + 0;
     return `${year}-0${month}-${day}`;
     // return "${year}-${month}-${day}";
   };
@@ -840,7 +841,7 @@ const BookIssueReport = () => {
           <div className="row p-3 d-flex justify-content-center">
             <div className="ps-0 col-lg-6 col-md-6 col-sm-12">
 
-              <div class="dropdown">
+              {/* <div class="dropdown">
                 <input type="text" class="form-control form-focus font-color" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="name@example.com" />
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <Flatpickr
@@ -854,8 +855,31 @@ const BookIssueReport = () => {
                     onChange={handleDateChange}
                   />
                 </div>
-              </div>
-              
+              </div> */}
+              <label htmlFor="" className='ps-1 heading-18'>Date</label>
+              <div className="date-picker-container">
+              <Flatpickr
+                class="form-control"
+                placeholder=''
+                value={[startDate, endDate]}
+                options={{
+                  mode: 'range',
+                  dateFormat: 'Y-n-j',
+                }}
+                onClick={() => handleButtonClick("custom")}
+                onChange={handleDateChange}
+                render={({ defaultValue, ...props }, ref) => (
+                  
+                  <div className="input-group d-flex">
+                    
+                    <input {...props} ref={ref} defaultValue={defaultValue} />
+                    {/* <span className="input-group-text">
+                      <Icon icon="uiw:date" width="1.1em" height="1.1em" style={{ color: '#2C6DB5' }} />
+                    </span> */}
+                  </div>
+                )}
+              />
+            </div>
             </div>
           </div>
 
@@ -891,7 +915,7 @@ const BookIssueReport = () => {
 
               <tbody className='heading-14 align-middle greyTextColor'>
                 {
-                  issuesData.map((item, index) => (
+                  issuesData?.map((item, index) => (
                     <tr className='heading-14' >
                       <td className=' greyText pe-0'>{index + 1}</td>
                       <td className=' greyText pe-0'>{item.bookName}</td>

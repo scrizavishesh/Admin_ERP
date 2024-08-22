@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
+import { PayrollGetAllApi } from '../Utils/Apis'
+import HashLoader from './HashLoaderCom';
+import toast, { Toaster } from 'react-hot-toast';
+import { RolePermissionGetApi } from '../Utils/Apis'
+import { TeacherGetAllApi } from "../Utils/Apis";
+import { ContractGetAllApi } from "../Utils/Apis";
+// import { PayrollPostApi } from "../Utils/Apis";
 // ## style css area start ####  
 
 const Container = styled.div`
@@ -401,15 +407,86 @@ font-size: 12px;
 // ## style css area end ####  
 
 const PayRoll_Create = () => {
+
+    // console.log('allowance amountt',allowance)
+    const [deduction, setDeduction] = useState()
+    const [loader, setLoader] = useState(false)
     const [hide, setHide] = useState(false)
     const [show, setShow] = useState(true)
     const [hidedelete, setHidedelete] = useState(false)
-    const [showdelete, setShowdelete] = useState(true)
-    const [formValues, setFormValues] = useState([{ name: "" }])
-    const [formValues12, setFormValues12] = useState([{ name: "" }])
+    const [showdelete, setShowdelete] = useState(true);
+
+    // custome code 
+    const [formValues, setFormValues] = useState([{
+        title: "",
+        amount: ""
+    }])
+
+    const [allowance, setAllowance] = useState({
+
+        // [formValues[0].title]: formValues[0].amount
+
+    });
+    console.log('allowance', allowance)
+
+    console.log('form data', formValues)
+
+    const [formValues12, setFormValues12] = useState([{
+        title: "",
+        amount: ""
+
+    }])
+    const handleAddEmployerFields = async () => {
+        setFormValues([
+            ...formValues,
+            {
+                title: "",
+                amount: ""
+            },
+        ]);
+    };
+
+    const handleEmployChange = async (i, e) => {
+        const value = [...formValues];
+        value[i][e.target.name] = e.target.value;
+        setFormValues(value);
+        setAllowance([e.target.value])
+
+    };
+    const removeEmployeRow = async (i) => {
+        if (formValues.length > 1) {
+            formValues.splice(i, 1);
+            setFormValues([...formValues]);
+        }
+    };
+
+    // custome code 
+
     const [feature, setFeature] = useState()
+
     const [allowanceType, setAllowanceType] = useState()
     const [allowanceAmount, setAllowanceAmount] = useState()
+
+    // console.log(formValues, 'formValues data')
+    // console.log(allowanceType,'allowanceType data') 
+
+    const [month, setMonth] = useState()
+    const [year, setYear] = useState()
+    const [searchKey, setSearchKey] = useState('')
+    const [rolePermisAllData, setRolePermisAllData] = useState([])
+    // console.log('rolesss permissionnn12345',rolePermisAllData)
+    const [TeacherAllData, setTeacherAllData] = useState([]);
+    const [year2, setYear2] = useState()
+    const [month2, setMonth2] = useState()
+    const [roleId, setRoleId] = useState()
+    console.log('my role iddd ', roleId)
+    const [staffId, setStaffId] = useState()
+    const [status, setStatus] = useState()
+
+    const [basicPay, setBasicPay] = useState()
+    const [paid, setPaid] = useState()
+
+
 
     const UpdateHandleBtn = (e) => {
 
@@ -429,45 +506,174 @@ const PayRoll_Create = () => {
             setShowdelete(true)
         }
     }
-   
-     // Add remove fields start
-//  fields First 
-  let handleChange = (i, e) => {
-    let newFormValues = [...formValues];
-    newFormValues[i][e.target.name] = e.target.value;
-    setFormValues(newFormValues);
-    setFeature([e.target.value])
-  }
-  let addFormFields = () => {
-    // setAdd1(true);
-    setFormValues([...formValues, { name: "" }])
-  }
-  let removeFormFields = (i) => {
-    let newFormValues = [...formValues];
-    newFormValues.splice(i, 1);
-    setFormValues(newFormValues)
-  }
 
-// second fields 
-let handleChange12 = (i, e) => {
-    let newFormValues = [...formValues12];
-    newFormValues[i][e.target.name] = e.target.value;
-    setFormValues12(newFormValues);
-    setFeature([e.target.value])
-  }
-  let addFormFields12 = () => {
-  
-    setFormValues12([...formValues12, { name: "" }])
-  }
-  let removeFormFields12 = (i) => {
-    let newFormValues = [...formValues12];
-    newFormValues.splice(i, 1);
-    setFormValues12(newFormValues)
-  }
+    // Add remove fields start
+    //  fields First 
 
- 
+    let handleChange = (i, e) => {
+        let newFormValues = [...formValues];
+        newFormValues[i][e.target.name] = e.target.value;
+        setFormValues(newFormValues);
+        setFeature([e.target.value])
+    }
+    let addFormFields = () => {
+        // setAdd1(true);
+        setFormValues([...formValues,])
 
-   // Add remove fields end
+
+    }
+    let removeFormFields = (i) => {
+        let newFormValues = [...formValues];
+        newFormValues.splice(i, 1);
+        setFormValues(newFormValues)
+    }
+
+    // second fields 
+    let handleChange12 = (i, e) => {
+        let newFormValues = [...formValues12];
+        newFormValues[i][e.target.name] = e.target.value;
+        setFormValues12(newFormValues);
+        setFeature([e.target.value])
+    }
+    let addFormFields12 = () => {
+
+        setFormValues12([...formValues12, { name: "" }])
+    }
+    let removeFormFields12 = (i) => {
+        let newFormValues = [...formValues12];
+        newFormValues.splice(i, 1);
+        setFormValues12(newFormValues)
+    }
+
+    useEffect(() => {
+        MyRolPermisGetAllApi()
+        // if (staffId) {
+        //     MyContractGetAllApi()
+        //}
+
+        setAllowance()
+        if (roleId) {
+            MyStaffrGetAllApi()
+        }
+    }, [roleId, staffId, formValues])
+
+    // Role permission Get All Api  from role permission page  
+    const MyRolPermisGetAllApi = async () => {
+        try {
+            const response = await RolePermissionGetApi();
+            console.log('My role permission get all New User page', response)
+            if (response?.status === 200) {
+                // toast.success(response?.data?.msg)
+                setRolePermisAllData(response?.data?.roles)
+            } else {
+                // toast.error(response?.data?.msg);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // Staff  Get All Api
+    const MyStaffrGetAllApi = async () => {
+        setLoader(true);
+        try {
+            const response = await TeacherGetAllApi(roleId, searchKey);
+            console.log("My Stafffffff get all DATA", response);
+            if (response?.status === 200) {
+                toast.success(response?.data?.message);
+                setTeacherAllData(response?.data?.AllRoles);
+                setLoader(false);
+            } else {
+                toast.error(response?.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    // Staff Get All api 
+
+    // const MyPayrollGetAllApi = async () => {
+    //     setLoader(true)
+    //     try {
+    //         const response = await PayrollGetAllApi(month, year);
+
+    //         console.log('Payroll get all api', response);
+    //         if (response?.status === 200) {
+    //             toast.success(response?.data?.classes?.message)
+    //             setBasicPay(response?.data?.payroll)
+    //             setLoader(false)
+    //         } else {
+    //             toast.error(response?.data?.classes?.message);
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    //   contract getAll 
+    const MyContractGetAllApi = async () => {
+        setLoader(true)
+        try {
+            const response = await ContractGetAllApi(staffId);
+
+            console.log('Contracttttttt get all api', response);
+            if (response?.status === 200) {
+                toast.success(response?.data?.classes?.message)
+                setBasicPay(response?.data?.contact?.basicSalary)
+                setLoader(false)
+            } else {
+                toast.error(response?.data?.classes?.message);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const PayrolPostApi = async () => {
+
+        const formData = {
+            "roleId": roleId,
+            "userId": staffId,
+            "month": month,
+            "year": year,
+            "netSalary": 0,
+            "basicPay": basicPay,
+            "deductions": {
+                "additionalProp1": 0,
+                "additionalProp2": 0,
+                "additionalProp3": 0
+            },
+            "allowance": formValues,
+            "commission": {
+                "additionalProp1": 0,
+                "additionalProp2": 0,
+                "additionalProp3": 0
+            },
+            "reimbursement": {
+                "additionalProp1": 0,
+                "additionalProp2": 0,
+                "additionalProp3": 0
+            },
+            "paid": paid
+        }
+
+        setLoader(true)
+        try {
+            const response = await PayrollPostApi(formData);
+            console.log('MY PAYROL POST APIIIIII 123456', response)
+            if (response?.data?.status === "success") {
+                toast.success(response?.data?.message);
+                setStatus(response?.data?.status)
+                // setFunction(response?.data?.otherstaff?.staffStatus)
+
+                setLoader(false)
+            } else {
+                toast.error(response?.data?.message);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Container>
@@ -519,46 +725,64 @@ let handleChange12 = (i, e) => {
                     {/* ###### copy content till here for all component ######  */}
                     <div className="row p-3">
                         <div className="col-lg-3 col-md-6 col-sm-12  ">
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Role</label>
-                                <select class="form-select  form-select-sm" aria-label="Default select example">
-                                    <option selected>Admin</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                            <div className="mb-3   for-media-margin">
+                                <label for="exampleFormControlInput1 " className="form-label mb-1 heading-14 label-color gender-adjust-media">Role Name*</label>
+                                <select className="form-select form-control-sm  form-focus-input heading-14 grey-input-text-color input-border-color" onChange={(e) => setRoleId(e.target.value)} aria-label="Default select example" style={{ borderRadius: '5px' }} >
+                                    <option value="" >--Choose--</option>
+                                    {
+                                        rolePermisAllData?.map(item => (
+                                            <option value={item.roleId} >{item.roleName}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-12">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Employee</label>
-                                <select class="form-select  form-select-sm" aria-label="Default select example">
-                                    <option selected>Henry Russo</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select  form-select-sm" onChange={(e) => setStaffId(e.target.value)} aria-label="Default select example">
+                                    <option selected>--Choosee--</option>
+                                    {
+                                        TeacherAllData?.map(item => (
+                                            <option value={item.id} >{item.staffName}</option>
+                                        ))
+                                    }
                                 </select>
+
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-12">
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color  heading-14">Month</label>
-                                <select class="form-select  form-select-sm" aria-label="Default select example">
-                                    <option selected>March</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color focus heading-14">Month</label>
+                                <select class="form-select  form-select-sm" onChange={(e) => setMonth(e.target.value)} aria-label="Default select example">
+                                    <option >--Choose--</option>
+                                    <option value='jabuary'>January</option>
+                                    <option value='february'>February</option>
+                                    <option value='march'>March</option>
+                                    <option value='april'>April</option>
+                                    <option value='may'>May</option>
+                                    <option value='june'>June</option>
+                                    <option value='july'>July</option>
+                                    <option value='august'>August</option>
+                                    <option value='september'>September</option>
+                                    <option value='october'>October</option>
+                                    <option value='november'>November</option>
+                                    <option value='december'>December</option>
+
                                 </select>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-12">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Year</label>
-                                <select class="form-select  form-select-sm" aria-label="Default select example">
-                                    <option selected>2024</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select  form-select-sm" onChange={(e) => setYear(e.target.value)} aria-label="Default select example">
+                                    <option >--Choose--</option>
+                                    <option value='2024'>2024</option>
+                                    <option value='2025'>2025</option>
+                                    <option value='2026'>2026</option>
+                                    <option value='2027'>2027</option>
+                                    <option value='2028'>2028</option>
+
                                 </select>
                             </div>
                         </div>
@@ -568,7 +792,7 @@ let handleChange12 = (i, e) => {
                     {/* ####### buttons ######  */}
                     <div className="row buttons-topss">
                         <div className='my-button11 heading-16'>
-                            <button type="button" class="btn btn-outline-success">Search</button>
+                            <button type="button" class="btn btn-outline-success" onClick={MyContractGetAllApi}>Search</button>
                             <button type="button" class="btn btn-outline-success">Cancel</button>
                         </div>
                     </div>
@@ -581,49 +805,76 @@ let handleChange12 = (i, e) => {
 
                         <div className="row pt-2 pb-3 ">
                             <div className="col-6">
-                               {
-                                    formValues?.map((element, index)=>(
-                                        <div className="row d-flex" value={element.name || ""} onChange={e => handleChange(index, e)} >
-
-                                        <div className="col-5 ">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label heading-14">Type</label>
-                                                <input type="text" class="form-control form-contro-sm heading-14" id="exampleFormControlInput1" placeholder="Enter Type Name" />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-5 ">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label heading-14">Amount</label>
-                                                <input type="text" class="form-control form-contro-sm heading-14" id="exampleFormControlInput1" onChange={(e)=>setAllowanceAmount(e.target.value)} placeholder="Enter Type Amount" />
-                                            </div>
-                                        </div>
-                                        <div className="col-2 plus-design mt-3 ps-0 ">
-                                        <div>
-                                            {
-                                                index === 0 ? 
-                                                    <div className='my-anchor'>
-                                                    <Link href=""><p className='' onClick={() => addFormFields()}>+</p></Link>
+                                {formValues.map((identificationField, i) => {
+                                    return (
+                                        <>
+                                            <div className="">
+                                                <div className="row d-flex heading-16">
+                                                    <div className="col-5">
+                                                        <label>Title</label>
+                                                        <input
+                                                            type="text"
+                                                            maxLength="40"
+                                                            name="title"
+                                                            value={identificationField.title}
+                                                            onChange={(e) => handleEmployChange(i, e)}
+                                                            className="form-control form-contro-sm"
+                                                            placeholder="Enter title"
+                                                        />
                                                     </div>
-                                                : <div className='my-anchor'>
-                                                    <Link type="button" className="button remove my-remove-button" onClick={() => removeFormFields()}> - </Link>
+                                                    <div className="col-5 ">
+                                                        <label>Amount</label>
+                                                        <input
+                                                            type="text"
+                                                            maxLength="40"
+                                                            name="amount"
+                                                            value={identificationField.amount}
+                                                            onChange={(e) => handleEmployChange(i, e)}
+                                                            className="form-control form-contro-sm"
+                                                            placeholder="Enter Amount"
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-2 px-0">
+                                                        {formValues.length > 1 && (
+                                                            <div className="text-right mb-3">
+                                                                <spann
+                                                                    className="btnn closeBtn mr-4 "
+                                                                    onClick={(e) => removeEmployeRow(i)}
+                                                                >
+                                                                    {/* <FaTimes /> */}
+                                                                </spann>
+                                                            </div>
+                                                        )}
+                                                        <div className="col-2 plus-design mt-3 ps-0 ">
+                                                            <div style={{ marginTop: '-5px' }}>
+                                                                {
+                                                                    i === 0 ?
+                                                                        <div className='my-anchor'>
+                                                                            <Link href=""><p className=''
+                                                                                onClick={handleAddEmployerFields}>+</p></Link>
+                                                                        </div>
+                                                                        : <div className='my-anchor'>
+                                                                            <Link type="button" className="button remove my-remove-button" onClick={() => removeFormFields()}> - </Link>
+                                                                        </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            }
-                                    </div>
-                                        </div> 
-                                        <div>
-                                    
-                                        </div>                     
-                                    </div>
-                                    ))
-                               }
+
+                                            </div>
+                                        </>
+                                    );
+                                })}
+
                             </div>
 
-                             {/* Second fiels  */}
+
                             <div className="col-6">
-                                   {
-                                        formValues12?.map((element, index)=>(
-                                            <div className="row d-flex" value={element.name || ""} onChange={e => handleChange12(index, e)} >
+                                {
+                                    formValues12?.map((element, index) => (
+                                        <div className="row d-flex" value={element.name || ""} onChange={e => handleChange12(index, e)} >
 
                                             <div className="col-5 ">
                                                 <div class="mb-3">
@@ -639,83 +890,103 @@ let handleChange12 = (i, e) => {
                                                 </div>
                                             </div>
                                             <div className="col-2 plus-design mt-3 ps-0 ">
+                                                <div>
+                                                    {
+                                                        index === 0 ?
+                                                            <div className='my-anchor'>
+                                                                <Link href=""><p className='' onClick={() => addFormFields12()}>+</p></Link>
+                                                            </div>
+                                                            : <div className='my-anchor'>
+                                                                <Link type="button" className="button remove my-remove-button  " onClick={() => removeFormFields12()}> - </Link>
+                                                            </div>
+                                                    }
+                                                </div>
+                                            </div>
                                             <div>
-                                                {
-                                                    index === 0 ? 
-                                                        <div className='my-anchor'>
-                                                        <Link href=""><p className='' onClick={() => addFormFields12()}>+</p></Link>
-                                                        </div>
-                                                    : <div className='my-anchor'>
-                                                        <Link type="button" className="button remove my-remove-button  " onClick={() => removeFormFields12()}> - </Link>
-                                                    </div>
-                                                }
+
+                                            </div>
                                         </div>
-                                            </div> 
-                                            <div>
-                                        
-                                            </div>                     
-                                        </div>
-                                        ))
-                               }
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
 
 
-                  <div>
-                  <p className='greenText ps-4'>Summary</p>
-                  </div>
-                 <div className="row p-4 pt-2 pb-0 heading-16">
-                    <div className="col-6">
-                        <div class="">
-                            <label for="exampleFormControlInput1" class="form-label heading-14">Basic</label>
-                            <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="" value={allowanceAmount} disabled/>
+                    <div>
+                        <p className='greenText ps-4'>Summary</p>
+                    </div>
+                    <div className="row p-4 pt-2 pb-0 heading-16">
+                        <div className="col-6">
+                            <div class="">
+                                <label for="exampleFormControlInput1" class="form-label heading-14">Basic</label>
+                                <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" value={basicPay} id="exampleFormControlInput1" placeholder="" disabled />
+                            </div>
                         </div>
                     </div>
-                 </div>
-                 <div className="row  p-4 pt-2 pb-0 heading-16">
-                    <div className="col-6">
-                        <div class="">
-                            <label for="exampleFormControlInput1" class="form-label heading-14">Total Allowance</label>
-                            <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="0" disabled/>
+
+                    <div className="row  p-4 pt-2 pb-0 heading-16">
+
+                        <div className="col-6">
+                            {/* <div class="">
+                                <label for="exampleFormControlInput1" class="form-label heading-14" >Tota Allowance</label>
+                                <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="0" disabled />
+                            </div> */}
+                            {
+
+                                formValues.map((item, i) => (
+                                    <>
+                                        {/* {console.log(item, "hello 2")} */}
+                                        <div class="">
+                                            <label for="exampleFormControlInput1" class="form-label heading-14" >{item !== '' ? "Title" : item.title}</label>
+                                            <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="0" disabled />
+                                        </div>
+                                    </>
+                                ))
+                            }
+
+                        </div>
+                        <div className="col-6">
+
+
+                        </div>
+
+                    </div>
+                    <div className="row p-4 pt-2 pb-0  heading-16">
+                        <div className="col-6">
+                            <div class="">
+                                <label for="exampleFormControlInput1" class="form-label heading-14">Total Deduction</label>
+                                <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="0" />
+                            </div>
                         </div>
                     </div>
-                 </div>
-                 <div className="row p-4 pt-2 pb-0  heading-16">
-                    <div className="col-6">
-                        <div class="">
-                            <label for="exampleFormControlInput1" class="form-label heading-14">Total Deduction</label>
-                            <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="0" />
+                    <div className="row p-4 pt-2 pb-1 heading-16">
+                        <div className="col-6">
+                            <div class="">
+                                <label for="exampleFormControlInput1" class="form-label heading-14">Net Salary</label>
+                                <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="150000" />
+                            </div>
                         </div>
                     </div>
-                 </div>
-                 <div className="row p-4 pt-2 pb-1 heading-16">
-                    <div className="col-6">
-                        <div class="">
-                            <label for="exampleFormControlInput1" class="form-label heading-14">Net Salary</label>
-                            <input type="email" class="form-control form-contro-sm heading-14 darkGreyBgColor" id="exampleFormControlInput1" placeholder="150000" />
+                    <div className="row p-4 pt-0  pb-0">
+                        <div className="col-lg-6 col-md-6 col-sm-12  ">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Status</label>
+                                <select class="form-select  form-select-sm" onChange={(e) => setPaid(e.target.value)} aria-label="Default select example">
+                                    <option >--Choose--</option>
+                                    <option value="true">Paid</option>
+                                    <option value="false">Unpaid</option>
+
+                                </select>
+                            </div>
                         </div>
                     </div>
-                 </div>
-                <div className="row p-4 pt-0  pb-0">
-                    <div className="col-lg-6 col-md-6 col-sm-12  ">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label mb-1 label-text-color heading-14">Status</label>
-                            <select class="form-select  form-select-sm" aria-label="Default select example">
-                                <option selected>Paid</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="row ps-4 pb-4">
+                    <div className="row ps-4 pb-4">
                         <div className='my-button22 heading-16'>
-                            <button type="button" class="btn btn-outline-success">Create Payslip</button>
+                            <button type="button" class="btn btn-outline-success" onClick={PayrolPostApi}>Create Payslip</button>
                             <button type="button" class="btn btn-outline-success">Cancel</button>
                         </div>
-                </div>
+                    </div>
                 </div>
 
                 {/* ################## Off Canvas Area ####################  */}

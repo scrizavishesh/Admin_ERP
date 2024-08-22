@@ -433,15 +433,15 @@ const FeesType = () => {
             <>
               <form className='row' action="">
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Name</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" placeholder="Enter Name" onChange={(e) => setFeeTypeName(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Fees Code*</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Fees Code*</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" placeholder="Enter Code" onChange={(e) => setFeeTypeCode(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
+                  <label htmlFor="exampleFormControlTextarea1" className="form-label font14">Description</label>
                   <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" placeholder='Text Description......' onChange={(e) => setFeeTypeDescription(e.target.value)}></textarea>
                 </div>
               </form>
@@ -484,15 +484,15 @@ const FeesType = () => {
             <>
               <form className='row' action="">
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Name</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Name</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" value={EditFeeTypeName} onChange={(e) => setEditFeeTypeName(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1 font14" className="form-label">Fees Code*</label>
+                  <label htmlFor="exampleFormControlInput1" className="form-label font14">Fees Code*</label>
                   <input type="email" className="form-control font14" id="exampleFormControlInput1" value={EditFeeTypeCode} onChange={(e) => setEditFeeTypeCode(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1 font14" className="form-label">Description</label>
+                  <label htmlFor="exampleFormControlTextarea1" className="form-label font14">Description</label>
                   <textarea className="form-control font14" id="exampleFormControlTextarea1" rows="3" value={EditFeeTypeDescription} onChange={(e) => setEditFeeTypeDescription(e.target.value)}></textarea>
                 </div>
               </form>

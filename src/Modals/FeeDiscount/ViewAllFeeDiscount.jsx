@@ -31,7 +31,7 @@ const ViewAllFeeDiscount = ({ goData, ViewId }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
         getAllFeeDiscountData();
