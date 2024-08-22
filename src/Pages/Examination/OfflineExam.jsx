@@ -175,7 +175,7 @@ const OfflineExam = () => {
     // }
 
     useEffect(() => {
-        getAllRoomData();
+        // getAllRoomData();
         getAllClassData();
         getAllOfflineExamData();
     }, [token, dataRefresh, pageNo, reload])
@@ -298,27 +298,6 @@ const OfflineExam = () => {
 
         }
     }
-
-    const getAllRoomData = async () => {
-        try {
-            setloaderState(true);
-            var response = await getRoomDataApi(classNo);
-            console.log(response)
-            if (response?.status === 200) {
-                if (response?.data?.status === 'success') {
-                    setloaderState(false);
-                    setAllRoomData(response?.data?.subjects);
-                }
-            }
-            else {
-                console.log(response?.data?.message);
-            }
-        }
-        catch {
-
-        }
-    }
-
 
     const handleReload = () => {
         setReload(true);

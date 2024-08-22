@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { addNewStudentApi, getAllClassApi } from '../../Utils/Apis'
+import { addNewStudentApi, getAllClassApi, getAllFeeMasterApi } from '../../Utils/Apis'
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import DataLoader from '../../Layouts/Loader';
 
 const Container = styled.div`
     overflow: scroll;
@@ -36,6 +37,10 @@ const SingleStudentAdmission = () => {
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    // loader State
+    const [loaderState, setloaderState] = useState(false);
+    // Data States
+    const [FeeMasterData, setFeeMasterData] = useState([])
     // Variable States
     const [studentName, setStudentName] = useState('')
     const [bloodGroup, setBloodGroup] = useState('')
@@ -79,126 +84,61 @@ const SingleStudentAdmission = () => {
     //UseEffect Call
     useEffect(() => {
         getAllClassData();
+        getAllFeeMasterData();
     }, [token])
 
     // All API Functions
     const getAllClassData = async () => {
+        setloaderState(true);
         try {
             var response = await getAllClassApi();
             if (response?.status === 200) {
                 if (response?.data?.status === 'success') {
                     setAllClassData(response?.data?.classes);
-                    toast.success(response?.data?.message);
-                }
-            }
-            else {
-                toast.error(response?.data?.message);
-            }
-        }
-        catch {
-
-        }
-    }
-
-    const AddNewStudent = async () => {
-
-        const studentNameValidate = validateStudentName(studentName);
-        const bloodGroupValidate = validateBloodGroup(bloodGroup);
-        const fatherNameValidate = validateFatherName(fatherName);
-        const motherNameValidate = validateMotherName(motherName);
-        const parentNoValidate = validateParentPhone(parentNo);
-        const studentPhValidate = validateStudentPhone(studentPh);
-        const studentEmailValidate = validateStudentEmail(studentEmail);
-        const parentEmailValidate = validateParentEmail(parentEmail);
-        const fatherOccupationValidate = validateFatherOccupation(fatherOccupation);
-        const motherOccupationValidate = validateMotherOccupation(motherOccupation);
-        const classNoValidate = validateClass(classNo);
-        const sectionValidate = validateSection(section);
-        const studentDOBValidate = validateBirthday(studentDOB);
-        const genderValidate = validateGender(gender);
-        const studentAddressValidate = validateAddress(studentAddress);
-        const emergencyNoValidate = validateEmergencyNo(emergencyNo);
-        const studentImageValidate = validateStudentImage(studentImage);
-
-        if (studentNameValidate || bloodGroupValidate || fatherNameValidate || motherNameValidate || parentNoValidate || studentPhValidate || studentEmailValidate || parentEmailValidate || fatherOccupationValidate || motherOccupationValidate || classNoValidate || sectionValidate || studentDOBValidate || genderValidate || studentAddressValidate || emergencyNoValidate || studentImageValidate) {
-            setStudentNameError(studentNameValidate);
-            setBloodGroupError(bloodGroupValidate);
-            setFatherNameError(fatherNameValidate);
-            setMotherNameError(motherNameValidate);
-            setParentNoError(parentNoValidate);
-            setStudentPhError(studentPhValidate);
-            setStudentEmailError(studentEmailValidate);
-            setParentEmailError(parentEmailValidate);
-            setFatherOccupationError(fatherOccupationValidate);
-            setMotherOccupationError(motherOccupationValidate);
-            setClassNoError(classNoValidate);
-            setSectionError(sectionValidate);
-            setstudentDOBError(studentDOBValidate);
-            setGenderError(genderValidate);
-            setStudentAddressError(studentAddressValidate);
-            setEmergencyNoError(emergencyNoValidate);
-            setStudentImageError(studentImageValidate);
-            return;
-        }
-
-        setStudentNameError('');
-        setBloodGroupError('');
-        setFatherNameError('');
-        setMotherNameError('');
-        setParentNoError('');
-        setStudentPhError('');
-        setStudentEmailError('');
-        setParentEmailError('');
-        setFatherOccupationError('');
-        setMotherOccupationError('');
-        setClassNoError('');
-        setSectionError('');
-        setstudentDOBError('');
-        setGenderError('');
-        setStudentAddressError('');
-        setEmergencyNoError('');
-        setStudentImageError('');
-
-        try {
-            const formData = new FormData();
-            formData.append("studentName", studentName);
-            formData.append("bloodGroup", bloodGroup);
-            formData.append("fatherName", fatherName);
-            formData.append("motherName", motherName);
-            formData.append("parentNo", parentNo);
-            formData.append("studentEmail", studentEmail);
-            formData.append("parentEmail", parentEmail);
-            formData.append("fatherOccupation", fatherOccupation);
-            formData.append("motherOccupation", motherOccupation);
-            formData.append("classNo", classNo);
-            formData.append("section", section);
-            formData.append("studentDOB", studentDOB);
-            formData.append("gender", gender);
-            formData.append("studentAddress", studentAddress);
-            formData.append("emergencyNo", emergencyNo);
-            formData.append("studentPh", studentPh);
-            formData.append("studentImage", studentImage);
-
-            var response = await addNewStudentApi(formData);
-            console.log(response, 'res')
-            if (response?.status === 200) {
-                console.log(response?.status, '200')
-                if (response?.data?.status === 'success') {
-                    toast.success(response?.data?.message)
-                    setTimeout(() => {
-                        navigate('/allStudent');
-                    }, 700);
+                    setloaderState(false);
+                    toast.success(response.data.message);
                 }
                 else {
-                    toast.error(response?.data?.message)
+                    setloaderState(false);
+                    toast.error(response?.data?.message);
                 }
             }
             else {
-                toast.error(response?.data?.message);
+                setloaderState(false);
+                console.log(response?.data?.message);
             }
         }
         catch (error) {
-            console.log('Error faced while registering a new student', error)
+            console.log('Error Facing during Get All Class API - ', error)
+        }
+    }
+
+    const getAllFeeMasterData = async () => {
+        try {
+            setloaderState(true);
+            const searchByKey =''
+            const pageNo =''
+            const pageSize =''
+            var response = await getAllFeeMasterApi(searchByKey, pageNo, pageSize);
+            console.log(response, 'fee master')
+            if (response?.status === 200) {
+                if (response?.data?.status === 'success') {
+                    setFeeMasterData(response?.data?.feeMaster);
+                    setloaderState(false);
+                    toast.success(response.data.message);
+                }
+                else {
+                    setloaderState(false);
+                    toast.error(response?.data?.message);
+                }
+            }
+            else {
+                setloaderState(false);
+                console.log(response?.data?.message);
+            }
+        }
+        catch (error) {
+            console.log('Error Facing during Get All Fee Group API - ', error)
         }
     }
 
@@ -439,16 +379,214 @@ const SingleStudentAdmission = () => {
     }
 
     const validateStudentImage = (value) => {
-        if (value === '') {
+        if (!value) {
             return '* Student Image is required';
+        }
+        else if (value.size < 10240 || value.size > 204800) { // 1 KB = 1024 bytes
+            return '* File size must be between 10 KB to 200 KB';
         }
         return '';
     };
+
+    const validateFields = () => {
+        let isValid = true;
+
+        const studentNameValidate = validateStudentName(studentName);
+        if (studentNameValidate) {
+            setStudentNameError(studentNameValidate);
+            isValid = false;
+        } else {
+            setStudentNameError('');
+        }
+
+        const bloodGroupValidate = validateBloodGroup(bloodGroup);
+        if (bloodGroupValidate) {
+            setBloodGroupError(bloodGroupValidate);
+            isValid = false;
+        } else {
+            setBloodGroupError('');
+        }
+
+        const fatherNameValidate = validateFatherName(fatherName);
+        if (fatherNameValidate) {
+            setFatherNameError(fatherNameValidate);
+            isValid = false;
+        } else {
+            setFatherNameError('');
+        }
+
+        const motherNameValidate = validateMotherName(motherName);
+        if (motherNameValidate) {
+            setMotherNameError(motherNameValidate);
+            isValid = false;
+        } else {
+            setMotherNameError('');
+        }
+
+        const parentNoValidate = validateParentPhone(parentNo);
+        if (parentNoValidate) {
+            setParentNoError(parentNoValidate);
+            isValid = false;
+        } else {
+            setParentNoError('');
+        }
+
+        const studentPhValidate = validateStudentPhone(studentPh);
+        if (studentPhValidate) {
+            setStudentPhError(studentPhValidate);
+            isValid = false;
+        } else {
+            setStudentPhError('');
+        }
+
+        const studentEmailValidate = validateStudentEmail(studentEmail);
+        if (studentEmailValidate) {
+            setStudentEmailError(studentEmailValidate);
+            isValid = false;
+        } else {
+            setStudentEmailError('');
+        }
+
+        const parentEmailValidate = validateParentEmail(parentEmail);
+        if (parentEmailValidate) {
+            setParentEmailError(parentEmailValidate);
+            isValid = false;
+        } else {
+            setParentEmailError('');
+        }
+
+        const fatherOccupationValidate = validateFatherOccupation(fatherOccupation);
+        if (fatherOccupationValidate) {
+            setFatherOccupationError(fatherOccupationValidate);
+            isValid = false;
+        } else {
+            setFatherOccupationError('');
+        }
+
+        const motherOccupationValidate = validateMotherOccupation(motherOccupation);
+        if (motherOccupationValidate) {
+            setMotherOccupationError(motherOccupationValidate);
+            isValid = false;
+        } else {
+            setMotherOccupationError('');
+        }
+
+        const classNoValidate = validateClass(classNo);
+        if (classNoValidate) {
+            setClassNoError(classNoValidate);
+            isValid = false;
+        } else {
+            setClassNoError('');
+        }
+
+        const sectionValidate = validateSection(section);
+        if (sectionValidate) {
+            setSectionError(sectionValidate);
+            isValid = false;
+        } else {
+            setSectionError('');
+        }
+
+        const studentDOBValidate = validateBirthday(studentDOB);
+        if (studentDOBValidate) {
+            setstudentDOBError(studentDOBValidate);
+            isValid = false;
+        } else {
+            setstudentDOBError('');
+        }
+
+        const genderValidate = validateGender(gender);
+        if (genderValidate) {
+            setGenderError(genderValidate);
+            isValid = false;
+        } else {
+            setGenderError('');
+        }
+
+        const studentAddressValidate = validateAddress(studentAddress);
+        if (studentAddressValidate) {
+            setStudentAddressError(studentAddressValidate);
+            isValid = false;
+        } else {
+            setStudentAddressError('');
+        }
+
+        const emergencyNoValidate = validateEmergencyNo(emergencyNo);
+        if (emergencyNoValidate) {
+            setEmergencyNoError(emergencyNoValidate);
+            isValid = false;
+        } else {
+            setEmergencyNoError('');
+        }
+
+        const studentImageValidate = validateStudentImage(studentImage);
+        if (studentImageValidate) {
+            setStudentImageError(studentImageValidate);
+            isValid = false;
+        } else {
+            setStudentImageError('');
+        }
+
+        return isValid;
+    }
+
+    const AddNewStudent = async () => {
+        if(validateFields()){
+            try {
+                const formData = new FormData();
+                formData.append("studentName", studentName);
+                formData.append("bloodGroup", bloodGroup);
+                formData.append("fatherName", fatherName);
+                formData.append("motherName", motherName);
+                formData.append("parentNo", parentNo);
+                formData.append("studentEmail", studentEmail);
+                formData.append("parentEmail", parentEmail);
+                formData.append("fatherOccupation", fatherOccupation);
+                formData.append("motherOccupation", motherOccupation);
+                formData.append("classNo", classNo);
+                formData.append("section", section);
+                formData.append("studentDOB", studentDOB);
+                formData.append("gender", gender);
+                formData.append("studentAddress", studentAddress);
+                formData.append("emergencyNo", emergencyNo);
+                formData.append("studentPh", studentPh);
+                formData.append("studentImage", studentImage);
+
+                var response = await addNewStudentApi(formData);
+                console.log(response, 'res')
+                if (response?.status === 200) {
+                    console.log(response?.status, '200')
+                    if (response?.data?.status === 'success') {
+                        toast.success(response?.data?.message)
+                        setTimeout(() => {
+                            navigate('/allStudent');
+                        }, 700);
+                    }
+                    else {
+                        console.log('fail')
+                    }
+                } else {
+                    toast.error(response?.error);
+                }
+            } catch (error) {
+                console.error('Error during update:', error);
+            }
+        }
+        else {
+            toast.error('Please Validate All Fields Correctly')
+        }
+    }
+
 
 
     return (
         <>
             <Container className='hideScrollBar p-3'>
+            {
+                loaderState && (
+                    <DataLoader />
+                )
+            }
                 <div className="container-fluid">
                     <form className="row g-3 h-100 overflow-scroll">
                         <div className="col-md-6 col-sm-12 col-12">
@@ -580,8 +718,20 @@ const SingleStudentAdmission = () => {
                         </div>
                         <div className="col-md-6 col-sm-12 col-12">
                             <label htmlFor="validationDefault02" className="form-label font14">Photo*</label>
-                            <input type="file" className={`form-control font14  ${studentImageError ? 'border-1 border-danger' : ''} `} id="validationDefault02" placeholder="" onChange={(e) => handleStudentImageChange(e.target.files)} />
+                            <input type="file" className={`form-control font14  ${studentImageError ? 'border-1 border-danger' : ''} `} id="validationDefault02" placeholder="" onChange={(e) => handleStudentImageChange(e.target.files)}  accept='.jpg, .png, .jpeg' />
                             <span className='text-danger'>{studentImageError}</span>
+                        </div>
+                        <div className="col-md-6 col-sm-12 col-12">
+                            <label htmlFor="validationDefault01" className="form-label font14">Fee Master*</label>
+                            <select className={`form-select font14 ${sectionError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleSectionChange(e.target.value)}>
+                                <option >--- Choose ---</option>
+                                {FeeMasterData.map((option) => (
+                                    <option key={option.feeGroup} value={option?.feeGroup}>
+                                        {option.feeGroup.split('_').join(' ')}
+                                    </option>
+                                ))}
+                            </select>
+                            <span className='text-danger'>{sectionError}</span>
                         </div>
                     </form>
                     <div className="row p-5">
@@ -1157,3 +1307,6 @@ export default SingleStudentAdmission
 // }
 
 // export default SingleStudentAdmission
+
+
+

@@ -122,6 +122,7 @@ import Item_category from '../Pages/ItemCategory'
 
 
 const Container = styled.div`
+height: 90vh;
   background-color: #F2F3F6;
 `;
 

@@ -194,7 +194,6 @@ export const assignStudentApi = async(data) => {
 // ******************************************************************************************************
 
 export const getRoomDataApi = async(searchKey, pageNo, pageSize) => {
-    
     axios.defaults.headers.common["Authorization"] = token;
     var res = await axios.get(`${Domain}/room/getAllRoomBySchId?searchKey=${searchKey}&page=${pageNo}&size=${pageSize}`);
     

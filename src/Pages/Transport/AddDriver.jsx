@@ -240,13 +240,20 @@ const AddDriver = () => {
                             navigate('/driver');
                         }, 1500);
                     }
+                    else{
+                        toast.error(response?.data?.message, 'else 1');
+                        setloaderState(false)
+                    }
                 }
-                else {
-                    toast.error(response?.data?.message);
+                else{
+                    toast.error(response?.data?.message, 'else 2');
+                    setloaderState(false)
                 }
             }
-            catch (error) {
-                toast.error('Error facing while adding new driver : ', error)
+            catch(error) { 
+                toast.error(error);
+                console.log(error, 'catch error')
+                setloaderState(false)
             }
         }
         else{

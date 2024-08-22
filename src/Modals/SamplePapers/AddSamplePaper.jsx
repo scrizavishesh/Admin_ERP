@@ -122,6 +122,108 @@ const AddSamplePaper = () => {
         }
     }
 
+    const handleTitleChange = (value) => {
+        setTitle(value);
+        setTitleError(validateTitle(value))
+    }
+
+    const validateTitle = (value) => {
+        if (value.trim() === '') {
+            return '* Title is required';
+        }
+        const titleRegex = /^[a-zA-Z\s]+$/;
+        if (!titleRegex.test(value)) {
+            return '* Invalid characters !!';
+        }
+        return '';
+    };
+
+    const handleClassChange = (value) => {
+        const classIdVal = parseInt(value);
+        setClassId(classIdVal);
+        const selectedClass = allClassData.find(c => c.classId === classIdVal);
+
+        if (selectedClass) {
+            setAllSectionData(selectedClass.section || []);
+            setAllSubjectData(selectedClass.subjects || []);
+        } else {
+            setAllSectionData([]);
+            setAllSubjectData([]);
+        }
+        setClasssError(validateClass(classIdVal));
+    }
+
+    const validateClass = (value) => {
+        if (!value || value == '') {
+            return '* Class is required';
+        }
+        return '';
+    };
+
+    const handleSectionChange = (value) => {
+        setSectionId(value);
+        setSectionIdError(validateSection(value))
+    }
+
+    const validateSection = (value) => {
+        if (!value || value == '') {
+            return '* Section is required';
+        }
+        return '';
+    };
+
+    const handleSubjectChange = (value) => {
+        setSubject(value);
+        setSubjectError(validateSubject(value))
+    }
+
+    const validateSubject = (value) => {
+        if (!value || value == '') {
+            return '* Subject is required';
+        }
+        return '';
+    };
+
+    const handleTeacherChange = (value) => {
+        setTeacher(value);
+        setTeacherError(validateTeacher(value))
+    }
+
+    const validateTeacher = (value) => {
+        if (!value || value == '') {
+            return '* Teacher is required';
+        }
+        return '';
+    };
+
+    const handleStatusChange = (value) => {
+        setStatuus(value);
+        setStatuusError(validateStatus(value))
+    }
+
+    const validateStatus = (value) => {
+        if (!value || value == '') {
+            return '* Status is required';
+        }
+        return '';
+    };
+
+    const handleFileChange = (value) => {
+        setSamplePaperUpload(value);
+        setSamplePaperUploadError(validateSamplePaperImage(value))
+    }
+
+    const validateSamplePaperImage = (value) => {
+        if (!value) {
+            return '* File Upload is required';
+        }
+        else if (value.size < 10240 || value.size > 204800) { // 1 KB = 1024 bytes
+            return '* File size must be between 10 KB to 200 KB';
+        }
+        return '';
+    };
+    
+
     const AddNewSamplePaper = async () => {
         if (validateFields()) {
             try {
@@ -155,67 +257,52 @@ const AddSamplePaper = () => {
     const validateFields = () => {
         let isValid = true;
 
-        if (!classId) {
+        if (!classId || classId == '') {
             setClasssError('* This Feild is required');
             isValid = false;
         } else {
             setClasssError('');
         }
 
-        if (!SectionId) {
+        if (!SectionId || SectionId == '' ) {
             setSectionIdError('* This Feild is required');
             isValid = false;
         } else {
             setSectionIdError('');
         }
 
-        if (!Subject) {
+        if (!Subject || Subject == '' ) {
             setSubjectError('* This Feild is required');
             isValid = false;
         } else {
             setSubjectError('');
         }
 
-        if (!Teacher) {
+        if (!Teacher || Teacher == '' ) {
             setTeacherError('* This Feild is required');
             isValid = false;
         } else {
             setTeacherError('');
         }
 
-        if (!SamplePaperUpload) {
+        if (!SamplePaperUpload || SamplePaperUpload == '' ) {
             setSamplePaperUploadError('* This Feild is required');
             isValid = false;
         } else {
             setSamplePaperUploadError('');
         }
 
-        if (!Title) {
+        if (!Title || Title == '' ) {
             setTitleError('* This Feild is required');
             isValid = false;
-        } else if (!textAlphaRegex.test(Title)) {
-            return 'Invalid characters in name !!';
-        } else {
+        } 
+        else {
             setTitleError('');
         }
 
         return isValid;
     }
 
-
-    const handleClassChange = (val) => {
-        const classNoVal = parseInt(val);
-        setClassId(classNoVal);
-        const selectedClass = allClassData.find(c => c.classId === classNoVal);
-
-        if (selectedClass) {
-            setAllSectionData(selectedClass.section || []);
-            setAllSubjectData(selectedClass.subjects || []);
-        } else {
-            setAllSectionData([]);
-            setAllSubjectData([]);
-        }
-    };
 
 
     return (
@@ -229,7 +316,7 @@ const AddSamplePaper = () => {
                                 <form className='p-3'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Title</label>
-                                        <input type="text" id="exampleInputEmail1" className={`form-control font14 ${TitleError ? 'border-1 border-danger' : ''}`} placeholder='Enter Title' value={Title} onChange={(e) => { setTitle(e.target.value), setTitleError('') }} />
+                                        <input type="text" id="exampleInputEmail1" className={`form-control font14 ${TitleError ? 'border-1 border-danger' : ''}`} placeholder='Enter Title' value={Title} onChange={(e) => handleTitleChange(e.target.value)} />
                                         <span className='text-danger'>{TitleError}</span>
                                     </div>
 
@@ -237,7 +324,7 @@ const AddSamplePaper = () => {
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Class</label>
                                         <select className={`form-select font14 ${ClasssError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={classId} onChange={(e) => handleClassChange(e.target.value)}>
-                                            <option>--- Choose ---</option>
+                                            <option selected disabled >--- Choose ---</option>
                                             {allClassData?.map((option) => (
                                                 <option key={option.classId} value={option?.classId}>
                                                     {option?.classNo}
@@ -248,8 +335,8 @@ const AddSamplePaper = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Section</label>
-                                        <select className={`form-select font14 ${SectionIdError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={SectionId} onChange={(e) => setSectionId(e.target.value)}>
-                                            <option>--- Choose ---</option>
+                                        <select className={`form-select font14 ${SectionIdError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={SectionId} onChange={(e) => handleSectionChange(e.target.value)}>
+                                            <option selected disabled >--- Choose ---</option>
                                             {allSectionData?.map(option => (
                                                 <option key={option.classSecId} value={option.classSecId}>
                                                     {option.sectionName}
@@ -260,8 +347,8 @@ const AddSamplePaper = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Subject</label>
-                                        <select className={`form-select font14 ${SubjectError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Subject} onChange={(e) => setSubject(e.target.value)}>
-                                            <option>--- Choose ---</option>
+                                        <select className={`form-select font14 ${SubjectError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Subject} onChange={(e) => handleSubjectChange(e.target.value)}>
+                                            <option selected disabled >--- Choose ---</option>
                                             {allSubjectData?.map((option) => (
                                                 <option key={option.subjectId} value={option.subjectId}>
                                                     {option.subjectName}
@@ -272,8 +359,8 @@ const AddSamplePaper = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">Teacher</label>
-                                        <select className={`form-select font14 ${TeacherError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Teacher} onChange={(e) => { setTeacher(e.target.value); setTeacherError(''); }}>
-                                            <option defaultValue value=''>--- Choose ---</option>
+                                        <select className={`form-select font14 ${TeacherError ? 'border-1 border-danger' : ''}`} aria-label="Default select example" value={Teacher} onChange={(e) => handleTeacherChange(e.target.value) } >
+                                            <option selected disabled >--- Choose ---</option>
                                             {allTeacherData.map(option => (
                                                 <option key={option.staffId} value={option.staffId}>
                                                     {option.staffName}
@@ -285,8 +372,8 @@ const AddSamplePaper = () => {
 
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputAdd1" className='form-label font14'>Status</label>
-                                        <select className={`form-select font14 ${StatuusError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => { setStatuus(e.target.value), setStatuusError('') }}>
-                                            <option>--- Choose ---</option>
+                                        <select className={`form-select font14 ${StatuusError ? 'border-1 border-danger' : ''} `} aria-label="Default select example" onChange={(e) => handleStatusChange(e.target.value) } >
+                                            <option defaultValue value=''>--- Choose ---</option>
                                             <option value='Active'>Active</option>
                                             <option value='Draft'>Draft</option>
                                             <option value='Archives'>Archives</option>
@@ -295,7 +382,7 @@ const AddSamplePaper = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label font14">SamplePaper Upload</label>
-                                        <input type="file" id="exampleInputEmail1" className={`form-control font14 ${SamplePaperUploadError ? 'border-1 border-danger' : ''}`} onChange={(e) => { setSamplePaperUpload(e.target.files[0]), setSamplePaperUploadError('') }} />
+                                        <input type="file" id="exampleInputEmail1" className={`form-control font14 ${SamplePaperUploadError ? 'border-1 border-danger' : ''}`} accept='.pdf' onChange={(e) => handleFileChange(e.target.files[0]) } />
                                         <span className='text-danger'>{SamplePaperUploadError}</span>
                                     </div>
                                     <p className='text-center p-3'>

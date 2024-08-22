@@ -4,8 +4,7 @@ import SingleStudentAdmission from './SingleStudentAdmission';
 import ExcelUploadForm from './ExcelUpload';
 
 const Container= styled.div`
-height: fit-content;
-overflow : scroll;
+    overflow : scroll;
 
     .mainBreadCrum{
         --bs-breadcrumb-divider: '>' !important;
